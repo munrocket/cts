@@ -366,6 +366,24 @@ export const listing = [
     "file": [
       "api",
       "operation",
+      "texture_view",
+      "read"
+    ],
+    "description": "Test the result of reading textures through texture views with various options.\n\nAll x= every possible view read method: {\n  - {unfiltered, filtered (if valid), comparison (if valid)} sampling\n  - storage read {vertex, fragment, compute}\n  - no-op render pass that loads and then stores\n  - depth comparison\n  - stencil comparison\n}\nTODO: Write helper for this if not already available (see resource_init, buffer_sync_test for related code)."
+  },
+  {
+    "file": [
+      "api",
+      "operation",
+      "texture_view",
+      "write"
+    ],
+    "description": "Test the result of writing textures through texture views with various options.\n\nAll x= every possible view write method: {\n  - storage write {fragment, compute}\n  - render pass store\n  - render pass resolve\n}\nTODO: Write helper for this if not already available (see resource_init, buffer_sync_test for related code)."
+  },
+  {
+    "file": [
+      "api",
+      "operation",
       "threading"
     ],
     "readme": "Tests for behavior with multiple threads (main thread + workers).\n\nTODO: plan and implement\n- Try postMessage'ing an object of every type (to same or different thread)\n    - {main -> main, main -> worker, worker -> main, worker1 -> worker1, worker1 -> worker2}\n    - through {global postMessage, MessageChannel}\n    - {in, not in} transferrable object list, when valid\n- Short tight loop doing many of an action from two threads at the same time\n    - e.g. {create {buffer, texture, shader, pipeline}}"
