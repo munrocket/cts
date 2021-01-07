@@ -22,11 +22,9 @@ TODO: ensure existing tests cover these notes. Note many of these may be operati
 > - setStencilReference
 >     - {0, max}
 >     - used with a simple pipeline that {does, doesn't} use it
-
-TODO: setIndexBuffer, setVertexBuffer state (maybe in another file).
-`;import { params } from '../../../../../common/framework/params_builder.js';
-import { makeTestGroup } from '../../../../../common/framework/test_group.js';
-import { ValidationTest } from '../../validation_test.js';
+`;import { params } from '../../../../../../common/framework/params_builder.js';
+import { makeTestGroup } from '../../../../../../common/framework/test_group.js';
+import { ValidationTest } from '../../../validation_test.js';
 
 
 
@@ -315,4 +313,4 @@ fn(t => {
   encoders.pass.endPass();
   encoders.encoder.finish();
 });
-//# sourceMappingURL=dynamic_render_state.spec.js.map
+//# sourceMappingURL=dynamic_state.spec.js.map

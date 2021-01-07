@@ -22,12 +22,10 @@ TODO: ensure existing tests cover these notes. Note many of these may be operati
 > - setStencilReference
 >     - {0, max}
 >     - used with a simple pipeline that {does, doesn't} use it
-
-TODO: setIndexBuffer, setVertexBuffer state (maybe in another file).
 `;
-import { params } from '../../../../../common/framework/params_builder.js';
-import { makeTestGroup } from '../../../../../common/framework/test_group.js';
-import { ValidationTest } from '../../validation_test.js';
+import { params } from '../../../../../../common/framework/params_builder.js';
+import { makeTestGroup } from '../../../../../../common/framework/test_group.js';
+import { ValidationTest } from '../../../validation_test.js';
 
 class F extends ValidationTest {
   testViewportCall(success, v, attachmentSize = { width: 1, height: 1, depth: 1 }) {

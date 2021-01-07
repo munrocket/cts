@@ -1,10 +1,10 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
 **/export const description = `
-setVertexBuffer validation tests.
-`;import { makeTestGroup } from '../../../../../common/framework/test_group.js';
-import { range } from '../../../../../common/framework/util/util.js';
-import { ValidationTest } from '../../validation_test.js';
+Validation tests for setVertexBuffer/setIndexBuffer state (not validation). See also operation tests.
+`;import { makeTestGroup } from '../../../../../../common/framework/test_group.js';
+import { range } from '../../../../../../common/framework/util/util.js';
+import { ValidationTest } from '../../../validation_test.js';
 
 class F extends ValidationTest {
   getVertexBuffer() {
@@ -164,4 +164,4 @@ g.test('vertex_buffers_do_not_inherit_between_render_passes').fn(async t => {
     });
   }
 });
-//# sourceMappingURL=setVertexBuffer.spec.js.map
+//# sourceMappingURL=state_tracking.spec.js.map
