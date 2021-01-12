@@ -271,7 +271,7 @@ export const listing = [
       "queue",
       "writeBuffer"
     ],
-    "description": "TODO:\n- source.origin is unaligned\n- ?"
+    "description": "TODO:\n- source.origin is unaligned\n- data given as ArrayBuffer\n- data given as each TypedArray variant"
   },
   {
     "file": [
@@ -908,7 +908,7 @@ export const listing = [
       "queue",
       "writeBuffer"
     ],
-    "description": "Tests writeBuffer validation.\n\n- buffer missing usage flag\n- bufferOffset {ok, unaligned, too large for buffer}\n- dataOffset {ok, too large for data}\n- buffer size {ok, too small for copy}\n- data size {ok, too small for copy}\n- size {aligned, unaligned}\n- size unspecified; default {ok, too large for buffer}\n\nNote: destroyed buffer is tested in destroyed/.\n\nTODO: implement."
+    "description": "Tests writeBuffer validation.\n\n- buffer missing usage flag\n- bufferOffset {ok, unaligned, too large for buffer}\n- dataOffset {ok, too large for data}\n- buffer size {ok, too small for copy}\n- data size {ok, too small for copy}\n- size {aligned, unaligned}\n- size unspecified; default {ok, too large for buffer}\n\nNote: destroyed buffer is tested in destroyed/.\n\nTODO: implement usage flag validation.\nTODO: validate large write sizes that may overflow."
   },
   {
     "file": [
