@@ -1147,6 +1147,15 @@ export const listing = [
   },
   {
     "file": [
+      "shader",
+      "validation",
+      "wgsl",
+      "basic"
+    ],
+    "description": "Basic WGSL validation tests to test the ShaderValidationTest fixture."
+  },
+  {
+    "file": [
       "util",
       "texture",
       "texel_data"
