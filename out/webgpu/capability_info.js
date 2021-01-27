@@ -43,6 +43,11 @@ table)
   return result;
 }
 
+// Queries
+
+export const kMaxQueryCount = 8192;
+export const kQueryTypes = ['occlusion', 'pipeline-statistics', 'timestamp'];
+
 // Buffers
 
 export const kBufferSizeAlignment = 4;

@@ -623,14 +623,6 @@ export const listing = [
     "file": [
       "api",
       "validation",
-      "createQuerySet"
-    ],
-    "description": "Tests for validation inside createQuerySet.\n\nTODO"
-  },
-  {
-    "file": [
-      "api",
-      "validation",
       "createRenderPipeline"
     ],
     "description": "createRenderPipeline validation tests.\n\nTODO: review existing tests, write descriptions, and make sure tests are complete.\n      Make sure the following is covered. Consider splitting the file if too large/disjointed.\n> - various attachment problems\n>\n> - interface matching between vertex and fragment shader\n>     - superset, subset, etc.\n>\n> - vertexStage {valid, invalid}\n> - fragmentStage {valid, invalid}\n> - primitiveTopology all possible values\n> - rasterizationState various values\n> - sampleCount {0, 1, 3, 4, 8, 16, 1024}\n> - sampleMask {0, 0xFFFFFFFF}\n> - alphaToCoverage:\n>     - alphaToCoverageEnabled is { true, false } and sampleCount { = 1, = 4 }.\n>       The only failing case is (true, 1).\n>     - output SV_Coverage semantics is statically used by fragmentStage and\n>       alphaToCoverageEnabled is { true (fails), false (passes) }.\n>     - sampleMask is being used and alphaToCoverageEnabled is { true (fails), false (passes) }."
@@ -909,6 +901,15 @@ export const listing = [
       "layout_shader_compat"
     ],
     "description": "TODO:\n- interface matching between pipeline layout and shader\n    - x= {compute, vertex, fragment, vertex+fragment}, visibilities\n    - x= bind group index values, binding index values, multiple bindings\n    - x= types of bindings\n    - x= {equal, superset, subset}"
+  },
+  {
+    "file": [
+      "api",
+      "validation",
+      "query_set",
+      "create"
+    ],
+    "description": "Tests for validation in createQuerySet."
   },
   {
     "file": [
