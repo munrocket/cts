@@ -115,7 +115,8 @@ export const kRegularTextureFormatInfo = makeTable(
 const kTexFmtInfoHeader = ['renderable', 'color', 'depth', 'stencil', 'storage', 'copySrc', 'copyDst', 'bytesPerBlock', 'blockWidth', 'blockHeight', 'extension'];
 export const kSizedDepthStencilFormatInfo = makeTable(kTexFmtInfoHeader,
 [true, false,,, false,,,, 1, 1], {
-  'depth32float': [true, false, true, false,, false, false, 4] });
+  'depth32float': [true, false, true, false,, false, false, 4],
+  'stencil8': [true,, false, true,, false, false, 1] });
 
 export const kUnsizedDepthStencilFormatInfo = makeTable(kTexFmtInfoHeader,
 [true, false,,, false,,, undefined, 1, 1], {

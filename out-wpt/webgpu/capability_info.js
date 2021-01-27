@@ -130,6 +130,7 @@ export const kSizedDepthStencilFormatInfo = makeTable(
   [true, false, , , false, , , , 1, 1],
   {
     depth32float: [true, false, true, false, , false, false, 4],
+    stencil8: [true, , false, true, , false, false, 1],
   }
 );
 
