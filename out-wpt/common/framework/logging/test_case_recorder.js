@@ -68,6 +68,12 @@ export class TestCaseRecorder {
     this.logImpl(LogSeverity.Pass, logMessage);
   }
 
+  info(ex) {
+    const logMessage = new LogMessageWithStack('INFO', ex);
+    logMessage.setStackHidden();
+    this.logImpl(LogSeverity.Pass, logMessage);
+  }
+
   skipped(ex) {
     const message = new LogMessageWithStack('SKIP', ex);
     if (!this.debugging) {
