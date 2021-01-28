@@ -1160,6 +1160,14 @@ export const listing = [
     "file": [
       "shader",
       "validation",
+      "variable_and_const"
+    ],
+    "description": "Positive and negative validation tests for variable and const."
+  },
+  {
+    "file": [
+      "shader",
+      "validation",
       "wgsl",
       "basic"
     ],
