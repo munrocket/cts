@@ -93,11 +93,7 @@ got [${failedByteActualValues.join(', ')}]`;
     bytesPerPixel,
     expectedData
   ) {
-    this.device.defaultQueue.copyImageBitmapToTexture(
-      imageBitmapCopyView,
-      dstTextureCopyView,
-      copySize
-    );
+    this.device.queue.copyImageBitmapToTexture(imageBitmapCopyView, dstTextureCopyView, copySize);
 
     const imageBitmap = imageBitmapCopyView.imageBitmap;
     const dstTexture = dstTextureCopyView.texture;
@@ -116,7 +112,7 @@ got [${failedByteActualValues.join(', ')}]`;
       { width: imageBitmap.width, height: imageBitmap.height, depth: 1 }
     );
 
-    this.device.defaultQueue.submit([encoder.finish()]);
+    this.device.queue.submit([encoder.finish()]);
 
     this.checkCopyImageBitmapResult(
       testBuffer,

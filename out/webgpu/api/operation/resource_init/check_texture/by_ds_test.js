@@ -116,7 +116,7 @@ subresourceRange) =>
     const renderTexture = t.device.createTexture({
       size: [width, height, 1],
       format: 'r8unorm',
-      usage: GPUTextureUsage.OUTPUT_ATTACHMENT | GPUTextureUsage.COPY_SRC,
+      usage: GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.COPY_SRC,
       sampleCount: params.sampleCount });
 
 
@@ -126,7 +126,7 @@ subresourceRange) =>
       resolveTexture = t.device.createTexture({
         size: [width, height, 1],
         format: 'r8unorm',
-        usage: GPUTextureUsage.OUTPUT_ATTACHMENT | GPUTextureUsage.COPY_SRC });
+        usage: GPUTextureUsage.RENDER_ATTACHMENT | GPUTextureUsage.COPY_SRC });
 
       resolveTarget = resolveTexture.createView();
     }

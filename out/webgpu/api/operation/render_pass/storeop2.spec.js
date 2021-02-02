@@ -18,7 +18,7 @@ fn(async t => {
   const renderTexture = t.device.createTexture({
     size: { width: 1, height: 1, depth: 1 },
     format: 'r8unorm',
-    usage: GPUTextureUsage.COPY_SRC | GPUTextureUsage.OUTPUT_ATTACHMENT });
+    usage: GPUTextureUsage.COPY_SRC | GPUTextureUsage.RENDER_ATTACHMENT });
 
 
   // create render pipeline
@@ -71,7 +71,7 @@ fn(async t => {
   pass.setPipeline(renderPipeline);
   pass.draw(3);
   pass.endPass();
-  t.device.defaultQueue.submit([encoder.finish()]);
+  t.device.queue.submit([encoder.finish()]);
 
   // expect the buffer to be clear
   t.expectSingleColor(renderTexture, 'r8unorm', {
