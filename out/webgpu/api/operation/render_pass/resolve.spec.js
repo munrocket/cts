@@ -31,9 +31,9 @@ export const g = makeTestGroup(GPUTest);
 g.test('render_pass_resolve').
 params(
 params().
+combine(poptions('storeOperation', ['clear', 'store'])).
 combine(poptions('numColorAttachments', [2, 4])).
 combine(poptions('slotsToResolve', kSlotsToResolve)).
-combine(poptions('storeOperation', ['clear', 'store'])).
 combine(poptions('resolveTargetBaseMipLevel', [0, 1])).
 combine(poptions('resolveTargetBaseArrayLayer', [0, 1]))).
 
@@ -161,10 +161,10 @@ fn(t => {
   t.device.queue.submit([encoder.finish()]);
 
   // Verify the resolve targets contain the correct values.
-  for (let i = 0; i < resolveTargets.length; i++) {
+  for (const resolveTarget of resolveTargets) {
     // Test top left pixel, which should be {255, 255, 255, 255}.
     t.expectSinglePixelIn2DTexture(
-    resolveTargets[i],
+    resolveTarget,
     kFormat,
     { x: 0, y: 0 },
     {
@@ -176,7 +176,7 @@ fn(t => {
 
     // Test bottom right pixel, which should be {0, 0, 0, 0}.
     t.expectSinglePixelIn2DTexture(
-    resolveTargets[i],
+    resolveTarget,
     kFormat,
     { x: kSize - 1, y: kSize - 1 },
     {
@@ -187,12 +187,12 @@ fn(t => {
 
 
     // Test top right pixel, which should be {127, 127, 127, 127} due to the multisampled resolve.
-    t.expectSinglePixelIn2DTexture(
-    resolveTargets[i],
+    t.expectSinglePixelBetweenTwoValuesIn2DTexture(
+    resolveTarget,
     kFormat,
     { x: kSize - 1, y: 0 },
     {
-      exp: new Uint8Array([0x7f, 0x7f, 0x7f, 0x7f]),
+      exp: [new Uint8Array([0x7f, 0x7f, 0x7f, 0x7f]), new Uint8Array([0x80, 0x80, 0x80, 0x80])],
       slice: t.params.resolveTargetBaseArrayLayer,
       layout: { mipLevel: t.params.resolveTargetBaseMipLevel } });
 

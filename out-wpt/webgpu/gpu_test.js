@@ -381,7 +381,7 @@ got [${failedByteActualValues.join(', ')}]`;
   }
 
   // return a GPUBuffer that data are going to be written into
-  readSinglePixelFrom2DTexture(src, format, { x, y }, slice = 0, layout) {
+  readSinglePixelFrom2DTexture(src, format, { x, y }, { slice = 0, layout }) {
     const { byteLength, bytesPerRow, rowsPerImage, mipSize } = getTextureCopyLayout(
       format,
       '2d',
@@ -418,7 +418,7 @@ got [${failedByteActualValues.join(', ')}]`;
     { x, y },
     { exp, slice = 0, layout, generateWarningOnly = false }
   ) {
-    const buffer = this.readSinglePixelFrom2DTexture(src, format, { x, y }, slice, layout);
+    const buffer = this.readSinglePixelFrom2DTexture(src, format, { x, y }, { slice, layout });
     this.expectContents(buffer, exp, 0, { generateWarningOnly });
   }
 
@@ -428,7 +428,7 @@ got [${failedByteActualValues.join(', ')}]`;
     { x, y },
     { exp, slice = 0, layout, generateWarningOnly = false }
   ) {
-    const buffer = this.readSinglePixelFrom2DTexture(src, format, { x, y }, slice, layout);
+    const buffer = this.readSinglePixelFrom2DTexture(src, format, { x, y }, { slice, layout });
     this.expectContentsBetweenTwoValues(buffer, exp, 0, { generateWarningOnly });
   }
 
