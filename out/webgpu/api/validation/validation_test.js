@@ -1,9 +1,14 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
-**/import { assert } from '../../../common/framework/util/util.js';import { GPUTest } from '../../gpu_test.js';
-
+**/import { assert, unreachable } from '../../../common/framework/util/util.js';import { GPUTest } from '../../gpu_test.js';
 
 export const kEncoderTypes = ['non-pass', 'compute pass', 'render pass', 'render bundle'];
+
+
+
+
+
+
 
 
 
@@ -203,17 +208,6 @@ export class ValidationTest extends GPUTest {
     return pipeline;
   }
 
-
-
-
-
-
-
-
-
-
-
-
   createEncoder(encoderType) {
     const colorFormat = 'rgba8unorm';
     switch (encoderType) {
@@ -221,7 +215,6 @@ export class ValidationTest extends GPUTest {
           const encoder = this.device.createCommandEncoder();
           return {
             encoder,
-
             finish: () => {
               return encoder.finish();
             } };
@@ -279,6 +272,7 @@ export class ValidationTest extends GPUTest {
 
         }}
 
+    unreachable();
   }
 
   /**
