@@ -7,20 +7,16 @@ export const kEncoderTypes = ['non-pass', 'compute pass', 'render pass', 'render
 
 export class ValidationTest extends GPUTest {
   createTextureWithState(state, descriptor) {
-    var _descriptor;
-    descriptor =
-      (_descriptor = descriptor) !== null && _descriptor !== void 0
-        ? _descriptor
-        : {
-            size: { width: 1, height: 1, depth: 1 },
-            format: 'rgba8unorm',
-            usage:
-              GPUTextureUsage.COPY_SRC |
-              GPUTextureUsage.COPY_DST |
-              GPUTextureUsage.SAMPLED |
-              GPUTextureUsage.STORAGE |
-              GPUTextureUsage.RENDER_ATTACHMENT,
-          };
+    descriptor = descriptor ?? {
+      size: { width: 1, height: 1, depth: 1 },
+      format: 'rgba8unorm',
+      usage:
+        GPUTextureUsage.COPY_SRC |
+        GPUTextureUsage.COPY_DST |
+        GPUTextureUsage.SAMPLED |
+        GPUTextureUsage.STORAGE |
+        GPUTextureUsage.RENDER_ATTACHMENT,
+    };
 
     switch (state) {
       case 'valid':
@@ -36,14 +32,10 @@ export class ValidationTest extends GPUTest {
   }
 
   createBufferWithState(state, descriptor) {
-    var _descriptor2;
-    descriptor =
-      (_descriptor2 = descriptor) !== null && _descriptor2 !== void 0
-        ? _descriptor2
-        : {
-            size: 4,
-            usage: GPUBufferUsage.VERTEX,
-          };
+    descriptor = descriptor ?? {
+      size: 4,
+      usage: GPUBufferUsage.VERTEX,
+    };
 
     switch (state) {
       case 'valid':

@@ -15,8 +15,8 @@ export class ValidationTest extends GPUTest {
   createTextureWithState(
   state,
   descriptor)
-  {var _descriptor;
-    descriptor = (_descriptor = descriptor) !== null && _descriptor !== void 0 ? _descriptor : {
+  {
+    descriptor = descriptor ?? {
       size: { width: 1, height: 1, depth: 1 },
       format: 'rgba8unorm',
       usage:
@@ -43,8 +43,8 @@ export class ValidationTest extends GPUTest {
   createBufferWithState(
   state,
   descriptor)
-  {var _descriptor2;
-    descriptor = (_descriptor2 = descriptor) !== null && _descriptor2 !== void 0 ? _descriptor2 : {
+  {
+    descriptor = descriptor ?? {
       size: 4,
       usage: GPUBufferUsage.VERTEX };
 

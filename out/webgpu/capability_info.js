@@ -34,8 +34,8 @@ table)
   const result = {};
   for (const [k, v] of Object.entries(table)) {
     const item = {};
-    for (let i = 0; i < members.length; ++i) {var _v$i;
-      item[members[i]] = (_v$i = v[i]) !== null && _v$i !== void 0 ? _v$i : defaults[i];
+    for (let i = 0; i < members.length; ++i) {
+      item[members[i]] = v[i] ?? defaults[i];
     }
     result[k] = item;
   }

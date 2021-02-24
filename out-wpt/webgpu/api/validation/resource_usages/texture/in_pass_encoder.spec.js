@@ -801,7 +801,7 @@ g.test('replaced_binding')
     let success = bindingType !== 'writeonly-storage-texture';
     // Replaced bindings should not be validated in compute pass, because validation only occurs
     // inside dispatch() which only looks at the current resource usages.
-    success || (success = compute);
+    success ||= compute;
 
     t.expectValidationError(() => {
       encoder.finish();

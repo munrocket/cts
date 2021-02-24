@@ -436,7 +436,7 @@ got [${failedByteActualValues.join(', ')}]`;
 
     const commandEncoder = this.device.createCommandEncoder();
     commandEncoder.copyTextureToBuffer(
-    { texture: src, mipLevel: layout === null || layout === void 0 ? void 0 : layout.mipLevel, origin: { x: 0, y: 0, z: slice } },
+    { texture: src, mipLevel: layout?.mipLevel, origin: { x: 0, y: 0, z: slice } },
     { buffer, bytesPerRow, rowsPerImage },
     mipSize);
 
@@ -466,7 +466,7 @@ got [${failedByteActualValues.join(', ')}]`;
 
     const commandEncoder = this.device.createCommandEncoder();
     commandEncoder.copyTextureToBuffer(
-    { texture: src, mipLevel: layout === null || layout === void 0 ? void 0 : layout.mipLevel, origin: { x, y, z: slice } },
+    { texture: src, mipLevel: layout?.mipLevel, origin: { x, y, z: slice } },
     { buffer, bytesPerRow, rowsPerImage },
     mipSize);
 

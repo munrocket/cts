@@ -25,7 +25,7 @@ layout,
 format,
 copyExtentValue,
 { method })
-{var _layout$offset;
+{
   const copyExtent = standardizeExtent3D(copyExtentValue);
 
   const info = kSizedTextureFormatInfo[format];
@@ -36,7 +36,7 @@ copyExtentValue,
   const bytesInLastRow = widthInBlocks * info.bytesPerBlock;
 
   let valid = true;
-  const offset = (_layout$offset = layout.offset) !== null && _layout$offset !== void 0 ? _layout$offset : 0;
+  const offset = layout.offset ?? 0;
   if (method !== 'WriteTexture') {
     if (offset % info.bytesPerBlock !== 0) valid = false;
     if (layout.bytesPerRow && layout.bytesPerRow % 256 !== 0) valid = false;
@@ -45,7 +45,7 @@ copyExtentValue,
   if (layout.rowsPerImage !== undefined && heightInBlocks > layout.rowsPerImage) valid = false;
 
   let requiredBytesInCopy = 0;
-  {var _bytesPerRow, _rowsPerImage;
+  {
     let { bytesPerRow, rowsPerImage } = layout;
 
     // If heightInBlocks > 1, layout.bytesPerRow must be specified.
@@ -57,8 +57,8 @@ copyExtentValue,
     // If specified, layout.rowsPerImage must be greater than or equal to heightInBlocks.
     if (rowsPerImage !== undefined && rowsPerImage < heightInBlocks) valid = false;
 
-    (_bytesPerRow = bytesPerRow) !== null && _bytesPerRow !== void 0 ? _bytesPerRow : bytesPerRow = align(info.bytesPerBlock * widthInBlocks, 256);
-    (_rowsPerImage = rowsPerImage) !== null && _rowsPerImage !== void 0 ? _rowsPerImage : rowsPerImage = heightInBlocks;
+    bytesPerRow ??= align(info.bytesPerBlock * widthInBlocks, 256);
+    rowsPerImage ??= heightInBlocks;
 
     if (copyExtent.depth > 1) {
       const bytesPerImage = bytesPerRow * rowsPerImage;
