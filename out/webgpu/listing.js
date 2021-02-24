@@ -258,7 +258,7 @@ export const listing = [
       "queue",
       "writeBuffer"
     ],
-    "description": "TODO:\n- source.origin is unaligned\n- data given as ArrayBuffer\n- data given as each TypedArray variant"
+    "description": "Operation tests for GPUQueue.writeBuffer()"
   },
   {
     "file": [
