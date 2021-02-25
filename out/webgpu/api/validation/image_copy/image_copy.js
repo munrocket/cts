@@ -3,7 +3,7 @@
 **/import { poptions } from '../../../../common/framework/params_builder.js';import { kSizedTextureFormatInfo } from '../../../capability_info.js';
 import { ValidationTest } from '../validation_test.js';
 
-export class CopyBetweenLinearDataAndTextureTest extends ValidationTest {
+export class ImageCopyTest extends ValidationTest {
   testRun(
   textureCopyView,
   textureDataLayout,
@@ -171,4 +171,4 @@ export function formatCopyableWithMethod({ format, method }) {
     return kSizedTextureFormatInfo[format].copyDst;
   }
 }
-//# sourceMappingURL=copyBetweenLinearDataAndTexture.js.map
+//# sourceMappingURL=image_copy.js.map

@@ -4,7 +4,7 @@
 import { kSizedTextureFormatInfo } from '../../../capability_info.js';
 import { ValidationTest } from '../validation_test.js';
 
-export class CopyBetweenLinearDataAndTextureTest extends ValidationTest {
+export class ImageCopyTest extends ValidationTest {
   testRun(textureCopyView, textureDataLayout, size, { method, dataSize, success, submit = false }) {
     switch (method) {
       case 'WriteTexture': {
