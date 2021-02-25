@@ -67,7 +67,7 @@ export class CopyBetweenLinearDataAndTextureTest extends ValidationTest {
   // precise about its size as long as it's big enough and properly aligned.
   createAlignedTexture(
     format,
-    copySize = { width: 1, height: 1, depth: 1 },
+    copySize = { width: 1, height: 1, depthOrArrayLayers: 1 },
     origin = { x: 0, y: 0, z: 0 }
   ) {
     const info = kSizedTextureFormatInfo[format];
@@ -75,7 +75,7 @@ export class CopyBetweenLinearDataAndTextureTest extends ValidationTest {
       size: {
         width: Math.max(1, copySize.width + origin.x) * info.blockWidth,
         height: Math.max(1, copySize.height + origin.y) * info.blockHeight,
-        depth: Math.max(1, copySize.depth + origin.z),
+        depthOrArrayLayers: Math.max(1, copySize.depthOrArrayLayers + origin.z),
       },
 
       format,
@@ -128,7 +128,7 @@ export function texelBlockAlignmentTestExpanderForValueToCoordinate({ format, co
       );
 
     case 'z':
-    case 'depth':
+    case 'depthOrArrayLayers':
       return poptions('valueToCoordinate', valuesToTestDivisibilityBy(1));
   }
 }

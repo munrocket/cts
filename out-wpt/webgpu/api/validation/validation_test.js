@@ -8,7 +8,7 @@ export const kEncoderTypes = ['non-pass', 'compute pass', 'render pass', 'render
 export class ValidationTest extends GPUTest {
   createTextureWithState(state, descriptor) {
     descriptor = descriptor ?? {
-      size: { width: 1, height: 1, depth: 1 },
+      size: { width: 1, height: 1, depthOrArrayLayers: 1 },
       format: 'rgba8unorm',
       usage:
         GPUTextureUsage.COPY_SRC |
@@ -90,7 +90,7 @@ export class ValidationTest extends GPUTest {
 
   getSampledTexture(sampleCount = 1) {
     return this.device.createTexture({
-      size: { width: 16, height: 16, depth: 1 },
+      size: { width: 16, height: 16, depthOrArrayLayers: 1 },
       format: 'rgba8unorm',
       usage: GPUTextureUsage.SAMPLED,
       sampleCount,
@@ -99,7 +99,7 @@ export class ValidationTest extends GPUTest {
 
   getStorageTexture() {
     return this.device.createTexture({
-      size: { width: 16, height: 16, depth: 1 },
+      size: { width: 16, height: 16, depthOrArrayLayers: 1 },
       format: 'rgba8unorm',
       usage: GPUTextureUsage.STORAGE,
     });
@@ -108,7 +108,7 @@ export class ValidationTest extends GPUTest {
   getErrorTexture() {
     this.device.pushErrorScope('validation');
     const texture = this.device.createTexture({
-      size: { width: 0, height: 0, depth: 0 },
+      size: { width: 0, height: 0, depthOrArrayLayers: 0 },
       format: 'rgba8unorm',
       usage: GPUTextureUsage.SAMPLED,
     });
@@ -244,7 +244,7 @@ export class ValidationTest extends GPUTest {
         const attachment = this.device
           .createTexture({
             format: colorFormat,
-            size: { width: 16, height: 16, depth: 1 },
+            size: { width: 16, height: 16, depthOrArrayLayers: 1 },
             usage: GPUTextureUsage.RENDER_ATTACHMENT,
           })
           .createView();

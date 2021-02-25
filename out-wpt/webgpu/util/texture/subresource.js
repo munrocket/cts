@@ -53,7 +53,7 @@ export function mipSize(size, level) {
     return {
       width: rShiftMax1(size.width),
       height: rShiftMax1(size.height),
-      depth: rShiftMax1(size.depth),
+      depthOrArrayLayers: rShiftMax1(size.depthOrArrayLayers),
     };
   }
 }
@@ -71,5 +71,9 @@ export function physicalMipSize(size, format, dimension, level) {
     kAllTextureFormatInfo[format].blockHeight
   );
 
-  return { width: physicalWidthAtLevel, height: physicalHeightAtLevel, depth: size.depth };
+  return {
+    width: physicalWidthAtLevel,
+    height: physicalHeightAtLevel,
+    depthOrArrayLayers: size.depthOrArrayLayers,
+  };
 }
