@@ -121,12 +121,16 @@ const kTexFmtInfoHeader = ['renderable', 'color', 'depth', 'stencil', 'storage',
 export const kSizedDepthStencilFormatInfo = makeTable(kTexFmtInfoHeader,
 [true, false,,, false,,,, 1, 1], {
   'depth32float': [true, false, true, false,, false, false, 4],
+  'depth16unorm': [true, false, true, false,, false, false, 2],
   'stencil8': [true,, false, true,, false, false, 1] });
 
 export const kUnsizedDepthStencilFormatInfo = makeTable(kTexFmtInfoHeader,
 [true, false,,, false,,, undefined, 1, 1], {
   'depth24plus': [,, true, false,, false, false],
-  'depth24plus-stencil8': [,, true, true,, false, false] });
+  'depth24plus-stencil8': [,, true, true,, false, false],
+  // bytesPerBlock only makes sense on a per-aspect basis. But this table can't express that. So we put depth24unorm-stencil8 and depth32float-stencil8 to be unsized formats for now.
+  'depth24unorm-stencil8': [,, true, true,, false, false,,,, 'depth24unorm-stencil8'],
+  'depth32float-stencil8': [,, true, true,, false, false,,,, 'depth32float-stencil8'] });
 
 export const kCompressedTextureFormatInfo = makeTable(kTexFmtInfoHeader,
 [false, true, false, false, false, true, true,, 4, 4], {

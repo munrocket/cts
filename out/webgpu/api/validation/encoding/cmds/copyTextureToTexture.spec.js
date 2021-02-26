@@ -535,6 +535,8 @@ fn(async t => {
 
   const kTextureSize = { width: 16, height: 8, depthOrArrayLayers: 1 };
 
+  await t.selectDeviceOrSkipTestCase(kAllTextureFormatInfo[format].extension);
+
   const srcTexture = t.device.createTexture({
     size: kTextureSize,
     format,
@@ -556,7 +558,10 @@ fn(async t => {
 
     // kSizedDepthStencilFormats
     depth32float: ['all', 'depth-only'],
-    stencil8: ['all', 'stencil-only'] };
+    stencil8: ['all', 'stencil-only'],
+    depth16unorm: ['all', 'depth-only'],
+    'depth24unorm-stencil8': ['all'],
+    'depth32float-stencil8': ['all'] };
 
 
   const isSourceAspectValid = kValidAspectsForFormat[format].includes(sourceAspect);
