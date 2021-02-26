@@ -3,6 +3,7 @@
  **/ import { assert } from '../../../common/framework/util/util.js';
 import { kAllTextureFormatInfo } from '../../capability_info.js';
 import { align } from '../../util/math.js';
+import { standardizeExtent3D } from '../unions.js';
 
 function endOfRange(r) {
   return 'count' in r ? r.begin + r.count : r.end;
@@ -50,10 +51,11 @@ export function mipSize(size, level) {
   if (size instanceof Array) {
     return size.map(rShiftMax1);
   } else {
+    const size_ = standardizeExtent3D(size);
     return {
-      width: rShiftMax1(size.width),
-      height: rShiftMax1(size.height),
-      depthOrArrayLayers: rShiftMax1(size.depthOrArrayLayers),
+      width: rShiftMax1(size_.width),
+      height: rShiftMax1(size_.height),
+      depthOrArrayLayers: rShiftMax1(size_.depthOrArrayLayers),
     };
   }
 }
