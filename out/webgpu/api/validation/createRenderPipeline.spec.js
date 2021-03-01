@@ -139,6 +139,8 @@ fn(async t => {
   const format = t.params.format;
   const info = kAllTextureFormatInfo[format];
 
+  await t.selectDeviceOrSkipTestCase(info.extension);
+
   const descriptor = t.getDescriptor({ colorStates: [{ format }] });
 
   if (info.renderable && info.color) {

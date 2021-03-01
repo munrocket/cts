@@ -88,7 +88,7 @@ combine([
 ...poptions('storageTextureFormat', kAllTextureFormats)])).
 
 
-fn(t => {
+fn(async t => {
   const {
     type,
     hasDynamicOffset,
@@ -97,6 +97,10 @@ fn(t => {
     viewDimension,
     storageTextureFormat } =
   t.params;
+
+  if (storageTextureFormat !== undefined) {
+    await t.selectDeviceOrSkipTestCase(kAllTextureFormatInfo[storageTextureFormat].extension);
+  }
 
   let success = true;
   if (!(type in kBufferBindingTypeInfo)) {

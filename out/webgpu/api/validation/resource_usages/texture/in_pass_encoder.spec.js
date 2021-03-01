@@ -598,6 +598,8 @@ fn(async t => {
     _usageSuccess } =
   t.params;
 
+  await t.selectDeviceOrSkipTestCase(kDepthStencilFormatInfo[format].extension);
+
   const texture = t.createTexture({
     arrayLayerCount: TOTAL_LAYERS,
     mipLevelCount: TOTAL_LEVELS,

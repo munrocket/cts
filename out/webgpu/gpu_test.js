@@ -2,7 +2,11 @@
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
 **/import { Fixture } from '../common/framework/fixture.js';import { attemptGarbageCollection } from '../common/framework/util/collect_garbage.js';import { assert } from '../common/framework/util/util.js';
 
+import {
 
+
+kAllTextureFormatInfo } from
+'./capability_info.js';
 import { makeBufferWithContents } from './util/buffer.js';
 import { DevicePool, TestOOMedShouldAttemptGC } from './util/device_pool.js';
 import { align } from './util/math.js';
@@ -89,6 +93,27 @@ export class GPUTest extends Fixture {
 
     this.provider = await devicePool.reserve(descriptor);
     this.acquiredDevice = this.provider.acquire();
+  }
+
+  async selectDeviceForTextureFormatOrSkipTestCase(
+  formats)
+  {
+    if (!Array.isArray(formats)) {
+      formats = [formats];
+    }
+    const extensions = new Set();
+    for (const format of formats) {
+      if (format !== undefined) {
+        const formatExtension = kAllTextureFormatInfo[format].extension;
+        if (formatExtension !== undefined) {
+          extensions.add(formatExtension);
+        }
+      }
+    }
+
+    if (extensions.size) {
+      await this.selectDeviceOrSkipTestCase({ extensions });
+    }
   }
 
   // Note: finalize is called even if init was unsuccessful.

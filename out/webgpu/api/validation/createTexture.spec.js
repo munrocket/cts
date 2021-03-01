@@ -295,6 +295,8 @@ fn(async t => {
   const format = t.params.format;
   const info = kAllTextureFormatInfo[format];
 
+  await t.selectDeviceOrSkipTestCase(info.extension);
+
   const descriptor = t.getDescriptor({ width: 1, height: 1, format });
 
   t.expectValidationError(() => {

@@ -137,6 +137,8 @@ g.test('color_formats_must_be_renderable')
     const format = t.params.format;
     const info = kAllTextureFormatInfo[format];
 
+    await t.selectDeviceOrSkipTestCase(info.extension);
+
     const descriptor = t.getDescriptor({ colorStates: [{ format }] });
 
     if (info.renderable && info.color) {
