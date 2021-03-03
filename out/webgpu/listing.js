@@ -651,7 +651,7 @@ export const listing = [
       "cmds",
       "buffer_texture_copies"
     ],
-    "description": "copyTextureToBuffer and copyBufferToTexture validation tests not covered by\ncopy_between_linear_data_and_texture or destroyed,*.\n\nTODO: plan"
+    "description": "copyTextureToBuffer and copyBufferToTexture validation tests not covered by\nthe general image_copy tests, or by destroyed,*.\n\nTODO: plan further"
   },
   {
     "file": [
