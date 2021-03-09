@@ -478,6 +478,12 @@ export const kShaderStageCombinations = [0, 1, 2, 3, 4, 5, 6, 7];
 // TODO: Switch existing tests to use kTextureSampleCounts
 export const kTextureSampleCounts = [1, 4];
 
+// Pipeline limits
+
 // TODO: Update maximum color attachments when defined
 export const kMaxColorAttachments = 4;
+
+export const kMaxVertexBuffers = 8;
+export const kMaxVertexAttributes = 16;
+export const kMaxVertexBufferArrayStride = 2048;
 //# sourceMappingURL=capability_info.js.map
