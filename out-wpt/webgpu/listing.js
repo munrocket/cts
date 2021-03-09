@@ -616,7 +616,7 @@ export const listing = [
       "validation",
       "createTexture"
     ],
-    "description": "createTexture validation tests.\n\nTODO: review existing tests and merge with this plan:\n> All x= every texture format\n>\n> - sampleCount = {0, 1, 4, 8, 16, 256} with format/dimension that supports multisample\n>     - x= every texture format\n> - sampleCount = {1, 4}\n>     - with format that supports multisample, with all possible dimensions\n>     - with dimension that support multisample, with all possible formats\n>     - with format-dimension that support multisample, with {mipLevelCount, array layer count} = {1, 2}\n> - usage flags\n>     - {0, ... each single usage flag}\n>     - x= every texture format\n> - every possible pair of usage flags\n>     - with one common texture format\n> - any other conditions from the spec\n> - ...?\n\nTODO: move destroy tests out of this file"
+    "description": "createTexture validation tests.\n\nTODO: review existing tests and merge with this plan:\n> All x= every texture format\n>\n> - usage flags\n>     - {0, ... each single usage flag}\n>     - x= every texture format\n> - every possible pair of usage flags\n>     - with one common texture format\n> - any other conditions from the spec\n> - ...?\n\nTODO: move destroy tests out of this file"
   },
   {
     "file": [
