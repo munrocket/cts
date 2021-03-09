@@ -793,7 +793,7 @@ export const listing = [
       "queries",
       "general"
     ],
-    "description": "TODO:\n\n- For each way to start a query (all possible types in all possible encoders):\n    - queryIndex {in, out of} range for GPUQuerySet\n    - GPUQuerySet {valid, invalid}\n        - or {undefined}, for occlusionQuerySet\n    - ?"
+    "description": "TODO:\n\n- For each way to start a query (all possible types in all possible encoders):\n    - queryIndex {in, out of} range for GPUQuerySet\n    - GPUQuerySet {valid, invalid}\n        - or {undefined}, for occlusionQuerySet\n    - x = {occlusion, pipeline statistics, timestamp} query"
   },
   {
     "file": [
@@ -823,7 +823,7 @@ export const listing = [
       "queries",
       "resolveQuerySet"
     ],
-    "description": "TODO:\n- invalid GPUQuerySet\n- firstQuery and/or queryCount out of range\n- invalid destination buffer\n- destinationOffset out of range\n- ?"
+    "description": "Validation tests for resolveQuerySet."
   },
   {
     "file": [
