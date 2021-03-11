@@ -1091,7 +1091,7 @@ export const listing = [
       "validation",
       "vertex_state"
     ],
-    "description": "vertexState validation tests.\n\nTODO: implement the combinations tests below.\n\nTest each declaration must have a format compatible with the attribute:\n - For each vertex format\n  - For each type of shader declaration\n   - Check error IFF shader declaration not compatible with the attribute's format.\n\nOne-off test that many attributes can overlap.\n\nAll tests below are for a vertex buffer index 0, 1, limit-1.\n\nTest check that the end attribute must be contained in the stride:\n - For stride = 0 (special case), 4, 128, limit\n   - For each vertex format\n    - For offset stride, stride - componentsize(format), stride - sizeof(format), stride - sizeof(format) + componentsize(format), 0, 2^32 - componentsize(format), 2^32, 2**60\n      - Check error IFF offset + sizeof(format) > stride (or 2048 for 0)\n\nTest that an attribute must be aligned to the component size:\n - For each vertex format\n  - For stride = 2*sizeof(format), 128, limit\n    - For offset = componentsize(format), componentsize(format) / 2, stride - sizeof(format) - componentsize(format), stride - sizeof(format)\n     - Check error IFF offset not aligned to componentsize(format);"
+    "description": "vertexState validation tests."
   },
   {
     "file": [
