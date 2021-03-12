@@ -1,6 +1,7 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
-**/
+**/import { assert } from '../common/framework/util/util.js';
+
 import { GPUConst } from './constants.js';
 
 
@@ -231,33 +232,40 @@ const kDepthStencilFormatCapabilityInBufferTextureCopy = {
   // kUnsizedDepthStencilFormats
   depth24plus: {
     CopyB2T: [],
-    CopyT2B: [] },
+    CopyT2B: [],
+    texelAspectSize: { 'depth-only': -1, 'stencil-only': -1 } },
 
   'depth24plus-stencil8': {
     CopyB2T: ['stencil-only'],
-    CopyT2B: ['stencil-only'] },
+    CopyT2B: ['stencil-only'],
+    texelAspectSize: { 'depth-only': -1, 'stencil-only': 1 } },
 
 
   // kSizedDepthStencilFormats
   depth16unorm: {
     CopyB2T: ['all', 'depth-only'],
-    CopyT2B: ['all', 'depth-only'] },
+    CopyT2B: ['all', 'depth-only'],
+    texelAspectSize: { 'depth-only': 2, 'stencil-only': -1 } },
 
   depth32float: {
     CopyB2T: [],
-    CopyT2B: ['all', 'depth-only'] },
+    CopyT2B: ['all', 'depth-only'],
+    texelAspectSize: { 'depth-only': 4, 'stencil-only': -1 } },
 
   'depth24unorm-stencil8': {
     CopyB2T: ['stencil-only'],
-    CopyT2B: ['depth-only', 'stencil-only'] },
+    CopyT2B: ['depth-only', 'stencil-only'],
+    texelAspectSize: { 'depth-only': 4, 'stencil-only': 1 } },
 
   'depth32float-stencil8': {
     CopyB2T: ['stencil-only'],
-    CopyT2B: ['depth-only', 'stencil-only'] },
+    CopyT2B: ['depth-only', 'stencil-only'],
+    texelAspectSize: { 'depth-only': 4, 'stencil-only': 1 } },
 
   stencil8: {
     CopyB2T: ['all', 'stencil-only'],
-    CopyT2B: ['all', 'stencil-only'] } };
+    CopyT2B: ['all', 'stencil-only'],
+    texelAspectSize: { 'depth-only': -1, 'stencil-only': 1 } } };
 
 
 
@@ -269,6 +277,16 @@ aspect)
   const supportedAspects =
   kDepthStencilFormatCapabilityInBufferTextureCopy[format][type];
   return supportedAspects.includes(aspect);
+}
+
+export function depthStencilFormatAspectSize(
+format,
+aspect)
+{
+  const texelAspectSize =
+  kDepthStencilFormatCapabilityInBufferTextureCopy[format].texelAspectSize[aspect];
+  assert(texelAspectSize > 0);
+  return texelAspectSize;
 }
 
 export const kTextureUsageInfo =

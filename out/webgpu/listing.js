@@ -642,7 +642,7 @@ export const listing = [
       "cmds",
       "buffer_texture_copies"
     ],
-    "description": "copyTextureToBuffer and copyBufferToTexture validation tests not covered by\nthe general image_copy tests, or by destroyed,*.\n\nTODO: plan further"
+    "description": "copyTextureToBuffer and copyBufferToTexture validation tests not covered by\nthe general image_copy tests, or by destroyed,*.\n\nTODO:\nAdd tests to cover the validation rule that source.offset is a multiple of the texel block size of\ndestination.texture.[[format]]."
   },
   {
     "file": [
