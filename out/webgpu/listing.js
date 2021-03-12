@@ -607,7 +607,7 @@ export const listing = [
       "validation",
       "createTexture"
     ],
-    "description": "createTexture validation tests.\n\nTODO: review existing tests and merge with this plan:\n> All x= every texture format\n>\n> - any other conditions from the spec\n> - ...?\n\nTODO: move destroy tests out of this file"
+    "description": "createTexture validation tests."
   },
   {
     "file": [
