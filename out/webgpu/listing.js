@@ -1074,6 +1074,13 @@ export const listing = [
   {
     "file": [
       "web_platform",
+      "canvas"
+    ],
+    "readme": "Tests for WebGPU <canvas> and OffscreenCanvas presentation."
+  },
+  {
+    "file": [
+      "web_platform",
       "canvas",
       "configureSwapChain"
     ]
