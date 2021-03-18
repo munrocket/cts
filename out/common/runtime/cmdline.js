@@ -51,90 +51,88 @@ if (queries.length === 0) {
 }
 
 (async () => {
-  try {
-    const loader = new DefaultTestFileLoader();
-    assert(queries.length === 1, 'currently, there must be exactly one query on the cmd line');
-    const testcases = await loader.loadCases(parseQuery(queries[0]));
+  const loader = new DefaultTestFileLoader();
+  assert(queries.length === 1, 'currently, there must be exactly one query on the cmd line');
+  const testcases = await loader.loadCases(parseQuery(queries[0]));
 
-    const log = new Logger(debug);
+  const log = new Logger(debug);
 
-    const failed = [];
-    const warned = [];
-    const skipped = [];
+  const failed = [];
+  const warned = [];
+  const skipped = [];
 
-    let total = 0;
+  let total = 0;
 
-    for (const testcase of testcases) {
-      const name = testcase.query.toString();
-      const [rec, res] = log.record(name);
-      await testcase.run(rec);
+  for (const testcase of testcases) {
+    const name = testcase.query.toString();
+    const [rec, res] = log.record(name);
+    await testcase.run(rec);
 
-      if (verbose) {
-        printResults([[name, res]]);
-      }
-
-      total++;
-      switch (res.status) {
-        case 'pass':
-          break;
-        case 'fail':
-          failed.push([name, res]);
-          break;
-        case 'warn':
-          warned.push([name, res]);
-          break;
-        case 'skip':
-          skipped.push([name, res]);
-          break;
-        default:
-          unreachable('unrecognized status');}
-
+    if (verbose) {
+      printResults([[name, res]]);
     }
 
-    assert(total > 0, 'found no tests!');
+    total++;
+    switch (res.status) {
+      case 'pass':
+        break;
+      case 'fail':
+        failed.push([name, res]);
+        break;
+      case 'warn':
+        warned.push([name, res]);
+        break;
+      case 'skip':
+        skipped.push([name, res]);
+        break;
+      default:
+        unreachable('unrecognized status');}
 
-    // TODO: write results out somewhere (a file?)
-    if (printJSON) {
-      console.log(log.asJSON(2));
-    }
+  }
 
-    if (skipped.length) {
-      console.log('');
-      console.log('** Skipped **');
-      printResults(skipped);
-    }
-    if (warned.length) {
-      console.log('');
-      console.log('** Warnings **');
-      printResults(warned);
-    }
-    if (failed.length) {
-      console.log('');
-      console.log('** Failures **');
-      printResults(failed);
-    }
+  assert(total > 0, 'found no tests!');
 
-    const passed = total - warned.length - failed.length - skipped.length;
-    const pct = x => (100 * x / total).toFixed(2);
-    const rpt = x => {
-      const xs = x.toString().padStart(1 + Math.log10(total), ' ');
-      return `${xs} / ${total} = ${pct(x).padStart(6, ' ')}%`;
-    };
+  // TODO: write results out somewhere (a file?)
+  if (printJSON) {
+    console.log(log.asJSON(2));
+  }
+
+  if (skipped.length) {
     console.log('');
-    console.log(`** Summary **
+    console.log('** Skipped **');
+    printResults(skipped);
+  }
+  if (warned.length) {
+    console.log('');
+    console.log('** Warnings **');
+    printResults(warned);
+  }
+  if (failed.length) {
+    console.log('');
+    console.log('** Failures **');
+    printResults(failed);
+  }
+
+  const passed = total - warned.length - failed.length - skipped.length;
+  const pct = x => (100 * x / total).toFixed(2);
+  const rpt = x => {
+    const xs = x.toString().padStart(1 + Math.log10(total), ' ');
+    return `${xs} / ${total} = ${pct(x).padStart(6, ' ')}%`;
+  };
+  console.log('');
+  console.log(`** Summary **
 Passed  w/o warnings = ${rpt(passed)}
 Passed with warnings = ${rpt(warned.length)}
 Skipped              = ${rpt(skipped.length)}
 Failed               = ${rpt(failed.length)}`);
 
-    if (failed.length || warned.length) {
-      process.exit(1);
-    }
-  } catch (ex) {
-    console.log(ex);
+  if (failed.length || warned.length) {
     process.exit(1);
   }
-})();
+})().catch(ex => {
+  console.log(ex.stack ?? ex.toString());
+  process.exit(1);
+});
 
 function printResults(results) {
   for (const [name, r] of results) {
