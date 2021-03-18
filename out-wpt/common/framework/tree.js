@@ -1,7 +1,6 @@
 /**
  * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
- **/
-import { compareQueries, Ordering } from './query/compare.js';
+ **/ import { compareQueries, Ordering } from './query/compare.js';
 import {
   TestQueryMultiCase,
   TestQuerySingleCase,
@@ -368,7 +367,7 @@ function insertLeaf(parent, query, t) {
   const leaf = {
     readableRelativeName: readableNameForCase(query),
     query,
-    run: rec => t.run(rec),
+    run: (rec, expectations) => t.run(rec, query, expectations || []),
   };
 
   assert(!parent.children.has(key));
