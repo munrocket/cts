@@ -1,6 +1,8 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
-**/export const description = '';import { params, pbool, poptions } from '../../../../../common/framework/params_builder.js';
+**/export const description = `
+Tests for capability checking for features enabling optional query types.
+`;import { params, pbool, poptions } from '../../../../../common/framework/params_builder.js';
 import { makeTestGroup } from '../../../../../common/framework/test_group.js';
 import { ValidationTest } from '../../validation_test.js';
 
@@ -49,4 +51,4 @@ fn(async t => {
     t.device.createQuerySet({ type, count, pipelineStatistics });
   }, shouldError);
 });
-//# sourceMappingURL=queries.spec.js.map
+//# sourceMappingURL=query_types.spec.js.map

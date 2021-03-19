@@ -1,6 +1,7 @@
-/**
- * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
- **/ export const description = '';
+export const description = `
+Tests for capability checking for features enabling optional query types.
+`;
+
 import { params, pbool, poptions } from '../../../../../common/framework/params_builder.js';
 import { makeTestGroup } from '../../../../../common/framework/test_group.js';
 import { ValidationTest } from '../../validation_test.js';
@@ -22,14 +23,14 @@ As of this writing, the spec needs to be fixed as well.
   )
   .params(
     params()
-      .combine(poptions('type', ['occlusion', 'pipeline-statistics', 'timestamp']))
+      .combine(poptions('type', ['occlusion', 'pipeline-statistics', 'timestamp'] as const))
       .combine(pbool('pipelineStatisticsQueryEnable'))
       .combine(pbool('timestampQueryEnable'))
   )
   .fn(async t => {
     const { type, pipelineStatisticsQueryEnable, timestampQueryEnable } = t.params;
 
-    const extensions = [];
+    const extensions: GPUExtensionName[] = [];
     if (pipelineStatisticsQueryEnable) {
       extensions.push('pipeline-statistics-query');
     }
@@ -40,7 +41,8 @@ As of this writing, the spec needs to be fixed as well.
     await t.selectDeviceOrSkipTestCase({ extensions });
 
     const count = 1;
-    const pipelineStatistics = type === 'pipeline-statistics' ? ['clipper-invocations'] : [];
+    const pipelineStatistics =
+      type === 'pipeline-statistics' ? (['clipper-invocations'] as const) : ([] as const);
     const shouldError =
       (type === 'pipeline-statistics' && !pipelineStatisticsQueryEnable) ||
       (type === 'timestamp' && !timestampQueryEnable);

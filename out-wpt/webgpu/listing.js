@@ -228,13 +228,6 @@ export const listing = [
     "file": [
       "api",
       "operation",
-      "onuncapturederror"
-    ]
-  },
-  {
-    "file": [
-      "api",
-      "operation",
       "queue",
       "writeBuffer"
     ]
@@ -411,6 +404,13 @@ export const listing = [
     "file": [
       "api",
       "operation",
+      "uncapturederror"
+    ]
+  },
+  {
+    "file": [
+      "api",
+      "operation",
       "vertex_state",
       "basic"
     ]
@@ -499,7 +499,25 @@ export const listing = [
       "validation",
       "capability_checks",
       "features",
-      "queries"
+      "depth_clamping"
+    ]
+  },
+  {
+    "file": [
+      "api",
+      "validation",
+      "capability_checks",
+      "features",
+      "query_types"
+    ]
+  },
+  {
+    "file": [
+      "api",
+      "validation",
+      "capability_checks",
+      "features",
+      "texture_formats"
     ]
   },
   {
@@ -846,7 +864,8 @@ export const listing = [
       "api",
       "validation",
       "queue",
-      "copyImageBitmapToTexture"
+      "copyToTexture",
+      "ImageBitmap"
     ]
   },
   {
@@ -1109,7 +1128,50 @@ export const listing = [
   {
     "file": [
       "web_platform",
-      "copyImageBitmapToTexture"
+      "copyToTexture",
+      "ImageBitmap"
+    ]
+  },
+  {
+    "file": [
+      "web_platform",
+      "copyToTexture"
+    ],
+    "readme": "Tests for copyToTexture from all possible sources (video, canvas, ImageBitmap, ...)"
+  },
+  {
+    "file": [
+      "web_platform",
+      "copyToTexture",
+      "canvas"
+    ]
+  },
+  {
+    "file": [
+      "web_platform",
+      "copyToTexture",
+      "video"
+    ]
+  },
+  {
+    "file": [
+      "web_platform",
+      "external_texture"
+    ],
+    "readme": "Tests for external textures from video/canvas."
+  },
+  {
+    "file": [
+      "web_platform",
+      "external_texture",
+      "canvas"
+    ]
+  },
+  {
+    "file": [
+      "web_platform",
+      "external_texture",
+      "video"
     ]
   },
   {
