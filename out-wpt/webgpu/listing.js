@@ -325,6 +325,14 @@ export const listing = [
       "api",
       "operation",
       "rendering",
+      "depth"
+    ]
+  },
+  {
+    "file": [
+      "api",
+      "operation",
+      "rendering",
       "draw"
     ]
   },
