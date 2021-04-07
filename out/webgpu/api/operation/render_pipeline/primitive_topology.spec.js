@@ -201,6 +201,74 @@ function getTriangleStripTestLocations(expectedColor) {
 
 }
 
+function getDefaultTestLocations({
+  topology,
+  primitiveRestart = false,
+  invalidateLastInList = false })
+
+
+
+
+{
+  function maybeInvalidateLast(locations) {
+    if (!invalidateLastInList) return locations;
+
+    return locations.map((tl, i) => {
+      if (i === locations.length - 1) {
+        return {
+          location: tl.location,
+          color: kInvalidPixelColor };
+
+      } else {
+        return tl;
+      }
+    });
+  }
+
+  let testLocations;
+  switch (topology) {
+    case 'point-list':
+      testLocations = [
+      ...getPointTestLocations(kValidPixelColor),
+      ...getLineStripTestLocations(kInvalidPixelColor),
+      ...getTriangleListTestLocations(kInvalidPixelColor),
+      ...getTriangleStripTestLocations(kInvalidPixelColor)];
+
+      break;
+    case 'line-list':
+      testLocations = [
+      ...maybeInvalidateLast(getLineTestLocations(kValidPixelColor)),
+      ...getLineStripTestLocations(kInvalidPixelColor),
+      ...getTriangleListTestLocations(kInvalidPixelColor),
+      ...getTriangleStripTestLocations(kInvalidPixelColor)];
+
+      break;
+    case 'line-strip':
+      testLocations = [
+      ...(primitiveRestart ?
+      getPrimitiveRestartLineTestLocations(kValidPixelColor) :
+      getLineTestLocations(kValidPixelColor)),
+      ...getLineStripTestLocations(kValidPixelColor),
+      ...getTriangleListTestLocations(kInvalidPixelColor),
+      ...getTriangleStripTestLocations(kInvalidPixelColor)];
+
+      break;
+    case 'triangle-list':
+      testLocations = [
+      ...maybeInvalidateLast(getTriangleListTestLocations(kValidPixelColor)),
+      ...getTriangleStripTestLocations(kInvalidPixelColor)];
+
+      break;
+    case 'triangle-strip':
+      testLocations = [
+      ...getTriangleListTestLocations(kValidPixelColor),
+      ...getTriangleStripTestLocations(primitiveRestart ? kInvalidPixelColor : kValidPixelColor)];
+
+      break;}
+
+  return testLocations;
+}
+
 function generateVertexBuffer(vertexLocations) {
   const vertexCoords = new Float32Array(vertexLocations.length * 4);
   for (let i = 0; i < vertexLocations.length; i++) {
@@ -213,6 +281,7 @@ function generateVertexBuffer(vertexLocations) {
   return vertexCoords;
 }
 
+const kDefaultDrawCount = 6;
 class PrimitiveTopologyTest extends GPUTest {
   makeAttachmentTexture() {
     return this.device.createTexture({
@@ -222,10 +291,18 @@ class PrimitiveTopologyTest extends GPUTest {
 
   }
 
-  run(
-  topology,
-  testLocations,
-  usePrimitiveRestart)
+  run({
+    topology,
+    indirect,
+    testLocations,
+    primitiveRestart = false,
+    drawCount = kDefaultDrawCount })
+
+
+
+
+
+
   {
     const colorAttachment = this.makeAttachmentTexture();
 
@@ -302,15 +379,36 @@ class PrimitiveTopologyTest extends GPUTest {
     renderPass.setVertexBuffer(0, vertexBuffer);
 
     // Restart the strip between [v3, <restart>, v4].
-    if (usePrimitiveRestart) {
+    if (primitiveRestart) {
       const indexBuffer = this.makeBufferWithContents(
       new Uint32Array([0, 1, 2, -1, 3, 4, 5]),
       GPUBufferUsage.INDEX);
 
       renderPass.setIndexBuffer(indexBuffer, 'uint32');
-      renderPass.drawIndexed(7); // extra index for restart
+
+      if (indirect) {
+        renderPass.drawIndexedIndirect(
+        this.makeBufferWithContents(
+        new Uint32Array([drawCount + 1, 1, 0, 0, 0]),
+        GPUBufferUsage.INDIRECT),
+
+        0);
+
+      } else {
+        renderPass.drawIndexed(drawCount + 1); // extra index for restart
+      }
     } else {
-      renderPass.draw(6);
+      if (indirect) {
+        renderPass.drawIndirect(
+        this.makeBufferWithContents(
+        new Uint32Array([drawCount, 1, 0, 0]),
+        GPUBufferUsage.INDIRECT),
+
+        0);
+
+      } else {
+        renderPass.draw(drawCount);
+      }
     }
 
     renderPass.endPass();
@@ -346,63 +444,58 @@ desc(
 
   Params:
     - topology= {...all topologies}
-    - primitive_restart= { true, false } - always false for non-strip topologies
+    - indirect= {true, false}
+    - primitiveRestart= { true, false } - always false for non-strip topologies
   `).
 
 cases(
 params() //
 .combine(poptions('topology', topologies)).
-combine(pbool('primitive_restart')).
+combine(pbool('indirect')).
+combine(pbool('primitiveRestart')).
 unless(
-p => p.primitive_restart && p.topology !== 'line-strip' && p.topology !== 'triangle-strip')).
+p => p.primitiveRestart && p.topology !== 'line-strip' && p.topology !== 'triangle-strip')).
 
 
 fn(t => {
-  // Check valid test locations
-  let testLocations;
-  switch (t.params.topology) {
-    case 'point-list':
-      testLocations = [
-      ...getPointTestLocations(kValidPixelColor),
-      ...getLineStripTestLocations(kInvalidPixelColor),
-      ...getTriangleListTestLocations(kInvalidPixelColor),
-      ...getTriangleStripTestLocations(kInvalidPixelColor)];
+  t.run({
+    ...t.params,
+    testLocations: getDefaultTestLocations(t.params) });
 
-      break;
+});
+
+g.test('unaligned_vertex_count').
+desc(
+`Test that drawing with a number of vertices that's not a multiple of the vertices a given primitive list topology is not an error. The last primitive is not drawn.
+
+    Params:
+    - topology= {line-list, triangle-list}
+    - indirect= {true, false}
+    - drawCount - number of vertices to draw. A value smaller than the test's default of ${kDefaultDrawCount}.
+                   One smaller for line-list. One or two smaller for triangle-list.
+    `).
+
+cases(
+params() //
+.combine(poptions('topology', ['line-list', 'triangle-list'])).
+combine(pbool('indirect')).
+expand(function* (p) {
+  switch (p.topology) {
     case 'line-list':
-      testLocations = [
-      ...getLineTestLocations(kValidPixelColor),
-      ...getLineStripTestLocations(kInvalidPixelColor),
-      ...getTriangleListTestLocations(kInvalidPixelColor),
-      ...getTriangleStripTestLocations(kInvalidPixelColor)];
-
-      break;
-    case 'line-strip':
-      testLocations = [
-      ...(t.params.primitive_restart ?
-      getPrimitiveRestartLineTestLocations(kValidPixelColor) :
-      getLineTestLocations(kValidPixelColor)),
-      ...getLineStripTestLocations(kValidPixelColor),
-      ...getTriangleListTestLocations(kInvalidPixelColor),
-      ...getTriangleStripTestLocations(kInvalidPixelColor)];
-
+      yield { drawCount: kDefaultDrawCount - 1 };
       break;
     case 'triangle-list':
-      testLocations = [
-      ...getTriangleListTestLocations(kValidPixelColor),
-      ...getTriangleStripTestLocations(kInvalidPixelColor)];
-
-      break;
-    case 'triangle-strip':
-      testLocations = [
-      ...getTriangleListTestLocations(kValidPixelColor),
-      ...getTriangleStripTestLocations(
-      t.params.primitive_restart ? kInvalidPixelColor : kValidPixelColor)];
-
-
+      yield { drawCount: kDefaultDrawCount - 1 };
+      yield { drawCount: kDefaultDrawCount - 2 };
       break;}
 
+})).
 
-  t.run(t.params.topology, testLocations, t.params.primitive_restart);
+fn(t => {
+  const testLocations = getDefaultTestLocations({ ...t.params, invalidateLastInList: true });
+  t.run({
+    ...t.params,
+    testLocations });
+
 });
 //# sourceMappingURL=primitive_topology.spec.js.map
