@@ -301,6 +301,14 @@ export function depthStencilFormatAspectSize(format, aspect) {
   return texelAspectSize;
 }
 
+export function textureDimensionAndFormatCompatible(dimension, format) {
+  const info = kAllTextureFormatInfo[format];
+  return !(
+    (dimension === '1d' || dimension === '3d') &&
+    (info.blockWidth > 1 || info.depth || info.stencil)
+  );
+}
+
 export const kTextureUsageInfo = {
   [GPUConst.TextureUsage.COPY_SRC]: {},
   [GPUConst.TextureUsage.COPY_DST]: {},
