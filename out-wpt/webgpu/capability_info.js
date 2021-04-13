@@ -33,7 +33,14 @@ function makeTable(members, defaults, table) {
 // Queries
 
 export const kMaxQueryCount = 8192;
-export const kQueryTypes = ['occlusion', 'pipeline-statistics', 'timestamp'];
+export const kQueryTypeInfo = {
+  // Occlusion query does not require any extensions.
+  occlusion: { extension: undefined },
+  'pipeline-statistics': { extension: 'pipeline-statistics-query' },
+  timestamp: { extension: 'timestamp-query' },
+};
+
+export const kQueryTypes = keysOf(kQueryTypeInfo);
 
 // Buffers
 
