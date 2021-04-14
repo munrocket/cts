@@ -157,12 +157,16 @@ class DescriptorToHolderMap {
   }}
 
 
+// TODO: Switch to using the non-deprecated member names
+
+
+
 
 /**
-      * Make a stringified map-key from a GPUDeviceDescriptor.
-      * Tries to make sure all defaults are resolved, first - but it's okay if some are missed
-      * (it just means some GPUDevice objects won't get deduplicated).
-      */
+ * Make a stringified map-key from a GPUDeviceDescriptor.
+ * Tries to make sure all defaults are resolved, first - but it's okay if some are missed
+ * (it just means some GPUDevice objects won't get deduplicated).
+ */
 function canonicalizeDescriptor(desc) {
   const extensionsCanonicalized = desc.extensions ? Array.from(desc.extensions).sort() : [];
   const limits = { ...desc.limits };

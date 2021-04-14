@@ -6,8 +6,6 @@ import { GPUConst } from './constants.js';
 
 
 
-
-
 function keysOf(obj) {
   return Object.keys(obj);
 }
