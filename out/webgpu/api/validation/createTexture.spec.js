@@ -196,6 +196,7 @@ fn(async t => {
 
   const descriptor = {
     size,
+    mipLevelCount: 0,
     dimension,
     format,
     usage: GPUTextureUsage.SAMPLED };

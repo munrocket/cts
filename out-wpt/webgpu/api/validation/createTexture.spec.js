@@ -187,6 +187,7 @@ g.test('mipLevelCount,bound_check')
 
     const descriptor = {
       size,
+      mipLevelCount: 0,
       dimension,
       format,
       usage: GPUTextureUsage.SAMPLED,
