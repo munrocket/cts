@@ -3,6 +3,8 @@
  **/ export const description = `
 Texture Usages Validation Tests in Render Pass and Compute Pass.
 
+TODO: update for new binding structure.
+
 TODO: description per test
 
 Test Coverage:
@@ -78,7 +80,14 @@ class TextureUsageTracking extends ValidationTest {
     });
   }
 
-  createBindGroup(index, view, bindingType, dimension, bindingTexFormat) {
+  createBindGroup(
+    index,
+    view,
+
+    bindingType,
+    dimension,
+    bindingTexFormat
+  ) {
     return this.device.createBindGroup({
       entries: [{ binding: index, resource: view }],
       layout: this.device.createBindGroupLayout({
@@ -587,8 +596,7 @@ g.test('subresources_and_binding_types_combination_for_aspect')
       _resourceSuccess,
       _usageSuccess,
     } = t.params;
-
-    await t.selectDeviceOrSkipTestCase(kDepthStencilFormatInfo[format].extension);
+    await t.selectDeviceOrSkipTestCase(kDepthStencilFormatInfo[format].feature);
 
     const texture = t.createTexture({
       arrayLayerCount: TOTAL_LAYERS,

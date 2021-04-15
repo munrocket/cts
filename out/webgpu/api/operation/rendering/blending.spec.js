@@ -240,6 +240,7 @@ fn(t => {
 
   renderPass.setPipeline(pipeline);
   if (blendColor) {
+
     renderPass.setBlendColor(blendColor);
   }
   renderPass.setBindGroup(

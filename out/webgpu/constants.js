@@ -1,6 +1,7 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
-**/ // Types ensures every field is specified.
+**/ // Types ensure every field is specified.
+function checkType(x) {}
 
 const BufferUsage = {
   MAP_READ: 0x0001,
@@ -14,12 +15,16 @@ const BufferUsage = {
   INDIRECT: 0x0100,
   QUERY_RESOLVE: 0x0200 };
 
+checkType(BufferUsage);
+
 const TextureUsage = {
   COPY_SRC: 0x01,
   COPY_DST: 0x02,
   SAMPLED: 0x04,
   STORAGE: 0x08,
   RENDER_ATTACHMENT: 0x10 };
+
+checkType(TextureUsage);
 
 const ColorWrite = {
   RED: 0x1,
@@ -28,14 +33,20 @@ const ColorWrite = {
   ALPHA: 0x8,
   ALL: 0xf };
 
+checkType(ColorWrite);
+
 const ShaderStage = {
   VERTEX: 0x1,
   FRAGMENT: 0x2,
   COMPUTE: 0x4 };
 
+checkType(ShaderStage);
+
 const MapMode = {
   READ: 0x1,
   WRITE: 0x2 };
+
+checkType(MapMode);
 
 export const GPUConst = {
   BufferUsage,
@@ -43,6 +54,7 @@ export const GPUConst = {
   ColorWrite,
   ShaderStage,
   MapMode };
+
 
 
 export const DefaultLimits = {
@@ -58,5 +70,9 @@ export const DefaultLimits = {
   maxStorageBuffersPerShaderStage: 4,
   maxStorageTexturesPerShaderStage: 4,
   maxUniformBuffersPerShaderStage: 12,
-  maxUniformBufferBindingSize: 16384 };
+  maxUniformBufferBindingSize: 16384,
+  maxStorageBufferBindingSize: 134217728,
+  maxVertexBuffers: 8,
+  maxVertexAttributes: 16,
+  maxVertexBufferArrayStride: 2048 };
 //# sourceMappingURL=constants.js.map

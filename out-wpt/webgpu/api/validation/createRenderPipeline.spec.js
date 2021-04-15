@@ -136,8 +136,7 @@ g.test('color_formats_must_be_renderable')
   .fn(async t => {
     const format = t.params.format;
     const info = kAllTextureFormatInfo[format];
-
-    await t.selectDeviceOrSkipTestCase(info.extension);
+    await t.selectDeviceOrSkipTestCase(info.feature);
 
     const descriptor = t.getDescriptor({ targets: [{ format }] });
 

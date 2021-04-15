@@ -42,10 +42,8 @@ g.test('zero_size')
   )
   .fn(async t => {
     const { dimension, zeroArgument, format } = t.params;
-
     const info = kAllTextureFormatInfo[format];
-
-    await t.selectDeviceOrSkipTestCase(info.extension);
+    await t.selectDeviceOrSkipTestCase(info.feature);
 
     const size = [info.blockWidth, info.blockHeight, 1];
     let mipLevelCount = 1;
@@ -90,9 +88,8 @@ g.test('dimension_type_and_format_compatibility')
   .subcases(() => params().combine(poptions('format', kAllTextureFormats)))
   .fn(async t => {
     const { dimension, format } = t.params;
-
     const info = kAllTextureFormatInfo[format];
-    await t.selectDeviceOrSkipTestCase(info.extension);
+    await t.selectDeviceOrSkipTestCase(info.feature);
 
     const descriptor = {
       size: [info.blockWidth, info.blockHeight, 1],
@@ -121,9 +118,8 @@ g.test('mipLevelCount,format')
   )
   .fn(async t => {
     const { dimension, format, mipLevelCount } = t.params;
-
     const info = kAllTextureFormatInfo[format];
-    await t.selectDeviceOrSkipTestCase(info.extension);
+    await t.selectDeviceOrSkipTestCase(info.feature);
 
     // Note that compressed formats are not valid for 1D. They have already been filtered out for 1D in this test.
     // So there is no dilemma about size.width equals 1 vs size.width % info.blockHeight equals 0 for 1D compressed formats.
@@ -182,8 +178,7 @@ g.test('mipLevelCount,bound_check')
   )
   .fn(async t => {
     const { format, size, dimension } = t.params;
-
-    await t.selectDeviceOrSkipTestCase(kAllTextureFormatInfo[format].extension);
+    await t.selectDeviceOrSkipTestCase(kAllTextureFormatInfo[format].feature);
 
     const descriptor = {
       size,
@@ -230,8 +225,7 @@ g.test('sampleCount,various_sampleCount_with_all_formats')
   )
   .fn(async t => {
     const { dimension, sampleCount, format } = t.params;
-
-    await t.selectDeviceOrSkipTestCase(kAllTextureFormatInfo[format].extension);
+    await t.selectDeviceOrSkipTestCase(kAllTextureFormatInfo[format].feature);
 
     const descriptor = {
       size: [32, 32, 1],
@@ -279,8 +273,7 @@ g.test('sampleCount,valid_sampleCount_with_other_parameter_varies')
   )
   .fn(async t => {
     const { dimension, sampleCount, format, mipLevelCount, arrayLayerCount, usage } = t.params;
-
-    await t.selectDeviceOrSkipTestCase(kAllTextureFormatInfo[format].extension);
+    await t.selectDeviceOrSkipTestCase(kAllTextureFormatInfo[format].feature);
 
     const size =
       dimension === '1d'
@@ -326,8 +319,7 @@ g.test('texture_size,default_value_and_smallest_size,uncompressed_format')
   )
   .fn(async t => {
     const { dimension, format, size } = t.params;
-
-    await t.selectDeviceOrSkipTestCase(kAllTextureFormatInfo[format].extension);
+    await t.selectDeviceOrSkipTestCase(kAllTextureFormatInfo[format].feature);
 
     const descriptor = {
       size,
@@ -364,10 +356,8 @@ g.test('texture_size,default_value_and_smallest_size,compressed_format')
   )
   .fn(async t => {
     const { dimension, format, size, _success } = t.params;
-
     const info = kCompressedTextureFormatInfo[format];
-
-    await t.selectDeviceOrSkipTestCase(info.extension);
+    await t.selectDeviceOrSkipTestCase(info.feature);
 
     const descriptor = {
       size,
@@ -399,8 +389,7 @@ g.test('texture_size,1d_texture')
   )
   .fn(async t => {
     const { format, width, height, depthOrArrayLayers } = t.params;
-
-    await t.selectDeviceOrSkipTestCase(kUncompressedTextureFormatInfo[format].extension);
+    await t.selectDeviceOrSkipTestCase(kUncompressedTextureFormatInfo[format].feature);
 
     const descriptor = {
       size: [width, height, depthOrArrayLayers],
@@ -442,8 +431,7 @@ g.test('texture_size,2d_texture,uncompressed_format')
   )
   .fn(async t => {
     const { dimension, format, size } = t.params;
-
-    await t.selectDeviceOrSkipTestCase(kUncompressedTextureFormatInfo[format].extension);
+    await t.selectDeviceOrSkipTestCase(kUncompressedTextureFormatInfo[format].feature);
 
     const descriptor = {
       size,
@@ -507,14 +495,13 @@ g.test('texture_size,2d_texture,compressed_format')
   )
   .fn(async t => {
     const { dimension, format, size } = t.params;
-
     const info = kCompressedTextureFormatInfo[format];
+    await t.selectDeviceOrSkipTestCase(info.feature);
+
     assert(
       DefaultLimits.maxTextureDimension2D % info.blockWidth === 0 &&
         DefaultLimits.maxTextureDimension2D % info.blockHeight === 0
     );
-
-    await t.selectDeviceOrSkipTestCase(info.extension);
 
     const descriptor = {
       size,
@@ -559,8 +546,7 @@ g.test('texture_size,3d_texture,uncompressed_format')
   )
   .fn(async t => {
     const { format, size } = t.params;
-
-    await t.selectDeviceOrSkipTestCase(kUncompressedTextureFormatInfo[format].extension);
+    await t.selectDeviceOrSkipTestCase(kUncompressedTextureFormatInfo[format].feature);
 
     const descriptor = {
       size,
@@ -628,12 +614,12 @@ g.test('texture_size,3d_texture,compressed_format')
     t.skip('Compressed 3D texture is not supported');
 
     const info = kCompressedTextureFormatInfo[format];
+    await t.selectDeviceOrSkipTestCase(info.feature);
+
     assert(
       DefaultLimits.maxTextureDimension3D % info.blockWidth === 0 &&
         DefaultLimits.maxTextureDimension3D % info.blockHeight === 0
     );
-
-    await t.selectDeviceOrSkipTestCase(info.extension);
 
     const descriptor = {
       size,
@@ -671,8 +657,7 @@ g.test('texture_usage')
   .fn(async t => {
     const { dimension, format, usage0, usage1 } = t.params;
     const info = kAllTextureFormatInfo[format];
-
-    await t.selectDeviceOrSkipTestCase(info.extension);
+    await t.selectDeviceOrSkipTestCase(info.feature);
 
     const size = [info.blockWidth, info.blockHeight, 1];
     const usage = usage0 | usage1;

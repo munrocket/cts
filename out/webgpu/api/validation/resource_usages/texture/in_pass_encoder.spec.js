@@ -3,6 +3,8 @@
 **/export const description = `
 Texture Usages Validation Tests in Render Pass and Compute Pass.
 
+TODO: update for new binding structure.
+
 TODO: description per test
 
 Test Coverage:
@@ -90,6 +92,7 @@ class TextureUsageTracking extends ValidationTest {
   createBindGroup(
   index,
   view,
+
   bindingType,
   dimension,
   bindingTexFormat)
@@ -597,8 +600,7 @@ fn(async t => {
     _resourceSuccess,
     _usageSuccess } =
   t.params;
-
-  await t.selectDeviceOrSkipTestCase(kDepthStencilFormatInfo[format].extension);
+  await t.selectDeviceOrSkipTestCase(kDepthStencilFormatInfo[format].feature);
 
   const texture = t.createTexture({
     arrayLayerCount: TOTAL_LAYERS,

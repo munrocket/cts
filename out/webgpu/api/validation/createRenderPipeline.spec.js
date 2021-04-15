@@ -138,8 +138,7 @@ params(poptions('format', kAllTextureFormats)).
 fn(async t => {
   const format = t.params.format;
   const info = kAllTextureFormatInfo[format];
-
-  await t.selectDeviceOrSkipTestCase(info.extension);
+  await t.selectDeviceOrSkipTestCase(info.feature);
 
   const descriptor = t.getDescriptor({ targets: [{ format }] });
 
