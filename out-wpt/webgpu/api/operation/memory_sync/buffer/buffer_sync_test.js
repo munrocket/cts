@@ -57,7 +57,7 @@ export class BufferSyncTest extends GPUTest {
         [[offset(0)]] a : i32;
       };
 
-      [[group(0), binding(0)]] var<storage_buffer> data : Data;
+      [[group(0), binding(0)]] var<storage> data : [[access(read_write)]] Data;
       [[stage(compute)]] fn main() -> void {
         data.a = ${value};
         return;
@@ -92,7 +92,7 @@ export class BufferSyncTest extends GPUTest {
         [[offset(0)]] a : i32;
       };
 
-      [[group(0), binding(0)]] var<storage_buffer> data : Data;
+      [[group(0), binding(0)]] var<storage> data : [[access(read_write)]] Data;
       [[stage(fragment)]] fn frag_main() -> void {
         data.a = ${value};
         outColor = vec4<f32>(1.0, 0.0, 0.0, 1.0);
