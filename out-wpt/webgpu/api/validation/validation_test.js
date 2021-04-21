@@ -106,14 +106,6 @@ export class ValidationTest extends GPUTest {
     return this.createBufferWithState('invalid');
   }
 
-  getSampler() {
-    return this.device.createSampler();
-  }
-
-  getComparisonSampler() {
-    return this.device.createSampler({ compare: 'never' });
-  }
-
   getErrorSampler() {
     this.device.pushErrorScope('validation');
     const sampler = this.device.createSampler({ lodMinClamp: -1 });
@@ -177,10 +169,12 @@ export class ValidationTest extends GPUTest {
         return { buffer: this.getUniformBuffer() };
       case 'storageBuf':
         return { buffer: this.getStorageBuffer() };
-      case 'plainSamp':
-        return this.getSampler();
+      case 'filtSamp':
+        return this.device.createSampler({ minFilter: 'linear' });
+      case 'nonFiltSamp':
+        return this.device.createSampler();
       case 'compareSamp':
-        return this.getComparisonSampler();
+        return this.device.createSampler({ compare: 'never' });
       case 'sampledTex':
         return this.getSampledTexture(1).createView();
       case 'sampledTexMS':
