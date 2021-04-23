@@ -196,15 +196,16 @@ fn(async t => {
   const renderPassDescriptorWithoutDepthStencil = {
     colorAttachments: [
     {
-      attachment: colorTexture.createView(),
-      loadValue: { r: 1.0, g: 0.0, b: 0.0, a: 1.0 } }] };
+      view: colorTexture.createView(),
+      loadValue: { r: 1.0, g: 0.0, b: 0.0, a: 1.0 },
+      storeOp: 'store' }] };
 
 
 
   const renderPassDescriptorWithDepthStencilOnly = {
     colorAttachments: [],
     depthStencilAttachment: {
-      attachment: depthStencilTexture.createView(),
+      view: depthStencilTexture.createView(),
       depthLoadValue: 1.0,
       depthStoreOp: 'store',
       stencilLoadValue: 0,

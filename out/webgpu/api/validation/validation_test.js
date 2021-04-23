@@ -221,7 +221,7 @@ export class ValidationTest extends GPUTest {
 
   createNoOpComputePipeline() {
     return this.device.createComputePipeline({
-      computeStage: {
+      compute: {
         module: this.device.createShaderModule({
           code: '[[stage(compute)]] fn main() {}' }),
 
@@ -233,7 +233,7 @@ export class ValidationTest extends GPUTest {
   createErrorComputePipeline() {
     this.device.pushErrorScope('validation');
     const pipeline = this.device.createComputePipeline({
-      computeStage: {
+      compute: {
         module: this.device.createShaderModule({
           code: '' }),
 
@@ -284,7 +284,7 @@ export class ValidationTest extends GPUTest {
         }
       case 'render pass':{
           const commandEncoder = this.device.createCommandEncoder();
-          const attachment = this.device.
+          const view = this.device.
           createTexture({
             format: colorFormat,
             size: { width: 16, height: 16, depthOrArrayLayers: 1 },
@@ -294,8 +294,9 @@ export class ValidationTest extends GPUTest {
           const encoder = commandEncoder.beginRenderPass({
             colorAttachments: [
             {
-              attachment,
-              loadValue: { r: 1.0, g: 0.0, b: 0.0, a: 1.0 } }] });
+              view,
+              loadValue: { r: 1.0, g: 0.0, b: 0.0, a: 1.0 },
+              storeOp: 'store' }] });
 
 
 

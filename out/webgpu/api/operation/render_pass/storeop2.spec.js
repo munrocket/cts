@@ -58,7 +58,7 @@ fn(async t => {
   const pass = encoder.beginRenderPass({
     colorAttachments: [
     {
-      attachment: renderTexture.createView(),
+      view: renderTexture.createView(),
       storeOp: t.params.storeOp,
       loadValue: { r: 0.0, g: 0.0, b: 0.0, a: 0.0 } }] });
 

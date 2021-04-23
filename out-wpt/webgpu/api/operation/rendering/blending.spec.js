@@ -10,7 +10,7 @@ TODO:
 `;
 import { params, poptions } from '../../../../common/framework/params_builder.js';
 import { makeTestGroup } from '../../../../common/framework/test_group.js';
-import { assert } from '../../../../common/framework/util/util.js';
+import { assert, unreachable } from '../../../../common/framework/util/util.js';
 import { GPUTest } from '../../../gpu_test.js';
 
 export const g = makeTestGroup(GPUTest);
@@ -18,17 +18,17 @@ export const g = makeTestGroup(GPUTest);
 const kBlendFactors = [
   'zero',
   'one',
-  'src-color',
-  'one-minus-src-color',
+  'src',
+  'one-minus-src',
   'src-alpha',
   'one-minus-src-alpha',
-  'dst-color',
-  'one-minus-dst-color',
+  'dst',
+  'one-minus-dst',
   'dst-alpha',
   'one-minus-dst-alpha',
   'src-alpha-saturated',
-  'blend-color',
-  'one-minus-blend-color',
+  'constant',
+  'one-minus-constant',
 ];
 
 const kBlendOperations = [
@@ -55,20 +55,16 @@ function computeBlendFactor(src, dst, blendColor, factor) {
     case 'one':
       return { r: 1, g: 1, b: 1, a: 1 };
     case 'src':
-    case 'src-color':
       return { ...src };
     case 'one-minus-src':
-    case 'one-minus-src-color':
       return mapColor(src, v => 1 - v);
     case 'src-alpha':
       return mapColor(src, () => src.a);
     case 'one-minus-src-alpha':
       return mapColor(src, () => 1 - src.a);
     case 'dst':
-    case 'dst-color':
       return { ...dst };
     case 'one-minus-dst':
-    case 'one-minus-dst-color':
       return mapColor(dst, v => 1 - v);
     case 'dst-alpha':
       return mapColor(dst, () => dst.a);
@@ -79,13 +75,13 @@ function computeBlendFactor(src, dst, blendColor, factor) {
       return { r: f, g: f, b: f, a: 1 };
     }
     case 'constant':
-    case 'blend-color':
       assert(blendColor !== undefined);
       return { ...blendColor };
     case 'one-minus-constant':
-    case 'one-minus-blend-color':
       assert(blendColor !== undefined);
       return mapColor(blendColor, v => 1 - v);
+    default:
+      unreachable();
   }
 }
 
@@ -127,11 +123,11 @@ g.test('GPUBlendComponent')
       .combine(poptions('operation', kBlendOperations))
   )
   .subcases(p => {
-    const needsBlendColor =
-      p.srcFactor === 'one-minus-blend-color' ||
-      p.srcFactor === 'blend-color' ||
-      p.dstFactor === 'one-minus-blend-color' ||
-      p.dstFactor === 'blend-color';
+    const needsBlendConstant =
+      p.srcFactor === 'one-minus-constant' ||
+      p.srcFactor === 'constant' ||
+      p.dstFactor === 'one-minus-constant' ||
+      p.dstFactor === 'constant';
 
     return params()
       .combine(poptions('srcColor', [{ r: 0.11, g: 0.61, b: 0.81, a: 0.44 }]))
@@ -143,8 +139,8 @@ g.test('GPUBlendComponent')
       )
       .combine(
         poptions(
-          'blendColor',
-          needsBlendColor ? [{ r: 0.91, g: 0.82, b: 0.73, a: 0.64 }] : [undefined]
+          'blendConstant',
+          needsBlendConstant ? [{ r: 0.91, g: 0.82, b: 0.73, a: 0.64 }] : [undefined]
         )
       );
   })
@@ -152,10 +148,10 @@ g.test('GPUBlendComponent')
     const textureFormat = 'rgba32float';
     const srcColor = t.params.srcColor;
     const dstColor = t.params.dstColor;
-    const blendColor = t.params.blendColor;
+    const blendConstant = t.params.blendConstant;
 
-    const srcFactor = computeBlendFactor(srcColor, dstColor, blendColor, t.params.srcFactor);
-    const dstFactor = computeBlendFactor(srcColor, dstColor, blendColor, t.params.dstFactor);
+    const srcFactor = computeBlendFactor(srcColor, dstColor, blendConstant, t.params.srcFactor);
+    const dstFactor = computeBlendFactor(srcColor, dstColor, blendConstant, t.params.dstFactor);
 
     const expectedColor = computeBlendOperation(
       srcColor,
@@ -238,15 +234,16 @@ g.test('GPUBlendComponent')
     const renderPass = commandEncoder.beginRenderPass({
       colorAttachments: [
         {
-          attachment: renderTarget.createView(),
+          view: renderTarget.createView(),
           loadValue: dstColor,
+          storeOp: 'store',
         },
       ],
     });
 
     renderPass.setPipeline(pipeline);
-    if (blendColor) {
-      renderPass.setBlendColor(blendColor);
+    if (blendConstant) {
+      renderPass.setBlendConstant(blendConstant);
     }
     renderPass.setBindGroup(
       0,
@@ -292,12 +289,6 @@ g.test('formats')
   .desc(
     `Test blending results works for all formats that support it, and that blending is not applied
   for formats that do not. Blending should be done in linear space for srgb formats.`
-  )
-  .unimplemented();
-
-g.test('multiple_color_attachments')
-  .desc(
-    'Test that if there are multiple color attachments, "src-color" refers to attachment index 0.'
   )
   .unimplemented();
 

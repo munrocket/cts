@@ -36,7 +36,7 @@ export const checkContentsBySampling = (t, params, texture, state, subresourceRa
     const _xd = '_' + params.dimension;
     const _multisampled = params.sampleCount > 1 ? '_multisampled' : '';
     const computePipeline = t.device.createComputePipeline({
-      computeStage: {
+      compute: {
         entryPoint: 'main',
         module: t.device.createShaderModule({
           code: `

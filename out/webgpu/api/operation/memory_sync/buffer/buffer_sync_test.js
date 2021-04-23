@@ -64,7 +64,7 @@ export class BufferSyncTest extends GPUTest {
     `;
 
     return this.device.createComputePipeline({
-      computeStage: {
+      compute: {
         module: this.device.createShaderModule({
           code: wgslCompute }),
 
@@ -124,8 +124,9 @@ export class BufferSyncTest extends GPUTest {
     return encoder.beginRenderPass({
       colorAttachments: [
       {
-        attachment: view,
-        loadValue: { r: 0.0, g: 1.0, b: 0.0, a: 1.0 } }] });
+        view,
+        loadValue: { r: 0.0, g: 1.0, b: 0.0, a: 1.0 },
+        storeOp: 'store' }] });
 
 
 

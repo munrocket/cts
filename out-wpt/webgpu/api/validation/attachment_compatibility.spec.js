@@ -40,14 +40,15 @@ class F extends ValidationTest {
 
   createColorAttachment(format, sampleCount) {
     return {
-      attachment: this.createAttachmentTextureView(format, sampleCount),
+      view: this.createAttachmentTextureView(format, sampleCount),
       loadValue: [0, 0, 0, 0],
+      storeOp: 'store',
     };
   }
 
   createDepthAttachment(format, sampleCount) {
     return {
-      attachment: this.createAttachmentTextureView(format, sampleCount),
+      view: this.createAttachmentTextureView(format, sampleCount),
       depthLoadValue: 0,
       depthStoreOp: 'clear',
       stencilLoadValue: 1,

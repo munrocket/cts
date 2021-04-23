@@ -170,8 +170,9 @@ struct Inputs {
     const renderPass = commandEncoder.beginRenderPass({
       colorAttachments: [
         {
-          attachment: renderTarget.createView(),
+          view: renderTarget.createView(),
           loadValue: [0, 0, 0, 0],
+          storeOp: 'store',
         },
       ],
     });
@@ -573,7 +574,7 @@ ${shaderLocations
       colorAttachments: [
         {
           // Dummy render attachment - not used.
-          attachment: t.device
+          view: t.device
             .createTexture({
               usage: GPUTextureUsage.RENDER_ATTACHMENT,
               size: [1],
@@ -581,6 +582,7 @@ ${shaderLocations
             })
             .createView(),
           loadValue: [0, 0, 0, 0],
+          storeOp: 'store',
         },
       ],
     });

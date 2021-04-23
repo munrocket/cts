@@ -147,7 +147,7 @@ class TextureUsageTracking extends ValidationTest {
     return encoder.beginRenderPass({
       colorAttachments: [
       {
-        attachment: view,
+        view,
         loadValue: { r: 0.0, g: 1.0, b: 0.0, a: 1.0 },
         storeOp: 'store' }] });
 
@@ -457,12 +457,12 @@ fn(async t => {
     const pass = encoder.beginRenderPass({
       colorAttachments: [
       {
-        attachment: view0,
+        view: view0,
         loadValue: { r: 0.0, g: 1.0, b: 0.0, a: 1.0 },
         storeOp: 'store' },
 
       {
-        attachment: view1,
+        view: view1,
         loadValue: { r: 0.0, g: 1.0, b: 0.0, a: 1.0 },
         storeOp: 'store' }] });
 
@@ -614,7 +614,7 @@ fn(async t => {
   encoder.beginRenderPass({
     colorAttachments: [
     {
-      attachment: t.createTexture({ width: size, height: size }).createView(),
+      view: t.createTexture({ width: size, height: size }).createView(),
       loadValue: { r: 0.0, g: 1.0, b: 0.0, a: 1.0 },
       storeOp: 'store' }],
 
@@ -623,7 +623,7 @@ fn(async t => {
     type1 !== 'render-target' ?
     undefined :
     {
-      attachment: view1,
+      view: view1,
       depthStoreOp: 'clear',
       depthLoadValue: 'load',
       stencilStoreOp: 'clear',
@@ -933,7 +933,7 @@ fn(async t => {
 
   const pipeline = compute ?
   t.device.createComputePipeline({
-    computeStage: {
+    compute: {
       module: t.device.createShaderModule({
         code: wgslCompute }),
 
@@ -963,7 +963,7 @@ fn(async t => {
   encoder.beginRenderPass({
     colorAttachments: [
     {
-      attachment: t.createTexture().createView(),
+      view: t.createTexture().createView(),
       loadValue: { r: 0.0, g: 1.0, b: 0.0, a: 1.0 },
       storeOp: 'store' }] });
 
