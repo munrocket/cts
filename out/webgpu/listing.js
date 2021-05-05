@@ -388,6 +388,14 @@ export const listing = [
     "file": [
       "api",
       "operation",
+      "shader_module",
+      "compilation_info"
+    ]
+  },
+  {
+    "file": [
+      "api",
+      "operation",
       "texture_view",
       "read"
     ]
