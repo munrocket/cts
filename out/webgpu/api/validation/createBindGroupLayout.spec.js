@@ -3,7 +3,6 @@
 **/export const description = `
 createBindGroupLayout validation tests.
 
-TODO: update for new binding structure, remove eslint-disable.
 TODO: review existing tests, write descriptions, and make sure tests are complete.
 `;import { poptions, params } from '../../../common/framework/params_builder.js';
 import { makeTestGroup } from '../../../common/framework/test_group.js';
