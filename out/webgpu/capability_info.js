@@ -511,9 +511,9 @@ assertTypeTrue();
 export function sampledTextureBindingTypeInfo(d) {
 
   if (d.multisampled) {
-    return { usage: GPUConst.TextureUsage.SAMPLED, ...kBindingKind.sampledTex, ...kValidStagesAll };
-  } else {
     return { usage: GPUConst.TextureUsage.SAMPLED, ...kBindingKind.sampledTexMS, ...kValidStagesAll };
+  } else {
+    return { usage: GPUConst.TextureUsage.SAMPLED, ...kBindingKind.sampledTex, ...kValidStagesAll };
   }
 }
 export const kTextureSampleTypes = [
