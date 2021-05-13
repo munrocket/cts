@@ -7,8 +7,7 @@ TODO:
 - Test result for all combinations of args (make sure each case is distinguishable from others
 - Test underflow/overflow has consistent behavior
 - ?
-`;
-import { params, poptions } from '../../../../common/framework/params_builder.js';
+`;import { params, poptions } from '../../../../common/framework/params_builder.js';
 import { makeTestGroup } from '../../../../common/framework/test_group.js';
 import { assert, unreachable } from '../../../../common/framework/util/util.js';
 import { GPUTest } from '../../../gpu_test.js';
@@ -93,8 +92,13 @@ factor)
 
 }
 
-function computeBlendOperation(src, srcFactor,
-dst, dstFactor, operation) {
+function computeBlendOperation(
+src,
+srcFactor,
+dst,
+dstFactor,
+operation)
+{
   switch (operation) {
     case 'add':
       return mapColor(src, (_, k) => srcFactor[k] * src[k] + dstFactor[k] * dst[k]);
@@ -121,8 +125,8 @@ desc(
     - component= {color, alpha} - whether to test blending the color or the alpha component.
     - srcFactor= {...all GPUBlendFactors}
     - dstFactor= {...all GPUBlendFactors}
-    - operation= {...all GPUBlendOperations}
-  `).
+    - operation= {...all GPUBlendOperations}`).
+
 cases(
 params() //
 .combine(poptions('component', ['color', 'alpha'])).
@@ -132,21 +136,25 @@ combine(poptions('operation', kBlendOperations))).
 
 subcases(p => {
   const needsBlendConstant =
-  p.srcFactor === 'one-minus-constant' || p.srcFactor === 'constant' ||
-  p.dstFactor === 'one-minus-constant' || p.dstFactor === 'constant';
-
+  p.srcFactor === 'one-minus-constant' ||
+  p.srcFactor === 'constant' ||
+  p.dstFactor === 'one-minus-constant' ||
+  p.dstFactor === 'constant';
 
   return params().
-  combine(poptions('srcColor', [
-  { r: 0.11, g: 0.61, b: 0.81, a: 0.44 }])).
-
-  combine(poptions('dstColor', [
+  combine(poptions('srcColor', [{ r: 0.11, g: 0.61, b: 0.81, a: 0.44 }])).
+  combine(
+  poptions('dstColor', [
   { r: 0.51, g: 0.22, b: 0.71, a: 0.33 },
   { r: 0.09, g: 0.73, b: 0.93, a: 0.81 }])).
 
-  combine(poptions('blendConstant', needsBlendConstant ? [
-  { r: 0.91, g: 0.82, b: 0.73, a: 0.64 }] :
-  [undefined]));
+
+  combine(
+  poptions(
+  'blendConstant',
+  needsBlendConstant ? [{ r: 0.91, g: 0.82, b: 0.73, a: 0.64 }] : [undefined]));
+
+
 }).
 fn(t => {
   const textureFormat = 'rgba32float';
@@ -157,7 +165,13 @@ fn(t => {
   const srcFactor = computeBlendFactor(srcColor, dstColor, blendConstant, t.params.srcFactor);
   const dstFactor = computeBlendFactor(srcColor, dstColor, blendConstant, t.params.dstFactor);
 
-  const expectedColor = computeBlendOperation(srcColor, srcFactor, dstColor, dstFactor, t.params.operation);
+  const expectedColor = computeBlendOperation(
+  srcColor,
+  srcFactor,
+  dstColor,
+  dstFactor,
+  t.params.operation);
+
 
   switch (t.params.component) {
     case 'color':
@@ -263,10 +277,15 @@ fn(t => {
   const expectedLow = mapColor(expectedColor, v => v - tolerance);
   const expectedHigh = mapColor(expectedColor, v => v + tolerance);
 
-  t.expectSinglePixelBetweenTwoValuesIn2DTexture(renderTarget, textureFormat, { x: 0, y: 0 }, {
+  t.expectSinglePixelBetweenTwoValuesIn2DTexture(
+  renderTarget,
+  textureFormat,
+  { x: 0, y: 0 },
+  {
     exp: [
     new Float32Array([expectedLow.r, expectedLow.g, expectedLow.b, expectedLow.a]),
     new Float32Array([expectedHigh.r, expectedHigh.g, expectedHigh.b, expectedHigh.a])] });
+
 
 
 });
@@ -275,6 +294,7 @@ g.test('formats').
 desc(
 `Test blending results works for all formats that support it, and that blending is not applied
   for formats that do not. Blending should be done in linear space for srgb formats.`).
+
 unimplemented();
 
 g.test('clamp,blend_factor').

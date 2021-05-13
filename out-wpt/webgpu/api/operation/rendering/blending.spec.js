@@ -112,8 +112,7 @@ g.test('GPUBlendComponent')
     - component= {color, alpha} - whether to test blending the color or the alpha component.
     - srcFactor= {...all GPUBlendFactors}
     - dstFactor= {...all GPUBlendFactors}
-    - operation= {...all GPUBlendOperations}
-  `
+    - operation= {...all GPUBlendOperations}`
   )
   .cases(
     params() //
