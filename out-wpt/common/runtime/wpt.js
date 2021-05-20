@@ -2,9 +2,10 @@
  * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
  **/ // Implements the wpt-embedded test runner (see also: wpt/cts.html).
 import { DefaultTestFileLoader } from '../framework/file_loader.js';
+import { prettyPrintLog } from '../framework/logging/log_message.js';
 import { Logger } from '../framework/logging/logger.js';
 import { parseQuery } from '../framework/query/parseQuery.js';
-import { parseExpectationsForTestQuery } from '../framework/query/query.js';
+import { parseExpectationsForTestQuery, relativeQueryString } from '../framework/query/query.js';
 import { assert } from '../framework/util/util.js';
 
 import { optionEnabled } from './helper/options.js';
@@ -41,6 +42,9 @@ setup({
 
   for (const testcase of testcases) {
     const name = testcase.query.toString();
+    // For brevity, display the case name "relative" to the ?q= path.
+    const shortName = relativeQueryString(filterQuery, testcase.query) || '(case)';
+
     const wpt_fn = async () => {
       const [rec, res] = log.record(name);
       if (worker) {
@@ -51,11 +55,12 @@ setup({
 
       // Unfortunately, it seems not possible to surface any logs for warn/skip.
       if (res.status === 'fail') {
-        throw (res.logs || []).map(s => s.toJSON()).join('\n\n');
+        const logs = (res.logs ?? []).map(prettyPrintLog);
+        assert_unreached('\n' + logs.join('\n') + '\n');
       }
     };
 
-    promise_test(wpt_fn, name);
+    promise_test(wpt_fn, shortName);
   }
 
   done();
