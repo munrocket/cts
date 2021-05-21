@@ -3,10 +3,8 @@
 **/import { comparePublicParamsPaths, Ordering } from './query/compare.js';import { kWildcard, kParamSeparator, kParamKVSeparator } from './query/separators.js';
 import { assert } from './util/util.js';
 
-// Consider adding more types here if needed
-//
-// TODO: This type isn't actually used to constrain what you're allowed to do in
-// `.cases()`/`.subcases()`, so it's not really serving its purpose. Figure out how to fix that?
+
+
 
 
 

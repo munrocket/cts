@@ -1,6 +1,6 @@
 import {
-  CaseParamsRW,
-  ParamArgument,
+  TestParamsRW,
+  JSONWithUndefined,
   badParamValueChars,
   paramKeyIsPublic,
 } from '../params_utils.js';
@@ -90,7 +90,7 @@ function parseQueryImpl(s: string): TestQuery {
 
   assert(test.length > 0, 'Test part of case-level query was empty (::)');
 
-  const params: CaseParamsRW = {};
+  const params: TestParamsRW = {};
   for (const paramPart of paramsParts) {
     const [k, v] = parseSingleParam(paramPart);
     assert(validQueryPart.test(k), 'param key names must match ' + validQueryPart);
@@ -134,7 +134,7 @@ function parseBigPart(
   return { parts, wildcard: endsWithWildcard };
 }
 
-function parseSingleParam(paramSubstring: string): [string, ParamArgument] {
+function parseSingleParam(paramSubstring: string): [string, JSONWithUndefined] {
   assert(paramSubstring !== '', 'Param in a query must not be blank (is there a trailing comma?)');
   const i = paramSubstring.indexOf('=');
   assert(i !== -1, 'Param in a query must be of form key=value');
@@ -144,7 +144,7 @@ function parseSingleParam(paramSubstring: string): [string, ParamArgument] {
   return [k, parseSingleParamValue(v)];
 }
 
-function parseSingleParamValue(s: string): ParamArgument {
+function parseSingleParamValue(s: string): JSONWithUndefined {
   assert(
     !badParamValueChars.test(s),
     `param value must not match ${badParamValueChars} - was ${s}`

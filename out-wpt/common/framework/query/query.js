@@ -75,7 +75,7 @@ export class TestQueryMultiTest extends TestQueryMultiFile {
  * A multi-case test query, like `s:f:t:*` or `s:f:t:a,b,*`.
  *
  * Immutable (makes copies of constructor args), except for param values
- * (which aren't normally supposed to change; they're marked readonly in CaseParams).
+ * (which aren't normally supposed to change; they're marked readonly in TestParams).
  */
 export class TestQueryMultiCase extends TestQueryMultiTest {
   level = 3;

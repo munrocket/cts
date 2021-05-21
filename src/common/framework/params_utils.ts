@@ -3,32 +3,30 @@ import { kWildcard, kParamSeparator, kParamKVSeparator } from './query/separator
 import { UnionToIntersection } from './util/types.js';
 import { assert } from './util/util.js';
 
-// Consider adding more types here if needed
-//
-// TODO: This type isn't actually used to constrain what you're allowed to do in
-// `.cases()`/`.subcases()`, so it's not really serving its purpose. Figure out how to fix that?
-export type ParamArgument =
+export type JSONWithUndefined =
   | undefined
   | null
   | number
   | string
   | boolean
-  | number[]
-  | { readonly [k: string]: undefined | null | number | string | boolean };
-export type CaseParams = {
-  readonly [k: string]: ParamArgument;
+  | readonly JSONWithUndefined[]
+  // Ideally this would recurse into JSONWithUndefined, but it breaks code.
+  | { readonly [k: string]: unknown };
+/** The fully-general type for params passed to a test function invocation. */
+export type TestParams = {
+  readonly [k: string]: JSONWithUndefined;
 };
-export interface CaseParamsRW {
-  [k: string]: ParamArgument;
+export interface TestParamsRW {
+  [k: string]: JSONWithUndefined;
 }
-export type CaseParamsIterable = Iterable<CaseParams>;
+export type TestParamsIterable = Iterable<TestParams>;
 
 export function paramKeyIsPublic(key: string): boolean {
   return !key.startsWith('_');
 }
 
-export function extractPublicParams(params: CaseParams): CaseParams {
-  const publicParams: CaseParamsRW = {};
+export function extractPublicParams(params: TestParams): TestParams {
+  const publicParams: TestParamsRW = {};
   for (const k of Object.keys(params)) {
     if (paramKeyIsPublic(k)) {
       publicParams[k] = params[k];
@@ -41,7 +39,7 @@ export const badParamValueChars = new RegExp(
   '[' + kParamKVSeparator + kParamSeparator + kWildcard + ']'
 );
 
-export function publicParamsEquals(x: CaseParams, y: CaseParams): boolean {
+export function publicParamsEquals(x: TestParams, y: TestParams): boolean {
   return comparePublicParamsPaths(x, y) === Ordering.Equal;
 }
 

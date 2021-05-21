@@ -136,18 +136,14 @@ class TestBuilder {
 
   cases(casesIterable) {
     assert(this.caseParams === undefined, 'test case is already parameterized');
-    const newSelf = this;
-    newSelf.caseParams = Array.from(casesIterable);
-
-    return newSelf;
+    this.caseParams = Array.from(casesIterable);
+    return this;
   }
 
   subcases(specs) {
     assert(this.subcaseParams === undefined, 'test subcases are already parameterized');
-    const newSelf = this;
-    newSelf.subcaseParams = specs;
-
-    return newSelf;
+    this.subcaseParams = specs;
+    return this;
   }
 
   *iterate() {
