@@ -30,7 +30,8 @@ import { makeTestGroup } from '../../../../../common/framework/test_group.js';
 import {
 kAllTextureFormatInfo,
 kAllTextureFormats,
-kTextureUsages } from
+kTextureUsages,
+kValidTextureFormatsForCopyIB2T } from
 '../../../../capability_info.js';
 import { ValidationTest } from '../../validation_test.js';
 
@@ -39,19 +40,6 @@ const kDefaultWidth = 32;
 const kDefaultHeight = 32;
 const kDefaultDepth = 1;
 const kDefaultMipLevelCount = 6;
-
-// From spec
-const kValidTextureFormatsForCopyIB2T = [
-'rgba8unorm',
-'rgba8unorm-srgb',
-'bgra8unorm',
-'bgra8unorm-srgb',
-'rgb10a2unorm',
-'rgba16float',
-'rgba32float',
-'rg8unorm',
-'rg16float'];
-
 
 function computeMipMapSize(width, height, mipLevel) {
   return {
@@ -192,7 +180,7 @@ fn(async t => {
   const dstTexture = t.device.createTexture({
     size: { width: 1, height: 1, depthOrArrayLayers: 1 },
     format: 'bgra8unorm',
-    usage: GPUTextureUsage.COPY_DST });
+    usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT });
 
 
   if (closed) imageBitmap.close();
@@ -249,7 +237,7 @@ fn(async t => {
   { imageBitmap },
   { texture: dstTexture },
   copySize,
-  !!(usage & GPUTextureUsage.COPY_DST));
+  !!(usage & GPUTextureUsage.COPY_DST && usage & GPUTextureUsage.RENDER_ATTACHMENT));
 
 });
 
@@ -271,7 +259,7 @@ fn(async t => {
     size: { width: 1, height: 1, depthOrArrayLayers: 1 },
     sampleCount,
     format: 'bgra8unorm',
-    usage: GPUTextureUsage.COPY_DST });
+    usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT });
 
 
   t.runTest({ imageBitmap }, { texture: dstTexture }, copySize, sampleCount === 1);
@@ -295,7 +283,7 @@ fn(async t => {
     size: { width: kDefaultWidth, height: kDefaultHeight, depthOrArrayLayers: kDefaultDepth },
     mipLevelCount: kDefaultMipLevelCount,
     format: 'bgra8unorm',
-    usage: GPUTextureUsage.COPY_DST });
+    usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT });
 
 
   t.runTest(
@@ -329,19 +317,13 @@ fn(async t => {
   const dstTexture = t.device.createTexture({
     size: { width: 1, height: 1, depthOrArrayLayers: 1 },
     format,
-    usage: GPUTextureUsage.COPY_DST });
+    usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT });
 
   t.device.popErrorScope();
 
   const success = kValidTextureFormatsForCopyIB2T.includes(format);
 
-  t.runTest(
-  { imageBitmap },
-  { texture: dstTexture },
-  copySize,
-  true, // No validation errors.
-  success ? '' : 'TypeError');
-
+  t.runTest({ imageBitmap }, { texture: dstTexture }, copySize, success);
 });
 
 g.test('OOB,source').
@@ -370,7 +352,7 @@ fn(async t => {
 
     mipLevelCount: kDefaultMipLevelCount,
     format: 'bgra8unorm',
-    usage: GPUTextureUsage.COPY_DST });
+    usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT });
 
 
   let success = true;
@@ -383,7 +365,13 @@ fn(async t => {
     success = false;
   }
 
-  t.runTest({ imageBitmap, origin: srcOrigin }, { texture: dstTexture }, copySize, success);
+  t.runTest(
+  { imageBitmap, origin: srcOrigin },
+  { texture: dstTexture },
+  copySize,
+  success,
+  success ? '' : 'OperationError');
+
 });
 
 g.test('OOB,destination').
@@ -407,10 +395,11 @@ fn(async t => {
 
     format: 'bgra8unorm',
     mipLevelCount: kDefaultMipLevelCount,
-    usage: GPUTextureUsage.COPY_DST });
+    usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT });
 
 
   let success = true;
+  let hasOperationError = false;
   const dstMipMapSize = computeMipMapSize(kDefaultWidth, kDefaultHeight, mipLevel);
 
   if (
@@ -421,6 +410,9 @@ fn(async t => {
   {
     success = false;
   }
+  if (copySize.depthOrArrayLayers > 1) {
+    hasOperationError = true;
+  }
 
   t.runTest(
   { imageBitmap },
@@ -430,7 +422,8 @@ fn(async t => {
     origin: dstOrigin },
 
   copySize,
-  success);
+  success,
+  hasOperationError ? 'OperationError' : '');
 
 });
 //# sourceMappingURL=ImageBitmap.spec.js.map

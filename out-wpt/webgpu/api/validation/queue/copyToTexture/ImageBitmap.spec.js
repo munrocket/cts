@@ -32,6 +32,7 @@ import {
   kAllTextureFormatInfo,
   kAllTextureFormats,
   kTextureUsages,
+  kValidTextureFormatsForCopyIB2T,
 } from '../../../../capability_info.js';
 import { ValidationTest } from '../../validation_test.js';
 
@@ -40,19 +41,6 @@ const kDefaultWidth = 32;
 const kDefaultHeight = 32;
 const kDefaultDepth = 1;
 const kDefaultMipLevelCount = 6;
-
-// From spec
-const kValidTextureFormatsForCopyIB2T = [
-  'rgba8unorm',
-  'rgba8unorm-srgb',
-  'bgra8unorm',
-  'bgra8unorm-srgb',
-  'rgb10a2unorm',
-  'rgba16float',
-  'rgba32float',
-  'rg8unorm',
-  'rg16float',
-];
 
 function computeMipMapSize(width, height, mipLevel) {
   return {
@@ -182,7 +170,7 @@ g.test('source_imageBitmap,state')
     const dstTexture = t.device.createTexture({
       size: { width: 1, height: 1, depthOrArrayLayers: 1 },
       format: 'bgra8unorm',
-      usage: GPUTextureUsage.COPY_DST,
+      usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
     });
 
     if (closed) imageBitmap.close();
@@ -239,7 +227,7 @@ g.test('destination_texture,usage')
       { imageBitmap },
       { texture: dstTexture },
       copySize,
-      !!(usage & GPUTextureUsage.COPY_DST)
+      !!(usage & GPUTextureUsage.COPY_DST && usage & GPUTextureUsage.RENDER_ATTACHMENT)
     );
   });
 
@@ -261,7 +249,7 @@ g.test('destination_texture,sample_count')
       size: { width: 1, height: 1, depthOrArrayLayers: 1 },
       sampleCount,
       format: 'bgra8unorm',
-      usage: GPUTextureUsage.COPY_DST,
+      usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
     });
 
     t.runTest({ imageBitmap }, { texture: dstTexture }, copySize, sampleCount === 1);
@@ -285,7 +273,7 @@ g.test('destination_texture,mipLevel')
       size: { width: kDefaultWidth, height: kDefaultHeight, depthOrArrayLayers: kDefaultDepth },
       mipLevelCount: kDefaultMipLevelCount,
       format: 'bgra8unorm',
-      usage: GPUTextureUsage.COPY_DST,
+      usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
     });
 
     t.runTest(
@@ -319,20 +307,14 @@ g.test('destination_texture,format')
     const dstTexture = t.device.createTexture({
       size: { width: 1, height: 1, depthOrArrayLayers: 1 },
       format,
-      usage: GPUTextureUsage.COPY_DST,
+      usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
     });
 
     t.device.popErrorScope();
 
     const success = kValidTextureFormatsForCopyIB2T.includes(format);
 
-    t.runTest(
-      { imageBitmap },
-      { texture: dstTexture },
-      copySize,
-      true, // No validation errors.
-      success ? '' : 'TypeError'
-    );
+    t.runTest({ imageBitmap }, { texture: dstTexture }, copySize, success);
   });
 
 g.test('OOB,source')
@@ -362,7 +344,7 @@ g.test('OOB,source')
 
       mipLevelCount: kDefaultMipLevelCount,
       format: 'bgra8unorm',
-      usage: GPUTextureUsage.COPY_DST,
+      usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
     });
 
     let success = true;
@@ -375,7 +357,13 @@ g.test('OOB,source')
       success = false;
     }
 
-    t.runTest({ imageBitmap, origin: srcOrigin }, { texture: dstTexture }, copySize, success);
+    t.runTest(
+      { imageBitmap, origin: srcOrigin },
+      { texture: dstTexture },
+      copySize,
+      success,
+      success ? '' : 'OperationError'
+    );
   });
 
 g.test('OOB,destination')
@@ -401,10 +389,11 @@ g.test('OOB,destination')
 
       format: 'bgra8unorm',
       mipLevelCount: kDefaultMipLevelCount,
-      usage: GPUTextureUsage.COPY_DST,
+      usage: GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT,
     });
 
     let success = true;
+    let hasOperationError = false;
     const dstMipMapSize = computeMipMapSize(kDefaultWidth, kDefaultHeight, mipLevel);
 
     if (
@@ -414,6 +403,9 @@ g.test('OOB,destination')
       dstOrigin.z + copySize.depthOrArrayLayers > kDefaultDepth
     ) {
       success = false;
+    }
+    if (copySize.depthOrArrayLayers > 1) {
+      hasOperationError = true;
     }
 
     t.runTest(
@@ -425,6 +417,7 @@ g.test('OOB,destination')
       },
 
       copySize,
-      success
+      success,
+      hasOperationError ? 'OperationError' : ''
     );
   });

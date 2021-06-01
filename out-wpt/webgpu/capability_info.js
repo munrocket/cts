@@ -235,6 +235,16 @@ export const kAllTextureFormats = keysOf(kAllTextureFormatInfo);
 // Assert every GPUTextureFormat is covered by one of the tables.
 (x => x)(kAllTextureFormatInfo);
 
+// From spec
+export const kValidTextureFormatsForCopyIB2T = [
+  'rgba8unorm',
+  'rgba8unorm-srgb',
+  'bgra8unorm',
+  'bgra8unorm-srgb',
+  'rgb10a2unorm',
+  'rg8unorm',
+];
+
 export const kTextureDimensionInfo = {
   '1d': {},
   '2d': {},
