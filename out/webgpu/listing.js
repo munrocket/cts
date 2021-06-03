@@ -563,6 +563,13 @@ export const listing = [
     "file": [
       "api",
       "validation",
+      "createComputePipeline"
+    ]
+  },
+  {
+    "file": [
+      "api",
+      "validation",
       "createPipelineLayout"
     ]
   },
