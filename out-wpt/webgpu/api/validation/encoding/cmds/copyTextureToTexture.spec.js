@@ -37,7 +37,6 @@ Test Plan: (TODO(jiawei.shao@intel.com): add tests on 1D/3D textures)
   - the set of source texture subresources {has, doesn't have} overlaps with the one of destination
     texture subresources.
 `;
-import { poptions, params } from '../../../../../common/framework/params_builder.js';
 import { makeTestGroup } from '../../../../../common/framework/test_group.js';
 import {
   kAllTextureFormatInfo,
@@ -107,7 +106,7 @@ g.test('copy_with_invalid_texture').fn(async t => {
 });
 
 g.test('mipmap_level')
-  .subcases(() => [
+  .paramsSubcasesOnly([
     { srcLevelCount: 1, dstLevelCount: 1, srcCopyLevel: 0, dstCopyLevel: 0 },
     { srcLevelCount: 1, dstLevelCount: 1, srcCopyLevel: 1, dstCopyLevel: 0 },
     { srcLevelCount: 1, dstLevelCount: 1, srcCopyLevel: 0, dstCopyLevel: 1 },
@@ -144,10 +143,10 @@ g.test('mipmap_level')
   });
 
 g.test('texture_usage')
-  .params(
-    params()
-      .combine(poptions('srcUsage', kTextureUsages))
-      .combine(poptions('dstUsage', kTextureUsages))
+  .paramsSubcasesOnly(u =>
+    u //
+      .combine('srcUsage', kTextureUsages)
+      .combine('dstUsage', kTextureUsages)
   )
   .fn(async t => {
     const { srcUsage, dstUsage } = t.params;
@@ -176,10 +175,10 @@ g.test('texture_usage')
   });
 
 g.test('sample_count')
-  .params(
-    params()
-      .combine(poptions('srcSampleCount', [1, 4]))
-      .combine(poptions('dstSampleCount', [1, 4]))
+  .paramsSubcasesOnly(u =>
+    u //
+      .combine('srcSampleCount', [1, 4])
+      .combine('dstSampleCount', [1, 4])
   )
   .fn(async t => {
     const { srcSampleCount, dstSampleCount } = t.params;
@@ -208,26 +207,22 @@ g.test('sample_count')
   });
 
 g.test('multisampled_copy_restrictions')
-  .subcases(() =>
-    params()
-      .combine(
-        poptions('srcCopyOrigin', [
-          { x: 0, y: 0, z: 0 },
-          { x: 1, y: 0, z: 0 },
-          { x: 0, y: 1, z: 0 },
-          { x: 1, y: 1, z: 0 },
-        ])
-      )
-      .combine(
-        poptions('dstCopyOrigin', [
-          { x: 0, y: 0, z: 0 },
-          { x: 1, y: 0, z: 0 },
-          { x: 0, y: 1, z: 0 },
-          { x: 1, y: 1, z: 0 },
-        ])
-      )
-      .expand(p => poptions('copyWidth', [32 - Math.max(p.srcCopyOrigin.x, p.dstCopyOrigin.x), 16]))
-      .expand(p => poptions('copyHeight', [16 - Math.max(p.srcCopyOrigin.y, p.dstCopyOrigin.y), 8]))
+  .paramsSubcasesOnly(u =>
+    u //
+      .combine('srcCopyOrigin', [
+        { x: 0, y: 0, z: 0 },
+        { x: 1, y: 0, z: 0 },
+        { x: 0, y: 1, z: 0 },
+        { x: 1, y: 1, z: 0 },
+      ])
+      .combine('dstCopyOrigin', [
+        { x: 0, y: 0, z: 0 },
+        { x: 1, y: 0, z: 0 },
+        { x: 0, y: 1, z: 0 },
+        { x: 1, y: 1, z: 0 },
+      ])
+      .expand('copyWidth', p => [32 - Math.max(p.srcCopyOrigin.x, p.dstCopyOrigin.x), 16])
+      .expand('copyHeight', p => [16 - Math.max(p.srcCopyOrigin.y, p.dstCopyOrigin.y), 8])
   )
   .fn(async t => {
     const { srcCopyOrigin, dstCopyOrigin, copyWidth, copyHeight } = t.params;
@@ -261,10 +256,10 @@ g.test('multisampled_copy_restrictions')
   });
 
 g.test('texture_format_equality')
-  .subcases(() =>
-    params()
-      .combine(poptions('srcFormat', kAllTextureFormats))
-      .combine(poptions('dstFormat', kAllTextureFormats))
+  .paramsSubcasesOnly(u =>
+    u //
+      .combine('srcFormat', kAllTextureFormats)
+      .combine('dstFormat', kAllTextureFormats)
   )
   .fn(async t => {
     const { srcFormat, dstFormat } = t.params;
@@ -296,34 +291,29 @@ g.test('texture_format_equality')
   });
 
 g.test('depth_stencil_copy_restrictions')
-  .cases(poptions('format', kDepthStencilFormats))
-  .subcases(() =>
-    params()
-      .combine(
-        poptions('copyBoxOffsets', [
-          { x: 0, y: 0, width: 0, height: 0 },
-          { x: 1, y: 0, width: 0, height: 0 },
-          { x: 0, y: 1, width: 0, height: 0 },
-          { x: 0, y: 0, width: -1, height: 0 },
-          { x: 0, y: 0, width: 0, height: -1 },
-        ])
-      )
-      .combine(
-        poptions('srcTextureSize', [
-          { width: 64, height: 64, depthOrArrayLayers: 1 },
-          { width: 64, height: 32, depthOrArrayLayers: 1 },
-          { width: 32, height: 32, depthOrArrayLayers: 1 },
-        ])
-      )
-      .combine(
-        poptions('dstTextureSize', [
-          { width: 64, height: 64, depthOrArrayLayers: 1 },
-          { width: 64, height: 32, depthOrArrayLayers: 1 },
-          { width: 32, height: 32, depthOrArrayLayers: 1 },
-        ])
-      )
-      .combine(poptions('srcCopyLevel', [1, 2]))
-      .combine(poptions('dstCopyLevel', [0, 1]))
+  .params(u =>
+    u
+      .combine('format', kDepthStencilFormats)
+      .beginSubcases()
+      .combine('copyBoxOffsets', [
+        { x: 0, y: 0, width: 0, height: 0 },
+        { x: 1, y: 0, width: 0, height: 0 },
+        { x: 0, y: 1, width: 0, height: 0 },
+        { x: 0, y: 0, width: -1, height: 0 },
+        { x: 0, y: 0, width: 0, height: -1 },
+      ])
+      .combine('srcTextureSize', [
+        { width: 64, height: 64, depthOrArrayLayers: 1 },
+        { width: 64, height: 32, depthOrArrayLayers: 1 },
+        { width: 32, height: 32, depthOrArrayLayers: 1 },
+      ])
+      .combine('dstTextureSize', [
+        { width: 64, height: 64, depthOrArrayLayers: 1 },
+        { width: 64, height: 32, depthOrArrayLayers: 1 },
+        { width: 32, height: 32, depthOrArrayLayers: 1 },
+      ])
+      .combine('srcCopyLevel', [1, 2])
+      .combine('dstCopyLevel', [0, 1])
   )
   .fn(async t => {
     const {
@@ -386,27 +376,25 @@ g.test('depth_stencil_copy_restrictions')
   });
 
 g.test('copy_ranges')
-  .subcases(() =>
-    params()
-      .combine(
-        poptions('copyBoxOffsets', [
-          { x: 0, y: 0, z: 0, width: 0, height: 0, depthOrArrayLayers: -2 },
-          { x: 1, y: 0, z: 0, width: 0, height: 0, depthOrArrayLayers: -2 },
-          { x: 1, y: 0, z: 0, width: -1, height: 0, depthOrArrayLayers: -2 },
-          { x: 0, y: 1, z: 0, width: 0, height: 0, depthOrArrayLayers: -2 },
-          { x: 0, y: 1, z: 0, width: 0, height: -1, depthOrArrayLayers: -2 },
-          { x: 0, y: 0, z: 1, width: 0, height: 1, depthOrArrayLayers: -2 },
-          { x: 0, y: 0, z: 2, width: 0, height: 1, depthOrArrayLayers: 0 },
-          { x: 0, y: 0, z: 0, width: 1, height: 0, depthOrArrayLayers: -2 },
-          { x: 0, y: 0, z: 0, width: 0, height: 1, depthOrArrayLayers: -2 },
-          { x: 0, y: 0, z: 0, width: 0, height: 0, depthOrArrayLayers: 1 },
-          { x: 0, y: 0, z: 0, width: 0, height: 0, depthOrArrayLayers: 0 },
-          { x: 0, y: 0, z: 1, width: 0, height: 0, depthOrArrayLayers: -1 },
-          { x: 0, y: 0, z: 2, width: 0, height: 0, depthOrArrayLayers: -1 },
-        ])
-      )
-      .combine(poptions('srcCopyLevel', [0, 1, 3]))
-      .combine(poptions('dstCopyLevel', [0, 1, 3]))
+  .paramsSubcasesOnly(u =>
+    u //
+      .combine('copyBoxOffsets', [
+        { x: 0, y: 0, z: 0, width: 0, height: 0, depthOrArrayLayers: -2 },
+        { x: 1, y: 0, z: 0, width: 0, height: 0, depthOrArrayLayers: -2 },
+        { x: 1, y: 0, z: 0, width: -1, height: 0, depthOrArrayLayers: -2 },
+        { x: 0, y: 1, z: 0, width: 0, height: 0, depthOrArrayLayers: -2 },
+        { x: 0, y: 1, z: 0, width: 0, height: -1, depthOrArrayLayers: -2 },
+        { x: 0, y: 0, z: 1, width: 0, height: 1, depthOrArrayLayers: -2 },
+        { x: 0, y: 0, z: 2, width: 0, height: 1, depthOrArrayLayers: 0 },
+        { x: 0, y: 0, z: 0, width: 1, height: 0, depthOrArrayLayers: -2 },
+        { x: 0, y: 0, z: 0, width: 0, height: 1, depthOrArrayLayers: -2 },
+        { x: 0, y: 0, z: 0, width: 0, height: 0, depthOrArrayLayers: 1 },
+        { x: 0, y: 0, z: 0, width: 0, height: 0, depthOrArrayLayers: 0 },
+        { x: 0, y: 0, z: 1, width: 0, height: 0, depthOrArrayLayers: -1 },
+        { x: 0, y: 0, z: 2, width: 0, height: 0, depthOrArrayLayers: -1 },
+      ])
+      .combine('srcCopyLevel', [0, 1, 3])
+      .combine('dstCopyLevel', [0, 1, 3])
   )
   .fn(async t => {
     const { copyBoxOffsets, srcCopyLevel, dstCopyLevel } = t.params;
@@ -481,11 +469,11 @@ g.test('copy_ranges')
   });
 
 g.test('copy_within_same_texture')
-  .subcases(() =>
-    params()
-      .combine(poptions('srcCopyOriginZ', [0, 2, 4]))
-      .combine(poptions('dstCopyOriginZ', [0, 2, 4]))
-      .combine(poptions('copyExtentDepth', [1, 2, 3]))
+  .paramsSubcasesOnly(u =>
+    u //
+      .combine('srcCopyOriginZ', [0, 2, 4])
+      .combine('dstCopyOriginZ', [0, 2, 4])
+      .combine('copyExtentDepth', [1, 2, 3])
   )
   .fn(async t => {
     const { srcCopyOriginZ, dstCopyOriginZ, copyExtentDepth } = t.params;
@@ -518,11 +506,12 @@ Test the validations on the member 'aspect' of GPUImageCopyTexture in CopyTextur
 - for all the stencil-only formats: the texture copy aspects must be either 'all' or 'stencil-only'.
 `
   )
-  .cases(poptions('format', ['rgba8unorm', ...kDepthStencilFormats]))
-  .subcases(() =>
-    params()
-      .combine(poptions('sourceAspect', ['all', 'depth-only', 'stencil-only']))
-      .combine(poptions('destinationAspect', ['all', 'depth-only', 'stencil-only']))
+  .params(u =>
+    u
+      .combine('format', ['rgba8unorm', ...kDepthStencilFormats])
+      .beginSubcases()
+      .combine('sourceAspect', ['all', 'depth-only', 'stencil-only'])
+      .combine('destinationAspect', ['all', 'depth-only', 'stencil-only'])
   )
   .fn(async t => {
     const { format, sourceAspect, destinationAspect } = t.params;
@@ -570,26 +559,25 @@ Test the validations on the member 'aspect' of GPUImageCopyTexture in CopyTextur
   });
 
 g.test('copy_ranges_with_compressed_texture_formats')
-  .cases(poptions('format', kCompressedTextureFormats))
-  .subcases(() =>
-    params()
-      .combine(
-        poptions('copyBoxOffsets', [
-          { x: 0, y: 0, z: 0, width: 0, height: 0, depthOrArrayLayers: -2 },
-          { x: 1, y: 0, z: 0, width: 0, height: 0, depthOrArrayLayers: -2 },
-          { x: 4, y: 0, z: 0, width: 0, height: 0, depthOrArrayLayers: -2 },
-          { x: 0, y: 0, z: 0, width: -1, height: 0, depthOrArrayLayers: -2 },
-          { x: 0, y: 0, z: 0, width: -4, height: 0, depthOrArrayLayers: -2 },
-          { x: 0, y: 1, z: 0, width: 0, height: 0, depthOrArrayLayers: -2 },
-          { x: 0, y: 4, z: 0, width: 0, height: 0, depthOrArrayLayers: -2 },
-          { x: 0, y: 0, z: 0, width: 0, height: -1, depthOrArrayLayers: -2 },
-          { x: 0, y: 0, z: 0, width: 0, height: -4, depthOrArrayLayers: -2 },
-          { x: 0, y: 0, z: 0, width: 0, height: 0, depthOrArrayLayers: 0 },
-          { x: 0, y: 0, z: 1, width: 0, height: 0, depthOrArrayLayers: -1 },
-        ])
-      )
-      .combine(poptions('srcCopyLevel', [0, 1, 2]))
-      .combine(poptions('dstCopyLevel', [0, 1, 2]))
+  .params(u =>
+    u
+      .combine('format', kCompressedTextureFormats)
+      .beginSubcases()
+      .combine('copyBoxOffsets', [
+        { x: 0, y: 0, z: 0, width: 0, height: 0, depthOrArrayLayers: -2 },
+        { x: 1, y: 0, z: 0, width: 0, height: 0, depthOrArrayLayers: -2 },
+        { x: 4, y: 0, z: 0, width: 0, height: 0, depthOrArrayLayers: -2 },
+        { x: 0, y: 0, z: 0, width: -1, height: 0, depthOrArrayLayers: -2 },
+        { x: 0, y: 0, z: 0, width: -4, height: 0, depthOrArrayLayers: -2 },
+        { x: 0, y: 1, z: 0, width: 0, height: 0, depthOrArrayLayers: -2 },
+        { x: 0, y: 4, z: 0, width: 0, height: 0, depthOrArrayLayers: -2 },
+        { x: 0, y: 0, z: 0, width: 0, height: -1, depthOrArrayLayers: -2 },
+        { x: 0, y: 0, z: 0, width: 0, height: -4, depthOrArrayLayers: -2 },
+        { x: 0, y: 0, z: 0, width: 0, height: 0, depthOrArrayLayers: 0 },
+        { x: 0, y: 0, z: 1, width: 0, height: 0, depthOrArrayLayers: -1 },
+      ])
+      .combine('srcCopyLevel', [0, 1, 2])
+      .combine('dstCopyLevel', [0, 1, 2])
   )
   .fn(async t => {
     const { format, copyBoxOffsets, srcCopyLevel, dstCopyLevel } = t.params;

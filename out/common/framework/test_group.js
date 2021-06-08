@@ -1,6 +1,13 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
 **/import { SkipTestCase, UnexpectedPassError } from './fixture.js';
+import {
+
+builderIterateCasesWithSubcases,
+kUnitCaseParamsBuilder } from
+
+
+'./params_builder.js';
 import { extractPublicParams, mergeParams } from './params_utils.js';
 import { compareQueries, Ordering } from './query/compare.js';
 import { TestQuerySingleCase } from './query/query.js';
@@ -127,6 +134,34 @@ class TestGroup {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class TestBuilder {
 
 
@@ -134,8 +169,7 @@ class TestBuilder {
 
 
 
-  caseParams = undefined;
-  subcaseParams = undefined;
+  testCases = undefined;
 
   constructor(testPath, fixture, testCreationStack) {
     this.testPath = testPath;
@@ -176,48 +210,64 @@ class TestBuilder {
       return s;
     });
 
-    if (this.caseParams === undefined) {
+    if (this.testCases === undefined) {
       return;
     }
 
     const seen = new Set();
-    for (const testcase of this.caseParams) {
-      // stringifyPublicParams also checks for invalid params values
-      const testcaseString = stringifyPublicParams(testcase);
+    for (const [caseParams, subcases] of builderIterateCasesWithSubcases(this.testCases)) {
+      for (const subcaseParams of subcases ?? [{}]) {
+        const params = mergeParams(caseParams, subcaseParams);
+        // stringifyPublicParams also checks for invalid params values
+        const testcaseString = stringifyPublicParams(params);
 
-      // A (hopefully) unique representation of a params value.
-      const testcaseStringUnique = stringifyPublicParamsUniquely(testcase);
-      assert(
-      !seen.has(testcaseStringUnique),
-      `Duplicate public test case params for test ${testPathString}: ${testcaseString}`);
+        // A (hopefully) unique representation of a params value.
+        const testcaseStringUnique = stringifyPublicParamsUniquely(params);
+        assert(
+        !seen.has(testcaseStringUnique),
+        `Duplicate public test case params for test ${testPathString}: ${testcaseString}`);
 
-      seen.add(testcaseStringUnique);
+        seen.add(testcaseStringUnique);
+      }
     }
   }
 
-  params(casesIterable) {
-    return this.cases(casesIterable);
-  }
-
-  cases(casesIterable) {
-    assert(this.caseParams === undefined, 'test case is already parameterized');
-    this.caseParams = Array.from(casesIterable);
+  params(
+  cases)
+  {
+    assert(this.testCases === undefined, 'test case is already parameterized');
+    if (cases instanceof Function) {
+      this.testCases = cases(kUnitCaseParamsBuilder);
+    } else {
+      this.testCases = cases;
+    }
     return this;
   }
 
-  subcases(specs) {
-    assert(this.subcaseParams === undefined, 'test subcases are already parameterized');
-    this.subcaseParams = specs;
+  paramsSimple(cases) {
+    assert(this.testCases === undefined, 'test case is already parameterized');
+    this.testCases = kUnitCaseParamsBuilder.combineWithParams(cases);
     return this;
+  }
+
+  paramsSubcasesOnly(
+  subcases)
+  {
+    if (subcases instanceof Function) {
+      return this.params(subcases(kUnitCaseParamsBuilder.beginSubcases()));
+    } else {
+      return this.params(kUnitCaseParamsBuilder.beginSubcases().combineWithParams(subcases));
+    }
   }
 
   *iterate() {
     assert(this.testFn !== undefined, 'No test function (.fn()) for test');
-    for (const params of this.caseParams || [{}]) {
+    this.testCases ??= kUnitCaseParamsBuilder;
+    for (const [caseParams, subcases] of builderIterateCasesWithSubcases(this.testCases)) {
       yield new RunCaseSpecific(
       this.testPath,
-      params,
-      this.subcaseParams,
+      caseParams,
+      subcases,
       this.fixture,
       this.testFn,
       this.testCreationStack);
@@ -238,14 +288,14 @@ class RunCaseSpecific {
   constructor(
   testPath,
   params,
-  subParamGen,
+  subcases,
   fixture,
   fn,
   testCreationStack)
   {
     this.id = { test: testPath, params: extractPublicParams(params) };
     this.params = params;
-    this.subParamGen = subParamGen;
+    this.subcases = subcases;
     this.fixture = fixture;
     this.fn = fn;
     this.testCreationStack = testCreationStack;
@@ -323,10 +373,10 @@ class RunCaseSpecific {
     };
 
     rec.start();
-    if (this.subParamGen) {
+    if (this.subcases) {
       let totalCount = 0;
       let skipCount = 0;
-      for (const subParams of this.subParamGen(this.params)) {
+      for (const subParams of this.subcases) {
         rec.info(new Error('subcase: ' + stringifyPublicParams(subParams)));
         try {
           const params = mergeParams(this.params, subParams);

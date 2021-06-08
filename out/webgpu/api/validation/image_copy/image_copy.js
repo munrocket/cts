@@ -1,7 +1,6 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
-**/import { poptions } from '../../../../common/framework/params_builder.js';import { kSizedTextureFormatInfo } from '../../../capability_info.js';
-import { ValidationTest } from '../validation_test.js';
+**/import { kSizedTextureFormatInfo } from '../../../capability_info.js';import { ValidationTest } from '../validation_test.js';
 
 export class ImageCopyTest extends ValidationTest {
   testRun(
@@ -123,18 +122,12 @@ function valuesToTestDivisibilityBy(number) {
 
 // This is a helper function used for expanding test parameters for texel block alignment tests on offset
 export function texelBlockAlignmentTestExpanderForOffset({ format }) {
-  return poptions(
-  'offset',
-  valuesToTestDivisibilityBy(kSizedTextureFormatInfo[format].bytesPerBlock));
-
+  return valuesToTestDivisibilityBy(kSizedTextureFormatInfo[format].bytesPerBlock);
 }
 
 // This is a helper function used for expanding test parameters for texel block alignment tests on rowsPerImage
 export function texelBlockAlignmentTestExpanderForRowsPerImage({ format }) {
-  return poptions(
-  'rowsPerImage',
-  valuesToTestDivisibilityBy(kSizedTextureFormatInfo[format].blockHeight));
-
+  return valuesToTestDivisibilityBy(kSizedTextureFormatInfo[format].blockHeight);
 }
 
 // This is a helper function used for expanding test parameters for texel block alignment tests on origin and size
@@ -145,21 +138,15 @@ export function texelBlockAlignmentTestExpanderForValueToCoordinate({
   switch (coordinateToTest) {
     case 'x':
     case 'width':
-      return poptions(
-      'valueToCoordinate',
-      valuesToTestDivisibilityBy(kSizedTextureFormatInfo[format].blockWidth));
-
+      return valuesToTestDivisibilityBy(kSizedTextureFormatInfo[format].blockWidth);
 
     case 'y':
     case 'height':
-      return poptions(
-      'valueToCoordinate',
-      valuesToTestDivisibilityBy(kSizedTextureFormatInfo[format].blockHeight));
-
+      return valuesToTestDivisibilityBy(kSizedTextureFormatInfo[format].blockHeight);
 
     case 'z':
     case 'depthOrArrayLayers':
-      return poptions('valueToCoordinate', valuesToTestDivisibilityBy(1));}
+      return valuesToTestDivisibilityBy(1);}
 
 }
 

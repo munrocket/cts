@@ -2,8 +2,7 @@
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
 **/export const description = `
 createComputePipeline and createComputePipelineAsync validation tests.
-`;import { params, poptions } from '../../../common/framework/params_builder.js';
-import { makeTestGroup } from '../../../common/framework/test_group.js';
+`;import { makeTestGroup } from '../../../common/framework/test_group.js';
 
 // import { kAllTextureFormats, kAllTextureFormatInfo } from '../../capability_info.js';
 import { ValidationTest } from './validation_test.js';
@@ -84,7 +83,7 @@ Control case for createComputePipeline and createComputePipelineAsync.
 Call the API with valid compute shader and matching valid entryPoint, making sure that the test function working well.
 `).
 
-cases(poptions('isAsync', [true, false])).
+params(u => u.combine('isAsync', [true, false])).
 fn(async t => {
   const { isAsync } = t.params;
   t.doCreateComputePipelineTest(isAsync, true, {
@@ -98,7 +97,7 @@ desc(
 Tests calling createComputePipeline(Async) with a invalid compute shader, and check that the APIs catch this error.
 `).
 
-cases(poptions('isAsync', [true, false])).
+params(u => u.combine('isAsync', [true, false])).
 fn(async t => {
   const { isAsync } = t.params;
   t.doCreateComputePipelineTest(isAsync, false, {
@@ -116,10 +115,10 @@ Tests calling createComputePipeline(Async) with valid but different stage shader
 and check that the APIs only accept compute shader.
 `).
 
-cases(
-params().
-combine(poptions('isAsync', [true, false])).
-combine(poptions('shaderModuleStage', ['compute', 'vertex', 'fragment']))).
+params((u) =>
+u //
+.combine('isAsync', [true, false]).
+combine('shaderModuleStage', ['compute', 'vertex', 'fragment'])).
 
 fn(async t => {
   const { isAsync, shaderModuleStage } = t.params;
@@ -146,10 +145,8 @@ The entryPoint assigned in descriptor include:
 - Containing invalid char, including space and control codes (Null character)
 `).
 
-cases(
-params().
-combine(poptions('isAsync', [true, false])).
-combine([
+params((u) =>
+u.combine('isAsync', [true, false]).combineWithParams([
 { shaderModuleEntryPoint: 'main', stageEntryPoint: 'main' },
 { shaderModuleEntryPoint: 'main', stageEntryPoint: '' },
 { shaderModuleEntryPoint: 'main', stageEntryPoint: 'main\0' },

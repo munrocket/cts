@@ -26,7 +26,28 @@ export function publicParamsEquals(x, y) {
   return comparePublicParamsPaths(x, y) === Ordering.Equal;
 }
 
-// (keyof A & keyof B) is not empty, so they overlapped
+function typeAssert() {}
+{
+  {
+    typeAssert();
+    typeAssert();
+    typeAssert();
+    typeAssert();
+    typeAssert();
+
+    typeAssert();
+
+    typeAssert();
+    typeAssert();
+    typeAssert();
+    typeAssert();
+    typeAssert();
+
+    // Unexpected test results - hopefully okay to ignore these
+    typeAssert();
+    typeAssert();
+  }
+}
 
 export function mergeParams(a, b) {
   for (const key of Object.keys(a)) {

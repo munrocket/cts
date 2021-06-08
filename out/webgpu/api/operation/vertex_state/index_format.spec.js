@@ -2,8 +2,7 @@
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
 **/export const description = `
 Test indexing, index format and primitive restart.
-`;import { params, poptions } from '../../../../common/framework/params_builder.js';
-import { makeTestGroup } from '../../../../common/framework/test_group.js';
+`;import { makeTestGroup } from '../../../../common/framework/test_group.js';
 import { GPUTest } from '../../../gpu_test.js';
 import { getTextureCopyLayout } from '../../../util/texture/layout.js';
 
@@ -183,7 +182,7 @@ export const g = makeTestGroup(IndexFormatTest);
 
 g.test('index_format,uint16').
 desc('Test rendering result of indexed draw with index format of uint16.').
-params([
+paramsSubcasesOnly([
 { indexOffset: 0, _expectedShape: kSquare },
 { indexOffset: 6, _expectedShape: kBottomLeftTriangle },
 { indexOffset: 18, _expectedShape: kNothing }]).
@@ -205,7 +204,7 @@ fn(t => {
 
 g.test('index_format,uint32').
 desc('Test rendering result of indexed draw with index format of uint32.').
-params([
+paramsSubcasesOnly([
 { indexOffset: 0, _expectedShape: kSquare },
 { indexOffset: 12, _expectedShape: kBottomLeftTriangle },
 { indexOffset: 36, _expectedShape: kNothing }]).
@@ -316,10 +315,10 @@ is different from what you would get if the topology were incorrect.
         |########|
 `).
 
-params(
-params().
-combine(poptions('indexFormat', ['uint16', 'uint32'])).
-combine([
+params((u) =>
+u //
+.combine('indexFormat', ['uint16', 'uint32']).
+combineWithParams([
 {
   primitiveTopology: 'point-list',
   _indices: [0, 1, -1, 2, 3, 0],

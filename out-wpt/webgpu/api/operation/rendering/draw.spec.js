@@ -13,7 +13,6 @@ TODO:
   - arg= {instance_count, first, first_instance, base_vertex}
   - mode= {draw, drawIndexed}
 `;
-import { params, pbool, poptions } from '../../../../common/framework/params_builder.js';
 import { makeTestGroup } from '../../../../common/framework/test_group.js';
 import { assert } from '../../../../common/framework/util/util.js';
 import { GPUTest } from '../../../gpu_test.js';
@@ -43,17 +42,17 @@ Params:
   - base_vertex= {0, 9} - only for indexed draws
   `
   )
-  .cases(
-    params()
-      .combine(poptions('first', [0, 3]))
-      .combine(poptions('count', [0, 3, 6]))
-      .combine(poptions('first_instance', [0, 2]))
-      .combine(poptions('instance_count', [0, 1, 4]))
-      .combine(pbool('indexed'))
-      .combine(pbool('indirect'))
-      .combine(poptions('vertex_buffer_offset', [0, 32]))
-      .expand(p => poptions('index_buffer_offset', p.indexed ? [0, 16] : [undefined]))
-      .expand(p => poptions('base_vertex', p.indexed ? [0, 9] : [undefined]))
+  .params(u =>
+    u
+      .combine('first', [0, 3])
+      .combine('count', [0, 3, 6])
+      .combine('first_instance', [0, 2])
+      .combine('instance_count', [0, 1, 4])
+      .combine('indexed', [false, true])
+      .combine('indirect', [false, true])
+      .combine('vertex_buffer_offset', [0, 32])
+      .expand('index_buffer_offset', p => (p.indexed ? [0, 16] : [undefined]))
+      .expand('base_vertex', p => (p.indexed ? [0, 9] : [undefined]))
   )
   .fn(t => {
     const renderTargetSize = [72, 36];
@@ -344,12 +343,12 @@ g.test('vertex_attributes,basic')
   - step_mode= {undefined, vertex, instance, mixed} - where mixed only applies for vertex_buffer_count > 1
   `
   )
-  .cases(
-    params()
-      .combine(poptions('vertex_attribute_count', [1, 4, 8, 16]))
-      .combine(poptions('vertex_buffer_count', [1, 4, 8]))
-      .combine(poptions('vertex_format', ['uint32', 'float32']))
-      .combine(poptions('step_mode', [undefined, 'vertex', 'instance', 'mixed']))
+  .params(u =>
+    u
+      .combine('vertex_attribute_count', [1, 4, 8, 16])
+      .combine('vertex_buffer_count', [1, 4, 8])
+      .combine('vertex_format', ['uint32', 'float32'])
+      .combine('step_mode', [undefined, 'vertex', 'instance', 'mixed'])
       .unless(p => p.vertex_attribute_count < p.vertex_buffer_count)
       .unless(p => p.step_mode === 'mixed' && p.vertex_buffer_count <= 1)
   )

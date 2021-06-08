@@ -12,9 +12,7 @@ TODO:
 
 
 import {
-params,
-poptions,
-pbool } from
+kUnitCaseParamsBuilder } from
 
 '../../../../common/framework/params_builder.js';
 
@@ -438,18 +436,17 @@ export class TextureZeroInitTest extends GPUTest {
   }}
 
 
-const paramsBuilder = params().
-combine(
-poptions('readMethod', [
+const kTestParams = kUnitCaseParamsBuilder.
+combine('readMethod', [
 ReadMethod.CopyToBuffer,
 ReadMethod.CopyToTexture,
 ReadMethod.Sample,
 ReadMethod.DepthTest,
-ReadMethod.StencilTest])).
+ReadMethod.StencilTest]).
 
-
-combine(poptions('format', kUncompressedTextureFormats)).
-combine(poptions('aspect', kTextureAspects)).
+combine('format', kUncompressedTextureFormats).
+beginSubcases().
+combine('aspect', kTextureAspects).
 unless(({ readMethod, format, aspect }) => {
   const info = kUncompressedTextureFormatInfo[format];
   // console.log(readMethod, format, aspect, info.depth, info.stencil);
@@ -468,8 +465,8 @@ unless(({ readMethod, format, aspect }) => {
     format === 'depth24plus' || format === 'depth24plus-stencil8'));
 
 }).
-combine(poptions('mipLevelCount', kMipLevelCounts)).
-combine(poptions('sampleCount', kSampleCounts)).
+combine('mipLevelCount', kMipLevelCounts).
+combine('sampleCount', kSampleCounts).
 unless(
 ({ readMethod, sampleCount }) =>
 // We can only read from multisampled textures by sampling.
@@ -478,8 +475,8 @@ readMethod === ReadMethod.CopyToBuffer || readMethod === ReadMethod.CopyToTextur
 
 // Multisampled textures may only have one mip
 .unless(({ sampleCount, mipLevelCount }) => sampleCount > 1 && mipLevelCount > 1).
-combine(poptions('uninitializeMethod', kUninitializeMethods)).
-combine(kCreationSizes)
+combine('uninitializeMethod', kUninitializeMethods).
+combineWithParams(kCreationSizes)
 // Multisampled 3D / 2D array textures not supported.
 .unless(({ sampleCount, sliceCount }) => sampleCount > 1 && sliceCount > 1).
 unless(({ format, sampleCount, uninitializeMethod, readMethod }) => {
@@ -491,8 +488,8 @@ unless(({ format, sampleCount, uninitializeMethod, readMethod }) => {
     (usage & GPUConst.TextureUsage.STORAGE) !== 0 && !info.storage);
 
 }).
-combine(pbool('nonPowerOfTwo')).
-combine(pbool('canaryOnCreation')).
+combine('nonPowerOfTwo', [false, true]).
+combine('canaryOnCreation', [false, true]).
 filter(({ canaryOnCreation, format }) => {
   // We can only initialize the texture if it's encodable or renderable.
   const canInitialize =
@@ -532,7 +529,7 @@ const checkContentsImpl = {
 export const g = makeTestGroup(TextureZeroInitTest);
 
 g.test('uninitialized_texture_is_zero').
-params(paramsBuilder).
+params(kTestParams).
 fn(async t => {
   await t.selectDeviceOrSkipTestCase(kUncompressedTextureFormatInfo[t.params.format].feature);
 

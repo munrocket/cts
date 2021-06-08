@@ -68,6 +68,8 @@ export function publicParamsEquals(x, y) {
 
 
 
+function typeAssert() {}
+{
 
 
 
@@ -82,7 +84,39 @@ export function publicParamsEquals(x, y) {
 
 
 
-// (keyof A & keyof B) is not empty, so they overlapped
+
+
+
+
+
+
+
+
+  {
+    typeAssert();
+    typeAssert();
+    typeAssert();
+    typeAssert();
+    typeAssert();
+
+    typeAssert();
+
+    typeAssert();
+    typeAssert();
+    typeAssert();
+    typeAssert();
+    typeAssert();
+
+    // Unexpected test results - hopefully okay to ignore these
+    typeAssert();
+    typeAssert();
+  }
+}
+
+
+
+
+
 
 export function mergeParams(a, b) {
   for (const key of Object.keys(a)) {

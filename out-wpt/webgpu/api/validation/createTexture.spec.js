@@ -1,7 +1,6 @@
 /**
  * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
  **/ export const description = `createTexture validation tests.`;
-import { poptions, params } from '../../../common/framework/params_builder.js';
 import { makeTestGroup } from '../../../common/framework/test_group.js';
 import { assert } from '../../../common/framework/util/util.js';
 import {
@@ -27,18 +26,15 @@ g.test('zero_size')
     `Test texture creation with zero or nonzero size of
     width, height, depthOrArrayLayers and mipLevelCount for every dimension, and representative formats.`
   )
-  .cases(poptions('dimension', [undefined, ...kTextureDimensions]))
-  .subcases(({ dimension }) =>
-    params()
-      .combine(
-        poptions('zeroArgument', ['none', 'width', 'height', 'depthOrArrayLayers', 'mipLevelCount'])
-      )
-      .combine(
-        poptions('format', ['rgba8unorm', 'rgb10a2unorm', 'bc1-rgba-unorm', 'depth24plus-stencil8'])
-      )
+  .params(u =>
+    u
+      .combine('dimension', [undefined, ...kTextureDimensions])
+      .beginSubcases()
+      .combine('zeroArgument', ['none', 'width', 'height', 'depthOrArrayLayers', 'mipLevelCount'])
+      .combine('format', ['rgba8unorm', 'rgb10a2unorm', 'bc1-rgba-unorm', 'depth24plus-stencil8'])
 
       // Filter out incompatible dimension type and format combinations.
-      .filter(({ format }) => textureDimensionAndFormatCompatible(dimension, format))
+      .filter(({ dimension, format }) => textureDimensionAndFormatCompatible(dimension, format))
   )
   .fn(async t => {
     const { dimension, zeroArgument, format } = t.params;
@@ -84,8 +80,12 @@ g.test('dimension_type_and_format_compatibility')
   .desc(
     `Test every dimension type on every format. Note that compressed formats and depth/stencil formats are not valid for 1D/3D dimension types.`
   )
-  .cases(poptions('dimension', [undefined, ...kTextureDimensions]))
-  .subcases(() => params().combine(poptions('format', kAllTextureFormats)))
+  .params(u =>
+    u
+      .combine('dimension', [undefined, ...kTextureDimensions])
+      .beginSubcases()
+      .combine('format', kAllTextureFormats)
+  )
   .fn(async t => {
     const { dimension, format } = t.params;
     const info = kAllTextureFormatInfo[format];
@@ -108,13 +108,14 @@ g.test('mipLevelCount,format')
     `Test texture creation with no mipmap chain, partial mipmap chain, full mipmap chain, out-of-bounds mipmap chain
     for every format with different texture dimension types.`
   )
-  .cases(poptions('dimension', [undefined, ...kTextureDimensions]))
-  .subcases(({ dimension }) =>
-    params()
-      .combine(poptions('format', kAllTextureFormats))
-      .combine(poptions('mipLevelCount', [1, 3, 6, 7]))
+  .params(u =>
+    u
+      .combine('dimension', [undefined, ...kTextureDimensions])
+      .beginSubcases()
+      .combine('format', kAllTextureFormats)
+      .combine('mipLevelCount', [1, 3, 6, 7])
       // Filter out incompatible dimension type and format combinations.
-      .filter(({ format }) => textureDimensionAndFormatCompatible(dimension, format))
+      .filter(({ dimension, format }) => textureDimensionAndFormatCompatible(dimension, format))
   )
   .fn(async t => {
     const { dimension, format, mipLevelCount } = t.params;
@@ -146,10 +147,10 @@ g.test('mipLevelCount,bound_check')
     `Test mip level count bound check upon different texture size and different texture dimension types.
     The cases below test: 1) there must be no mip levels after a 1 level (1D texture), or 1x1 level (2D texture), or 1x1x1 level (3D texture), 2) array layers are not mip-mapped, 3) power-of-two, non-power-of-two, and non-square sizes.`
   )
-  .subcases(() =>
-    params()
-      .combine(poptions('format', ['rgba8unorm', 'bc1-rgba-unorm']))
-      .combine([
+  .paramsSubcasesOnly(u =>
+    u //
+      .combine('format', ['rgba8unorm', 'bc1-rgba-unorm'])
+      .combineWithParams([
         { size: [32, 32] }, // Mip level sizes: 32x32, 16x16, 8x8, 4x4, 2x2, 1x1
         { size: [31, 32] }, // Mip level sizes: 31x32, 15x16, 7x8, 3x4, 1x2, 1x1
         { size: [28, 32] }, // Mip level sizes: 28x32, 14x16, 7x8, 3x4, 1x2, 1x1
@@ -217,11 +218,12 @@ g.test('sampleCount,various_sampleCount_with_all_formats')
   .desc(
     `Test texture creation with various (valid or invalid) sample count and all formats. Note that 1D and 3D textures can't support multisample.`
   )
-  .cases(poptions('dimension', [undefined, '2d']))
-  .subcases(() =>
-    params()
-      .combine(poptions('sampleCount', [0, 1, 2, 4, 8, 16, 32, 256]))
-      .combine(poptions('format', kAllTextureFormats))
+  .params(u =>
+    u
+      .combine('dimension', [undefined, '2d'])
+      .beginSubcases()
+      .combine('sampleCount', [0, 1, 2, 4, 8, 16, 32, 256])
+      .combine('format', kAllTextureFormats)
   )
   .fn(async t => {
     const { dimension, sampleCount, format } = t.params;
@@ -249,20 +251,21 @@ g.test('sampleCount,valid_sampleCount_with_other_parameter_varies')
      Texture can be single sample (sampleCount is 1) or multi-sample (sampleCount is 4).
      Multisample texture requires that 1) its dimension is 2d or undefined, 2) its format supports multisample, 3) its mipLevelCount and arrayLayerCount are 1, 4) its usage doesn't include STORAGE.`
   )
-  .cases(poptions('dimension', [undefined, ...kTextureDimensions]))
-  .subcases(({ dimension }) =>
-    params()
-      .combine(poptions('sampleCount', [1, 4]))
-      .combine(poptions('arrayLayerCount', [1, 2]))
+  .params(u =>
+    u
+      .combine('dimension', [undefined, ...kTextureDimensions])
+      .beginSubcases()
+      .combine('sampleCount', [1, 4])
+      .combine('arrayLayerCount', [1, 2])
       .unless(
-        ({ arrayLayerCount }) =>
+        ({ dimension, arrayLayerCount }) =>
           arrayLayerCount === 2 && dimension !== '2d' && dimension !== undefined
       )
-      .combine(poptions('mipLevelCount', [1, 2]))
-      .combine(poptions('format', kAllTextureFormats))
-      .combine(poptions('usage', kTextureUsages))
+      .combine('mipLevelCount', [1, 2])
+      .combine('format', kAllTextureFormats)
+      .combine('usage', kTextureUsages)
       // Filter out incompatible dimension type and format combinations.
-      .filter(({ format }) => textureDimensionAndFormatCompatible(dimension, format))
+      .filter(({ dimension, format }) => textureDimensionAndFormatCompatible(dimension, format))
       .unless(({ usage, format }) => {
         const info = kAllTextureFormatInfo[format];
         return (
@@ -309,13 +312,14 @@ g.test('texture_size,default_value_and_smallest_size,uncompressed_format')
     `Test default values for height and depthOrArrayLayers for every dimension type and every uncompressed format.
 	  It also tests smallest size (lower bound) for every dimension type and every uncompressed format, while other texture_size tests are testing the upper bound.`
   )
-  .cases(poptions('dimension', [undefined, ...kTextureDimensions]))
-  .subcases(({ dimension }) =>
-    params()
-      .combine(poptions('format', kUncompressedTextureFormats))
-      .combine(poptions('size', [[1], [1, 1], [1, 1, 1]]))
+  .params(u =>
+    u
+      .combine('dimension', [undefined, ...kTextureDimensions])
+      .beginSubcases()
+      .combine('format', kUncompressedTextureFormats)
+      .combine('size', [[1], [1, 1], [1, 1, 1]])
       // Filter out incompatible dimension type and format combinations.
-      .filter(({ format }) => textureDimensionAndFormatCompatible(dimension, format))
+      .filter(({ dimension, format }) => textureDimensionAndFormatCompatible(dimension, format))
   )
   .fn(async t => {
     const { dimension, format, size } = t.params;
@@ -336,13 +340,13 @@ g.test('texture_size,default_value_and_smallest_size,compressed_format')
     `Test default values for height and depthOrArrayLayers for every dimension type and every compressed format.
 	  It also tests smallest size (lower bound) for every dimension type and every compressed format, while other texture_size tests are testing the upper bound.`
   )
-
-  // Compressed formats are invalid for 1D and 3D.
-  .cases(poptions('dimension', [undefined, '2d']))
-  .subcases(() =>
-    params()
-      .combine(poptions('format', kCompressedTextureFormats))
-      .expand(p => {
+  .params(u =>
+    u
+      // Compressed formats are invalid for 1D and 3D.
+      .combine('dimension', [undefined, '2d'])
+      .beginSubcases()
+      .combine('format', kCompressedTextureFormats)
+      .expandWithParams(p => {
         const { blockWidth, blockHeight } = kAllTextureFormatInfo[p.format];
         return [
           { size: [1], _success: false },
@@ -373,19 +377,17 @@ g.test('texture_size,default_value_and_smallest_size,compressed_format')
 
 g.test('texture_size,1d_texture')
   .desc(`Test texture size requirement for 1D texture`)
-  .subcases(() =>
-    params()
+  .paramsSubcasesOnly(u =>
+    u //
       // Compressed textures are invalid for 1D.
-      .combine(poptions('format', kUncompressedTextureFormats))
-      .combine(
-        poptions('width', [
-          DefaultLimits.maxTextureDimension1D - 1,
-          DefaultLimits.maxTextureDimension1D,
-          DefaultLimits.maxTextureDimension1D + 1,
-        ])
-      )
-      .combine(poptions('height', [1, 2]))
-      .combine(poptions('depthOrArrayLayers', [1, 2]))
+      .combine('format', kUncompressedTextureFormats)
+      .combine('width', [
+        DefaultLimits.maxTextureDimension1D - 1,
+        DefaultLimits.maxTextureDimension1D,
+        DefaultLimits.maxTextureDimension1D + 1,
+      ])
+      .combine('height', [1, 2])
+      .combine('depthOrArrayLayers', [1, 2])
   )
   .fn(async t => {
     const { format, width, height, depthOrArrayLayers } = t.params;
@@ -408,26 +410,24 @@ g.test('texture_size,1d_texture')
 
 g.test('texture_size,2d_texture,uncompressed_format')
   .desc(`Test texture size requirement for 2D texture with uncompressed format.`)
-  .cases(poptions('dimension', [undefined, '2d']))
-  .subcases(() =>
-    params()
-      .combine(poptions('format', kUncompressedTextureFormats))
-      .combine(
-        poptions('size', [
-          // Test the bound of width
-          [DefaultLimits.maxTextureDimension2D - 1, 1, 1],
-          [DefaultLimits.maxTextureDimension2D, 1, 1],
-          [DefaultLimits.maxTextureDimension2D + 1, 1, 1],
-          // Test the bound of height
-          [1, DefaultLimits.maxTextureDimension2D - 1, 1],
-          [1, DefaultLimits.maxTextureDimension2D, 1],
-          [1, DefaultLimits.maxTextureDimension2D + 1, 1],
-          // Test the bound of array layers
-          [1, 1, DefaultLimits.maxTextureArrayLayers - 1],
-          [1, 1, DefaultLimits.maxTextureArrayLayers],
-          [1, 1, DefaultLimits.maxTextureArrayLayers + 1],
-        ])
-      )
+  .params(u =>
+    u
+      .combine('dimension', [undefined, '2d'])
+      .combine('format', kUncompressedTextureFormats)
+      .combine('size', [
+        // Test the bound of width
+        [DefaultLimits.maxTextureDimension2D - 1, 1, 1],
+        [DefaultLimits.maxTextureDimension2D, 1, 1],
+        [DefaultLimits.maxTextureDimension2D + 1, 1, 1],
+        // Test the bound of height
+        [1, DefaultLimits.maxTextureDimension2D - 1, 1],
+        [1, DefaultLimits.maxTextureDimension2D, 1],
+        [1, DefaultLimits.maxTextureDimension2D + 1, 1],
+        // Test the bound of array layers
+        [1, 1, DefaultLimits.maxTextureArrayLayers - 1],
+        [1, 1, DefaultLimits.maxTextureArrayLayers],
+        [1, 1, DefaultLimits.maxTextureArrayLayers + 1],
+      ])
   )
   .fn(async t => {
     const { dimension, format, size } = t.params;
@@ -452,13 +452,13 @@ g.test('texture_size,2d_texture,uncompressed_format')
 
 g.test('texture_size,2d_texture,compressed_format')
   .desc(`Test texture size requirement for 2D texture with compressed format.`)
-  .cases(poptions('dimension', [undefined, '2d']))
-  .subcases(() =>
-    params()
-      .combine(poptions('format', kCompressedTextureFormats))
-      .expand(p => {
+  .params(u =>
+    u
+      .combine('dimension', [undefined, '2d'])
+      .combine('format', kCompressedTextureFormats)
+      .expand('size', p => {
         const { blockWidth, blockHeight } = kAllTextureFormatInfo[p.format];
-        return poptions('size', [
+        return [
           // Test the bound of width
           [DefaultLimits.maxTextureDimension2D - 1, 1, 1],
           [DefaultLimits.maxTextureDimension2D - blockWidth, 1, 1],
@@ -490,7 +490,7 @@ g.test('texture_size,2d_texture,compressed_format')
           [blockWidth, 1, DefaultLimits.maxTextureArrayLayers + 1],
           [1, blockHeight, DefaultLimits.maxTextureArrayLayers + 1],
           [blockWidth, blockHeight, DefaultLimits.maxTextureArrayLayers + 1],
-        ]);
+        ];
       })
   )
   .fn(async t => {
@@ -524,25 +524,23 @@ g.test('texture_size,2d_texture,compressed_format')
 
 g.test('texture_size,3d_texture,uncompressed_format')
   .desc(`Test texture size requirement for 3D texture with uncompressed format.`)
-  .subcases(() =>
-    params()
-      .combine(poptions('format', kUncompressedTextureFormats))
-      .combine(
-        poptions('size', [
-          // Test the bound of width
-          [DefaultLimits.maxTextureDimension3D - 1, 1, 1],
-          [DefaultLimits.maxTextureDimension3D, 1, 1],
-          [DefaultLimits.maxTextureDimension3D + 1, 1, 1],
-          // Test the bound of height
-          [1, DefaultLimits.maxTextureDimension3D - 1, 1],
-          [1, DefaultLimits.maxTextureDimension3D, 1],
-          [1, DefaultLimits.maxTextureDimension3D + 1, 1],
-          // Test the bound of depth
-          [1, 1, DefaultLimits.maxTextureDimension3D - 1],
-          [1, 1, DefaultLimits.maxTextureDimension3D],
-          [1, 1, DefaultLimits.maxTextureDimension3D + 1],
-        ])
-      )
+  .paramsSubcasesOnly(u =>
+    u //
+      .combine('format', kUncompressedTextureFormats)
+      .combine('size', [
+        // Test the bound of width
+        [DefaultLimits.maxTextureDimension3D - 1, 1, 1],
+        [DefaultLimits.maxTextureDimension3D, 1, 1],
+        [DefaultLimits.maxTextureDimension3D + 1, 1, 1],
+        // Test the bound of height
+        [1, DefaultLimits.maxTextureDimension3D - 1, 1],
+        [1, DefaultLimits.maxTextureDimension3D, 1],
+        [1, DefaultLimits.maxTextureDimension3D + 1, 1],
+        // Test the bound of depth
+        [1, 1, DefaultLimits.maxTextureDimension3D - 1],
+        [1, 1, DefaultLimits.maxTextureDimension3D],
+        [1, 1, DefaultLimits.maxTextureDimension3D + 1],
+      ])
   )
   .fn(async t => {
     const { format, size } = t.params;
@@ -567,12 +565,12 @@ g.test('texture_size,3d_texture,uncompressed_format')
 
 g.test('texture_size,3d_texture,compressed_format')
   .desc(`Test texture size requirement for 3D texture with compressed format.`)
-  .subcases(() =>
-    params()
-      .combine(poptions('format', kCompressedTextureFormats))
-      .expand(p => {
+  .paramsSubcasesOnly(u =>
+    u //
+      .combine('format', kCompressedTextureFormats)
+      .expand('size', p => {
         const { blockWidth, blockHeight } = kAllTextureFormatInfo[p.format];
-        return poptions('size', [
+        return [
           // Test the bound of width
           [DefaultLimits.maxTextureDimension3D - 1, 1, 1],
           [DefaultLimits.maxTextureDimension3D - blockWidth, 1, 1],
@@ -604,7 +602,7 @@ g.test('texture_size,3d_texture,compressed_format')
           [blockWidth, 1, DefaultLimits.maxTextureDimension3D + 1],
           [1, blockHeight, DefaultLimits.maxTextureDimension3D + 1],
           [blockWidth, blockHeight, DefaultLimits.maxTextureDimension3D + 1],
-        ]);
+        ];
       })
   )
   .fn(async t => {
@@ -644,15 +642,16 @@ g.test('texture_usage')
   .desc(
     `Test texture usage (single usage or combined usages) for every texture format and every dimension type`
   )
-  .cases(poptions('dimension', [undefined, ...kTextureDimensions]))
-  .subcases(({ dimension }) =>
-    params()
-      .combine(poptions('format', kAllTextureFormats))
+  .params(u =>
+    u
+      .combine('dimension', [undefined, ...kTextureDimensions])
+      .beginSubcases()
+      .combine('format', kAllTextureFormats)
       // If usage0 and usage1 are the same, then the usage being test is a single usage. Otherwise, it is a combined usage.
-      .combine(poptions('usage0', kTextureUsages))
-      .combine(poptions('usage1', kTextureUsages))
+      .combine('usage0', kTextureUsages)
+      .combine('usage1', kTextureUsages)
       // Filter out incompatible dimension type and format combinations.
-      .filter(({ format }) => textureDimensionAndFormatCompatible(dimension, format))
+      .filter(({ dimension, format }) => textureDimensionAndFormatCompatible(dimension, format))
   )
   .fn(async t => {
     const { dimension, format, usage0, usage1 } = t.params;

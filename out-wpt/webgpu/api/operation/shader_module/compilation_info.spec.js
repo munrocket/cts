@@ -66,7 +66,7 @@ g.test('compilationInfo_returns')
     - Test that the compilation info for valid shader modules contains no errors.
     - Test that the compilation info for invalid shader modules contains at least one error.`
   )
-  .cases(kAllShaderSources)
+  .paramsSimple(kAllShaderSources)
   .fn(async t => {
     const { _code, valid } = t.params;
 
@@ -106,7 +106,7 @@ g.test('line_number_and_position')
     - Test for invalid shader modules containing containing at least one error.
     - Test for shader modules containing only ASCII and those containing unicode characters.`
   )
-  .cases(kInvalidShaderSources)
+  .paramsSimple(kInvalidShaderSources)
   .fn(async t => {
     const { _code, _errorLine } = t.params;
 
@@ -148,7 +148,7 @@ g.test('offset_and_length')
     - Test for valid and invalid shader modules.
     - Test for shader modules containing only ASCII and those containing unicode characters.`
   )
-  .cases(kAllShaderSources)
+  .paramsSimple(kAllShaderSources)
   .fn(async t => {
     const { _code, valid } = t.params;
 
