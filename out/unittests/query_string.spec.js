@@ -2,7 +2,8 @@
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
 **/export const description = `
 Unit tests for TestQuery strings.
-`;import { compareQueries, Ordering } from '../common/framework/query/compare.js';
+`;import { makeTestGroup } from '../common/framework/test_group.js';
+import { compareQueries, Ordering } from '../common/internal/query/compare.js';
 import {
 
 TestQuerySingleCase,
@@ -10,8 +11,7 @@ TestQueryMultiCase,
 TestQueryMultiTest,
 TestQueryMultiFile,
 relativeQueryString } from
-'../common/framework/query/query.js';
-import { makeTestGroup } from '../common/framework/test_group.js';
+'../common/internal/query/query.js';
 
 import { UnitTest } from './unit_test.js';
 

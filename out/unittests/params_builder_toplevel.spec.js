@@ -2,9 +2,10 @@
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
 **/export const description = `
 Unit tests for parameterization.
-`;import { kUnitCaseParamsBuilder } from '../common/framework/params_builder.js';
-
-import { makeTestGroup, makeTestGroupForUnitTesting } from '../common/framework/test_group.js';
+`;
+import { kUnitCaseParamsBuilder } from '../common/framework/params_builder.js';
+import { makeTestGroup } from '../common/framework/test_group.js';
+import { makeTestGroupForUnitTesting } from '../common/internal/test_group.js';
 
 import { TestGroupTest } from './test_group_test.js';
 import { UnitTest } from './unit_test.js';

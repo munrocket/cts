@@ -1,7 +1,7 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
 **/export const description = `createTexture validation tests.`;import { makeTestGroup } from '../../../common/framework/test_group.js';
-import { assert } from '../../../common/framework/util/util.js';
+import { assert } from '../../../common/util/util.js';
 import {
 kAllTextureFormats,
 kAllTextureFormatInfo,

@@ -1,12 +1,15 @@
 /**
  * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
- **/ import { assert } from '../../../common/framework/util/util.js';
+ **/ import { assert } from '../../../common/util/util.js';
 import { kSizedTextureFormatInfo } from '../../capability_info.js';
 import { align } from '../math.js';
 import { standardizeExtent3D } from '../unions.js';
 
 export const kImageCopyTypes = ['WriteTexture', 'CopyB2T', 'CopyT2B'];
 
+/**
+ * Computes `bytesInACompleteRow` (as defined by the WebGPU spec) for image copies (B2T/T2B/writeTexture).
+ */
 export function bytesInACompleteRow(copyWidth, format) {
   const info = kSizedTextureFormatInfo[format];
   assert(copyWidth % info.blockWidth === 0);

@@ -6,7 +6,7 @@ Validation for attachment compatibility between render passes, bundles, and pipe
 TODO: Add sparse color attachment compatibility test when defined by specification
 `;
 import { makeTestGroup } from '../../../common/framework/test_group.js';
-import { range } from '../../../common/framework/util/util.js';
+import { range } from '../../../common/util/util.js';
 import {
   kRegularTextureFormatInfo,
   kRegularTextureFormats,

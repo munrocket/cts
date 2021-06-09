@@ -1,6 +1,9 @@
 /**
  * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
  **/ import { standardizeExtent3D } from '../../util/unions.js';
+/**
+ * Compute the maximum mip level count allowed for a given texture size and texture dimension.
+ */
 export function maxMipLevelCount({ size, dimension = '2d' }) {
   const sizeDict = standardizeExtent3D(size);
 

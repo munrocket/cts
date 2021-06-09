@@ -8,7 +8,7 @@ TODO:
 - Move all the tests here to image_copy/ and test writeTexture() with depth/stencil formats.
 `;
 import { makeTestGroup } from '../../../../../common/framework/test_group.js';
-import { assert } from '../../../../../common/framework/util/util.js';
+import { assert } from '../../../../../common/util/util.js';
 import {
   kDepthStencilFormats,
   depthStencilBufferTextureCopySupported,

@@ -1,6 +1,6 @@
 /**
  * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
- **/ import { assert, unreachable } from '../../../common/framework/util/util.js';
+ **/ import { assert, unreachable } from '../../../common/util/util.js';
 import {
   assertInIntegerRange,
   float32ToFloatBits,

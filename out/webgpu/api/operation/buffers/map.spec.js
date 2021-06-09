@@ -9,7 +9,7 @@ TODO: Test that ranges not written preserve previous contents.
 TODO: Test that mapping-for-write again shows the values previously written.
 TODO: Some testing (probably minimal) of accessing with different TypedArray/DataView types.
 `;import { makeTestGroup } from '../../../../common/framework/test_group.js';
-import { assert } from '../../../../common/framework/util/util.js';
+import { assert } from '../../../../common/util/util.js';
 
 import { MappingTest } from './mapping_test.js';
 

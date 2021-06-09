@@ -1,4 +1,4 @@
-import { assert, unreachable } from '../../../common/framework/util/util.js';
+import { assert, unreachable } from '../../../common/util/util.js';
 import { BindableResource, kMaxQueryCount } from '../../capability_info.js';
 import { GPUTest } from '../../gpu_test.js';
 
@@ -20,6 +20,11 @@ export interface CommandBufferMaker<T extends EncoderType> {
   finish(): GPUCommandBuffer;
 }
 
+/**
+ * Base fixture for WebGPU validation tests.
+ *
+ * @noInheritDoc
+ */
 export class ValidationTest extends GPUTest {
   createTextureWithState(
     state: 'valid' | 'invalid' | 'destroyed',

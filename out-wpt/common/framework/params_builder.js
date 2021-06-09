@@ -1,6 +1,6 @@
 /**
  * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
- **/ import { mergeParams } from './params_utils.js'; // ================================================================
+ **/ import { mergeParams } from '../internal/params_utils.js'; // ================================================================
 // "Public" ParamsBuilder API / Documentation
 // ================================================================
 

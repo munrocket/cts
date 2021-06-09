@@ -1,6 +1,8 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
-**/ // Types ensure every field is specified.
+**/ /** @module webgpu/constants */ // Note: Types ensure every field is specified.
+
+
 function checkType(x) {}
 
 const BufferUsage = {

@@ -11,7 +11,7 @@ TODO: merge these notes and implement.
 >     - {null, compatible, incompatible} current pipeline (should have no effect without draw/dispatch)
 >     - setBindGroup in different orders (e.g. 0,1,2 vs 2,0,1)
 `;import { makeTestGroup } from '../../../../../common/framework/test_group.js';
-import { range, unreachable } from '../../../../../common/framework/util/util.js';
+import { range, unreachable } from '../../../../../common/util/util.js';
 import { kMinDynamicBufferOffsetAlignment } from '../../../../capability_info.js';
 import {
 kProgrammableEncoderTypes,

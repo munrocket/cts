@@ -2,11 +2,12 @@
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
 **/export const description = `
 Tests for queries/filtering, loading, and running.
-`;import { TestFileLoader } from '../common/framework/file_loader.js';
+`;
+import { makeTestGroup } from '../common/framework/test_group.js';
+import { TestFileLoader } from '../common/internal/file_loader.js';
+import { Logger } from '../common/internal/logging/logger.js';
 
-import { Logger } from '../common/framework/logging/logger.js';
-
-import { parseQuery } from '../common/framework/query/parseQuery.js';
+import { parseQuery } from '../common/internal/query/parseQuery.js';
 import {
 
 TestQuerySingleCase,
@@ -14,11 +15,11 @@ TestQueryMultiCase,
 TestQueryMultiTest,
 TestQueryMultiFile } from
 
-'../common/framework/query/query.js';
-import { makeTestGroup, makeTestGroupForUnitTesting } from '../common/framework/test_group.js';
+'../common/internal/query/query.js';
+import { makeTestGroupForUnitTesting } from '../common/internal/test_group.js';
 
 
-import { assert, objectEquals } from '../common/framework/util/util.js';
+import { assert, objectEquals } from '../common/util/util.js';
 
 import { UnitTest } from './unit_test.js';
 

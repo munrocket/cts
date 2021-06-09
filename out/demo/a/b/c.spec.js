@@ -1,7 +1,7 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
 **/export const description = 'Description for c.spec.ts';import { makeTestGroup } from '../../../common/framework/test_group.js';
-import { unreachable } from '../../../common/framework/util/util.js';
+import { unreachable } from '../../../common/util/util.js';
 import { UnitTest } from '../../../unittests/unit_test.js';
 
 export const g = makeTestGroup(UnitTest);

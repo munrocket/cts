@@ -1,6 +1,6 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
-**/import { assert, unreachable } from '../../../common/framework/util/util.js';import { kMaxQueryCount } from '../../capability_info.js';import { GPUTest } from '../../gpu_test.js';
+**/import { assert, unreachable } from '../../../common/util/util.js';import { kMaxQueryCount } from '../../capability_info.js';import { GPUTest } from '../../gpu_test.js';
 
 export const kRenderEncodeTypes = ['render pass', 'render bundle'];
 
@@ -20,6 +20,11 @@ export const kEncoderTypes = ['non-pass', ...kProgrammableEncoderTypes];
 
 
 
+/**
+                                                                          * Base fixture for WebGPU validation tests.
+                                                                          *
+                                                                          * @noInheritDoc
+                                                                          */
 export class ValidationTest extends GPUTest {
   createTextureWithState(
   state,

@@ -6,7 +6,7 @@ import {
   raceWithRejectOnTimeout,
   unreachable,
   assertReject,
-} from '../../common/framework/util/util.js';
+} from '../../common/util/util.js';
 import { DefaultLimits } from '../constants.js';
 
 import { getGPU } from './navigator_gpu.js';

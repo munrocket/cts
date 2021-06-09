@@ -11,9 +11,8 @@ TODO:
 // Everything that's exported should be moved to another file.
 
 import { kUnitCaseParamsBuilder } from '../../../../common/framework/params_builder.js';
-
 import { makeTestGroup } from '../../../../common/framework/test_group.js';
-import { assert, unreachable } from '../../../../common/framework/util/util.js';
+import { assert, unreachable } from '../../../../common/util/util.js';
 import {
   kAllTextureFormatInfo,
   kEncodableTextureFormatInfo,

@@ -1,8 +1,8 @@
 /**
  * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
  **/ import { Fixture } from '../common/framework/fixture.js';
-import { attemptGarbageCollection } from '../common/framework/util/collect_garbage.js';
-import { assert } from '../common/framework/util/util.js';
+import { attemptGarbageCollection } from '../common/util/collect_garbage.js';
+import { assert } from '../common/util/util.js';
 
 import { kAllTextureFormatInfo, kQueryTypeInfo } from './capability_info.js';
 import { makeBufferWithContents } from './util/buffer.js';
@@ -13,6 +13,11 @@ import { kTexelRepresentationInfo } from './util/texture/texel_data.js';
 
 const devicePool = new DevicePool();
 
+/**
+ * Base fixture for WebGPU tests.
+ *
+ * @noInherit
+ */
 export class GPUTest extends Fixture {
   /** Must not be replaced once acquired. */
 
@@ -72,6 +77,10 @@ export class GPUTest extends Fixture {
     this.acquiredDevice = this.provider.acquire();
   }
 
+  /**
+   * Create device with texture format(s) required feature(s).
+   * If the device creation fails, then skip the test for that format(s).
+   */
   async selectDeviceForTextureFormatOrSkipTestCase(formats) {
     if (!Array.isArray(formats)) {
       formats = [formats];
@@ -86,6 +95,10 @@ export class GPUTest extends Fixture {
     await this.selectDeviceOrSkipTestCase(Array.from(features));
   }
 
+  /**
+   * Create device with query type(s) required feature(s).
+   * If the device creation fails, then skip the test for that type(s).
+   */
   async selectDeviceForQueryTypeOrSkipTestCase(types) {
     if (!Array.isArray(types)) {
       types = [types];
@@ -177,6 +190,10 @@ export class GPUTest extends Fixture {
     });
   }
 
+  /**
+   * Expect a buffer's contents to be a single constant value,
+   * specified as a TypedArrayBufferView containing one element.
+   */
   expectSingleValueContents(
     src,
     expected,
@@ -378,6 +395,10 @@ got [${failedByteActualValues.join(', ')}]`;
     return undefined;
   }
 
+  /**
+   * Checks that an actual TypedArrayBufferView's contents are all a single constant value,
+   * specified as a TypedArrayBufferView containing one element.
+   */
   checkSingleValueBuffer(actual, exp, tolerance = 0) {
     assert(actual.constructor === exp.constructor);
 

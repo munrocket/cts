@@ -1,6 +1,11 @@
 /**
  * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
  **/ import { GPUTest } from '../../gpu_test.js';
+/**
+ * Base fixture for WGSL shader validation tests.
+ *
+ * @noInheritDoc
+ */
 export class ShaderValidationTest extends GPUTest {
   /**
    * Add a test expectation for whether a createShaderModule call succeeds or not.

@@ -1,6 +1,6 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
-**/import { unreachable } from '../../../common/framework/util/util.js';import { runRefTest } from './gpu_ref_test.js';
+**/import { unreachable } from '../../../common/util/util.js';import { runRefTest } from './gpu_ref_test.js';
 
 // <canvas> element from html page
 

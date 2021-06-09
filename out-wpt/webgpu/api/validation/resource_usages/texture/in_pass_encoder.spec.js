@@ -43,9 +43,9 @@ Test Coverage:
     - Texture usages should be validated per each render pass. And they should be validated per each
       dispatch call in compute.
 `;
-import { pp } from '../../../../../common/framework/preprocessor.js';
 import { makeTestGroup } from '../../../../../common/framework/test_group.js';
-import { assert } from '../../../../../common/framework/util/util.js';
+import { pp } from '../../../../../common/util/preprocessor.js';
+import { assert } from '../../../../../common/util/util.js';
 import {
   kDepthStencilFormats,
   kDepthStencilFormatInfo,

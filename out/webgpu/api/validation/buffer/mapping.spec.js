@@ -25,8 +25,8 @@ TODO: review existing tests and merge with this plan:
 > - {mappedAtCreation, await mapAsync} -> x = getMappedRange -> unmap -> await mapAsync(subrange) -> y = getMappedRange
 >     - check x.size == 0, y.size == mapping size
 `;import { makeTestGroup } from '../../../../common/framework/test_group.js';
-import { attemptGarbageCollection } from '../../../../common/framework/util/collect_garbage.js';
-import { assert, unreachable } from '../../../../common/framework/util/util.js';
+import { attemptGarbageCollection } from '../../../../common/util/collect_garbage.js';
+import { assert, unreachable } from '../../../../common/util/util.js';
 import { kBufferUsages } from '../../../capability_info.js';
 import { GPUConst } from '../../../constants.js';
 import { ValidationTest } from '../validation_test.js';

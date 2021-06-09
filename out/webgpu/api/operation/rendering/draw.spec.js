@@ -13,7 +13,7 @@ TODO:
   - arg= {instance_count, first, first_instance, base_vertex}
   - mode= {draw, drawIndexed}
 `;import { makeTestGroup } from '../../../../common/framework/test_group.js';
-import { assert } from '../../../../common/framework/util/util.js';
+import { assert } from '../../../../common/util/util.js';
 import {
 GPUTest } from
 
