@@ -3,7 +3,6 @@
  **/ import { assert } from '../../../common/framework/util/util.js';
 import { kAllTextureFormatInfo } from '../../capability_info.js';
 import { align } from '../../util/math.js';
-import { standardizeExtent3D } from '../unions.js';
 
 function endOfRange(r) {
   return 'count' in r ? r.begin + r.count : r.end;
@@ -22,16 +21,16 @@ export class SubresourceRange {
       end: endOfRange(subresources.mipRange),
     };
 
-    this.sliceRange = {
-      begin: subresources.sliceRange.begin,
-      end: endOfRange(subresources.sliceRange),
+    this.layerRange = {
+      begin: subresources.layerRange.begin,
+      end: endOfRange(subresources.layerRange),
     };
   }
 
   *each() {
     for (let level = this.mipRange.begin; level < this.mipRange.end; ++level) {
-      for (let slice = this.sliceRange.begin; slice < this.sliceRange.end; ++slice) {
-        yield { level, slice };
+      for (let layer = this.layerRange.begin; layer < this.layerRange.end; ++layer) {
+        yield { level, layer };
       }
     }
   }
@@ -40,23 +39,9 @@ export class SubresourceRange {
     for (let level = this.mipRange.begin; level < this.mipRange.end; ++level) {
       yield {
         level,
-        slices: rangeAsIterator(this.sliceRange),
+        layers: rangeAsIterator(this.layerRange),
       };
     }
-  }
-}
-
-export function mipSize(size, level) {
-  const rShiftMax1 = s => Math.max(s >> level, 1);
-  if (size instanceof Array) {
-    return size.map(rShiftMax1);
-  } else {
-    const size_ = standardizeExtent3D(size);
-    return {
-      width: rShiftMax1(size_.width),
-      height: rShiftMax1(size_.height),
-      depthOrArrayLayers: rShiftMax1(size_.depthOrArrayLayers),
-    };
   }
 }
 

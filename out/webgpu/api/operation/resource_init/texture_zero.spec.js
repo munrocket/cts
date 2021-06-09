@@ -4,7 +4,7 @@
 Test uninitialized textures are initialized to zero when read.
 
 TODO:
-- 1d, 3d
+- 1d
 - test by sampling depth/stencil
 - test by copying out of stencil
 `; // TODO: This is a test file, it probably shouldn't export anything.
@@ -29,8 +29,11 @@ kUncompressedTextureFormats } from
 '../../../capability_info.js';
 import { GPUConst } from '../../../constants.js';
 import { GPUTest } from '../../../gpu_test.js';
-import { createTextureUploadBuffer } from '../../../util/texture/layout.js';
-import { mipSize, SubresourceRange } from '../../../util/texture/subresource.js';
+import {
+createTextureUploadBuffer,
+getMipSizePassthroughLayers } from
+'../../../util/texture/layout.js';
+import { SubresourceRange } from '../../../util/texture/subresource.js';
 import { kTexelRepresentationInfo } from '../../../util/texture/texel_data.js';
 
 export let UninitializeMethod;(function (UninitializeMethod) {UninitializeMethod["Creation"] = "Creation";UninitializeMethod["StoreOpClear"] = "StoreOpClear";})(UninitializeMethod || (UninitializeMethod = {}));
@@ -65,29 +68,17 @@ const kUninitializedMipRangesToTest = {
 // Test with these sample counts.
 const kSampleCounts = [1, 4];
 
-// Test with these slice counts. This means the depth of a 3d texture or the number
-// or layers in a 2D or a 1D texture array.
+// Test with these layer counts.
 
 
-// For each slice count, define the slices to leave uninitialized.
-const kUninitializedSliceRangesToTest = {
-  1: [{ begin: 0, end: 1 }], // Test the only slice
+// For each layer count, define the layers to leave uninitialized.
+const kUninitializedLayerRangesToTest = {
+  1: [{ begin: 0, end: 1 }], // Test the only layer
   7: [
   { begin: 2, end: 4 },
   { begin: 6, end: 7 }]
-  // Test a range and a single slice
+  // Test a range and a single layer
 };
-
-// Test with these combinations of texture dimension and sliceCount.
-const kCreationSizes =
-
-
-[
-// { dimension: '1d', sliceCount: 7 }, // TODO: 1d textures
-{ dimension: '2d', sliceCount: 1 }, // 2d textures
-{ dimension: '2d', sliceCount: 7 } // 2d array textures
-// { dimension: '3d', sliceCount: 7 }, // TODO: 3d textures
-];
 
 // Enums to abstract over color / depth / stencil values in textures. Depending on the texture format,
 // the data for each value may have a different representation. These enums are converted to a
@@ -234,11 +225,19 @@ export class TextureZeroInitTest extends GPUTest {
     return height;
   }
 
+  get textureDepth() {
+    return this.p.dimension === '3d' ? 11 : 1;
+  }
+
+  get textureDepthOrArrayLayers() {
+    return this.p.dimension === '2d' ? this.p.layerCount : this.textureDepth;
+  }
+
   // Used to iterate subresources and check that their uninitialized contents are zero when accessed
   *iterateUninitializedSubresources() {
     for (const mipRange of kUninitializedMipRangesToTest[this.p.mipLevelCount]) {
-      for (const sliceRange of kUninitializedSliceRangesToTest[this.p.sliceCount]) {
-        yield new SubresourceRange({ mipRange, sliceRange });
+      for (const layerRange of kUninitializedLayerRangesToTest[this.p.layerCount]) {
+        yield new SubresourceRange({ mipRange, layerRange });
       }
     }
   }
@@ -249,19 +248,19 @@ export class TextureZeroInitTest extends GPUTest {
   *iterateInitializedSubresources() {
     const uninitialized = new Array(this.p.mipLevelCount);
     for (let level = 0; level < uninitialized.length; ++level) {
-      uninitialized[level] = new Array(this.p.sliceCount);
+      uninitialized[level] = new Array(this.p.layerCount);
     }
     for (const subresources of this.iterateUninitializedSubresources()) {
-      for (const { level, slice } of subresources.each()) {
-        uninitialized[level][slice] = true;
+      for (const { level, layer } of subresources.each()) {
+        uninitialized[level][layer] = true;
       }
     }
     for (let level = 0; level < uninitialized.length; ++level) {
-      for (let slice = 0; slice < uninitialized[level].length; ++slice) {
-        if (!uninitialized[level][slice]) {
+      for (let layer = 0; layer < uninitialized[level].length; ++layer) {
+        if (!uninitialized[level][layer]) {
           yield new SubresourceRange({
             mipRange: { begin: level, count: 1 },
-            sliceRange: { begin: slice, count: 1 } });
+            layerRange: { begin: layer, count: 1 } });
 
         }
       }
@@ -281,12 +280,12 @@ export class TextureZeroInitTest extends GPUTest {
       return viewDescriptor;
     }
 
-    for (const { level, slice } of subresourceRange.each()) {
+    for (const { level, layer } of subresourceRange.each()) {
       yield {
         ...viewDescriptor,
         baseMipLevel: level,
         mipLevelCount: 1,
-        baseArrayLayer: slice,
+        baseArrayLayer: layer,
         arrayLayerCount: 1 };
 
     }
@@ -337,20 +336,18 @@ export class TextureZeroInitTest extends GPUTest {
   state,
   subresourceRange)
   {
+    // TODO: 1D texture
+    assert(this.p.dimension !== '1d');
+
     assert(this.p.format in kEncodableTextureFormatInfo);
     const format = this.p.format;
-
-    if (this.p.dimension === '1d' || this.p.dimension === '3d') {
-      // TODO: https://github.com/gpuweb/gpuweb/issues/69
-      // Copies with 1D and 3D textures are not yet specified
-      unreachable();
-    }
 
     const firstSubresource = subresourceRange.each().next().value;
     assert(typeof firstSubresource !== 'undefined');
 
-    const [largestWidth, largestHeight] = mipSize(
-    [this.textureWidth, this.textureHeight],
+    const [largestWidth, largestHeight, largestDepth] = getMipSizePassthroughLayers(
+    this.p.dimension,
+    [this.textureWidth, this.textureHeight, this.textureDepth],
     firstSubresource.level);
 
 
@@ -361,13 +358,17 @@ export class TextureZeroInitTest extends GPUTest {
     this.device,
     format,
     this.p.dimension,
-    [largestWidth, largestHeight, 1]);
+    [largestWidth, largestHeight, largestDepth]);
 
 
     const commandEncoder = this.device.createCommandEncoder();
 
-    for (const { level, slice } of subresourceRange.each()) {
-      const [width, height] = mipSize([this.textureWidth, this.textureHeight], level);
+    for (const { level, layer } of subresourceRange.each()) {
+      const [width, height, depth] = getMipSizePassthroughLayers(
+      this.p.dimension,
+      [this.textureWidth, this.textureHeight, this.textureDepth],
+      level);
+
 
       commandEncoder.copyBufferToTexture(
       {
@@ -375,8 +376,8 @@ export class TextureZeroInitTest extends GPUTest {
         bytesPerRow,
         rowsPerImage },
 
-      { texture, mipLevel: level, origin: { x: 0, y: 0, z: slice } },
-      { width, height, depthOrArrayLayers: 1 });
+      { texture, mipLevel: level, origin: { x: 0, y: 0, z: layer } },
+      { width, height, depthOrArrayLayers: depth });
 
     }
     this.queue.submit([commandEncoder.finish()]);
@@ -436,7 +437,9 @@ export class TextureZeroInitTest extends GPUTest {
   }}
 
 
-const kTestParams = kUnitCaseParamsBuilder.
+const kTestParams = kUnitCaseParamsBuilder
+// TODO: 1d textures
+.combine('dimension', ['2d', '3d']).
 combine('readMethod', [
 ReadMethod.CopyToBuffer,
 ReadMethod.CopyToTexture,
@@ -449,7 +452,6 @@ beginSubcases().
 combine('aspect', kTextureAspects).
 unless(({ readMethod, format, aspect }) => {
   const info = kUncompressedTextureFormatInfo[format];
-  // console.log(readMethod, format, aspect, info.depth, info.stencil);
   return (
     readMethod === ReadMethod.DepthTest && (!info.depth || aspect === 'stencil-only') ||
     readMethod === ReadMethod.StencilTest && (!info.stencil || aspect === 'depth-only') ||
@@ -476,9 +478,34 @@ readMethod === ReadMethod.CopyToBuffer || readMethod === ReadMethod.CopyToTextur
 // Multisampled textures may only have one mip
 .unless(({ sampleCount, mipLevelCount }) => sampleCount > 1 && mipLevelCount > 1).
 combine('uninitializeMethod', kUninitializeMethods).
-combineWithParams(kCreationSizes)
+unless(({ dimension, readMethod, uninitializeMethod, format, sampleCount }) => {
+  const formatInfo = kUncompressedTextureFormatInfo[format];
+  return (
+    dimension === '3d' && (
+    sampleCount > 1 ||
+    formatInfo.depth ||
+    formatInfo.stencil ||
+    readMethod === ReadMethod.DepthTest ||
+    readMethod === ReadMethod.StencilTest ||
+    readMethod === ReadMethod.ColorBlending ||
+    uninitializeMethod === UninitializeMethod.StoreOpClear));
+
+}).
+expandWithParams(function* ({ dimension }) {
+  switch (dimension) {
+    case '2d':
+      yield { layerCount: 1 };
+      yield { layerCount: 7 };
+      break;
+    case '3d':
+      yield { layerCount: 1 };
+      break;
+    default:
+      unreachable();}
+
+})
 // Multisampled 3D / 2D array textures not supported.
-.unless(({ sampleCount, sliceCount }) => sampleCount > 1 && sliceCount > 1).
+.unless(({ sampleCount, layerCount }) => sampleCount > 1 && layerCount > 1).
 unless(({ format, sampleCount, uninitializeMethod, readMethod }) => {
   const usage = getRequiredTextureUsage(format, sampleCount, uninitializeMethod, readMethod);
   const info = kUncompressedTextureFormatInfo[format];
@@ -541,7 +568,7 @@ fn(async t => {
 
 
   const texture = t.device.createTexture({
-    size: [t.textureWidth, t.textureHeight, t.params.sliceCount],
+    size: [t.textureWidth, t.textureHeight, t.textureDepthOrArrayLayers],
     format: t.params.format,
     dimension: t.params.dimension,
     usage,
