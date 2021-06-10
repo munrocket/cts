@@ -49,9 +49,9 @@ function getType(scalarType, containerType) {
   return type;
 }
 
-g.test('v_0033')
+g.test('initializer_type')
   .desc(
-    `Tests for validation rule v-0033:
+    `
   If present, the initializer's type must match the store type of the variable.
   Testing scalars, vectors, and matrices of every dimension and type.
   TODO: add test for: structs - arrays of vectors and matrices - arrays of different length
@@ -84,14 +84,13 @@ g.test('v_0033')
       }
     `;
 
-    const expectation =
-      (lhsScalarType === rhsScalarType && lhsContainerType === rhsContainerType) || 'v-0033';
+    const expectation = lhsScalarType === rhsScalarType && lhsContainerType === rhsContainerType;
     t.expectCompileResult(expectation, code);
   });
 
-g.test('v_0038')
+g.test('io_shareable_type')
   .desc(
-    `Tests for validation rule v-0038:
+    `
   The following types are IO-shareable:
   - numeric scalar types
   - numeric vector types
@@ -154,6 +153,6 @@ g.test('v_0038')
       `;
     }
 
-    const expectation = storageClass === 'private' || scalarType !== 'bool' || 'v-0038';
+    const expectation = storageClass === 'private' || scalarType !== 'bool';
     t.expectCompileResult(expectation, code);
   });
