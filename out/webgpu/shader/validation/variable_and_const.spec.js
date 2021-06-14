@@ -92,7 +92,7 @@ fn(t => {
   const rhsType = getType(rhsScalarType, rhsContainerType);
 
   const code = `
-      [[stage(vertex)]]
+      [[stage(fragment)]]
       fn main() {
         ${variableOrConstant} a : ${lhsType} = ${rhsType}();
       }

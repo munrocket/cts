@@ -43,9 +43,7 @@ function doTest(t) {
   [[group(0), binding(0)]] var tex : texture_2d<${shaderType}>;
 
   [[block]] struct Output {
-    ${rep.componentOrder
-      .map((C, i) => `[[offset(${i * 4})]] result${C} : ${shaderType};`)
-      .join('\n')}
+    ${rep.componentOrder.map(C => `result${C} : ${shaderType};`).join('\n')}
   };
   [[group(0), binding(1)]] var<storage, read_write> output : Output;
 

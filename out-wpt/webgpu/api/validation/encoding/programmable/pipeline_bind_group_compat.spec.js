@@ -31,7 +31,7 @@ class F extends ValidationTest {
         module: this.device.createShaderModule({
           code: `
             [[block]] struct VertexUniforms {
-              [[offset(0)]] transform : mat2x2<f32> ;
+              transform : mat2x2<f32> ;
             };
             [[group(0), binding(0)]] var<uniform> uniforms : VertexUniforms;
 
@@ -54,7 +54,7 @@ class F extends ValidationTest {
         module: this.device.createShaderModule({
           code: `
             [[block]] struct FragmentUniforms {
-              [[offset(0)]] color : vec4<f32>;
+              color : vec4<f32>;
             };
             [[group(1), binding(0)]] var<uniform> uniforms : FragmentUniforms;
 

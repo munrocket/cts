@@ -55,7 +55,7 @@ export class BufferSyncTest extends GPUTest {
   createStorageWriteComputePipeline(value) {
     const wgslCompute = `
       [[block]] struct Data {
-        [[offset(0)]] a : i32;
+        a : i32;
       };
 
       [[group(0), binding(0)]] var<storage, read_write> data : Data;
@@ -87,7 +87,7 @@ export class BufferSyncTest extends GPUTest {
 
       fragment: `
       [[block]] struct Data {
-        [[offset(0)]] a : i32;
+        a : i32;
       };
 
       [[group(0), binding(0)]] var<storage, read_write> data : Data;
