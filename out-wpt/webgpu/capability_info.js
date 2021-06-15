@@ -1,7 +1,6 @@
 /**
  * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
- **/ /** @module webgpu/capability_info */
-import { assertTypeTrue } from '../common/util/types.js';
+ **/ import { assertTypeTrue } from '../common/util/types.js';
 import { assert, unreachable } from '../common/util/util.js';
 
 import { GPUConst } from './constants.js';

@@ -1,8 +1,6 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
-**/
-
-/**
+**/ /**
      * Creates a buffer with the contents of some TypedArray.
      */
 export function makeBufferWithContents(

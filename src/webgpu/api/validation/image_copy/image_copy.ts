@@ -1,8 +1,7 @@
 import { kSizedTextureFormatInfo, SizedTextureFormat } from '../../../capability_info.js';
-import { ImageCopyType } from '../../../util/texture/image_copy.js';
+import { ImageCopyType } from '../../../util/texture/layout.js';
 import { ValidationTest } from '../validation_test.js';
 
-/** @noInheritDoc */
 export class ImageCopyTest extends ValidationTest {
   testRun(
     textureCopyView: GPUImageCopyTexture,

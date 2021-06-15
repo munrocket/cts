@@ -2,7 +2,6 @@
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
 **/import { kSizedTextureFormatInfo } from '../../../capability_info.js';import { ValidationTest } from '../validation_test.js';
 
-/** @noInheritDoc */
 export class ImageCopyTest extends ValidationTest {
   testRun(
   textureCopyView,

@@ -1,10 +1,8 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
-**/ /** @module common/util/util */import { timeout } from './timeout.js';
-
-/**
-                                                                            * Asserts `condition` is true. Otherwise, throws an `Error` with the provided message.
-                                                                            */
+**/import { timeout } from './timeout.js'; /**
+                                            * Asserts `condition` is true. Otherwise, throws an `Error` with the provided message.
+                                            */
 export function assert(condition, msg) {
   if (!condition) {
     throw new Error(msg && (typeof msg === 'string' ? msg : msg()));

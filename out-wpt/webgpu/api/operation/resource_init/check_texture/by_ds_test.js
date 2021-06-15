@@ -1,7 +1,7 @@
 /**
  * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
  **/ import { assert } from '../../../../../common/util/util.js';
-import { getMipSizePassthroughLayers } from '../../../../util/texture/layout.js';
+import { virtualMipSize } from '../../../../util/texture/base.js';
 
 function makeFullscreenVertexModule(device) {
   return device.createShaderModule({
@@ -97,7 +97,7 @@ const checkContents = (type, t, params, texture, state, subresourceRange) => {
     subresourceRange
   )) {
     assert(viewDescriptor.baseMipLevel !== undefined);
-    const [width, height] = getMipSizePassthroughLayers(
+    const [width, height] = virtualMipSize(
       params.dimension,
       [t.textureWidth, t.textureHeight, 1],
       viewDescriptor.baseMipLevel

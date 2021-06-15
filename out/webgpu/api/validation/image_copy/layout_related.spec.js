@@ -12,7 +12,7 @@ bytesInACompleteRow,
 dataBytesForCopyOrOverestimate,
 dataBytesForCopyOrFail,
 kImageCopyTypes } from
-'../../../util/texture/image_copy.js';
+'../../../util/texture/layout.js';
 
 import {
 ImageCopyTest,

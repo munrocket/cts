@@ -2,7 +2,6 @@
  * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
  **/ import { assert } from '../../../../common/util/util.js';
 import { GPUTest } from '../../../gpu_test.js';
-/** @noInheritDoc */
 export class MappingTest extends GPUTest {
   checkMapWrite(buffer, offset, mappedContents, size) {
     this.checkMapWriteZeroed(mappedContents, size);

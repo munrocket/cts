@@ -25,4 +25,4 @@
   pass.endPass();
   t.device.queue.submit([encoder.finish()]);
 });
-//# sourceMappingURL=canvas_clear.js.map
+//# sourceMappingURL=canvas_clear.html.js.map

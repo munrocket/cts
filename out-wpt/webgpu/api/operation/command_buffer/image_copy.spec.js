@@ -40,8 +40,11 @@ import { assert, unreachable } from '../../../../common/util/util.js';
 import { kSizedTextureFormatInfo, kSizedTextureFormats } from '../../../capability_info.js';
 import { GPUTest } from '../../../gpu_test.js';
 import { align } from '../../../util/math.js';
-import { bytesInACompleteRow, dataBytesForCopyOrFail } from '../../../util/texture/image_copy.js';
-import { getTextureCopyLayout } from '../../../util/texture/layout.js';
+import {
+  bytesInACompleteRow,
+  dataBytesForCopyOrFail,
+  getTextureCopyLayout,
+} from '../../../util/texture/layout.js';
 
 /** Each combination of methods assume that the ones before it were tested and work correctly. */
 const kMethodsToTest = [

@@ -318,12 +318,12 @@ class RunCaseSpecific {
       const inst = new this.fixture(rec, params);
 
       try {
-        await inst.init();
+        await inst.doInit();
 
         await this.fn(inst);
       } finally {
         // Runs as long as constructor succeeded, even if initialization or the test failed.
-        await inst.finalize();
+        await inst.doFinalize();
       }
     } catch (ex) {
       // There was an exception from constructor, init, test, or finalize.

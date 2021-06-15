@@ -3,7 +3,7 @@
 **/import { assert } from '../../../../../common/util/util.js';import {
 kEncodableTextureFormatInfo } from
 '../../../../capability_info.js';
-import { getMipSizePassthroughLayers } from '../../../../util/texture/layout.js';
+import { virtualMipSize } from '../../../../util/texture/base.js';
 
 
 export const checkContentsByBufferCopy = (
@@ -40,7 +40,7 @@ subresourceRange) =>
     assert(params.format in kEncodableTextureFormatInfo);
     const format = params.format;
 
-    const [width, height, depth] = getMipSizePassthroughLayers(
+    const [width, height, depth] = virtualMipSize(
     params.dimension,
     [t.textureWidth, t.textureHeight, t.textureDepth],
     level);

@@ -1,15 +1,13 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
-**/ /** @module common/util/collect_garbage */import { resolveOnTimeout } from './util.js';
-
-
+**/import { resolveOnTimeout } from './util.js';
 
 
 /**
-                                                                                             * Attempts to trigger JavaScript garbage collection, either using explicit methods if exposed
-                                                                                             * (may be available in testing environments with special browser runtime flags set), or using
-                                                                                             * some weird tricks to incur GC pressure. Adopted from the WebGL CTS.
-                                                                                             */
+                                                  * Attempts to trigger JavaScript garbage collection, either using explicit methods if exposed
+                                                  * (may be available in testing environments with special browser runtime flags set), or using
+                                                  * some weird tricks to incur GC pressure. Adopted from the WebGL CTS.
+                                                  */
 export async function attemptGarbageCollection() {
 
   const w = self;

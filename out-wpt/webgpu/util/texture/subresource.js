@@ -1,8 +1,6 @@
 /**
  * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
- **/ import { assert } from '../../../common/util/util.js';
-import { kAllTextureFormatInfo } from '../../capability_info.js';
-import { align } from '../../util/math.js';
+ **/
 
 function endOfRange(r) {
   return 'count' in r ? r.begin + r.count : r.end;
@@ -14,6 +12,10 @@ function* rangeAsIterator(r) {
   }
 }
 
+/**
+ * Represents a range of subresources of a single-plane texture:
+ * a min/max mip level and min/max array layer.
+ */
 export class SubresourceRange {
   constructor(subresources) {
     this.mipRange = {
@@ -27,6 +29,9 @@ export class SubresourceRange {
     };
   }
 
+  /**
+   * Iterates over the "rectangle" of { mip level, array layer } pairs represented by the range.
+   */
   *each() {
     for (let level = this.mipRange.begin; level < this.mipRange.end; ++level) {
       for (let layer = this.layerRange.begin; layer < this.layerRange.end; ++layer) {
@@ -35,6 +40,10 @@ export class SubresourceRange {
     }
   }
 
+  /**
+   * Iterates over the mip levels represented by the range, each level including an iterator
+   * over the array layers at that level.
+   */
   *mipLevels() {
     for (let level = this.mipRange.begin; level < this.mipRange.end; ++level) {
       yield {
@@ -43,24 +52,4 @@ export class SubresourceRange {
       };
     }
   }
-}
-
-// TODO(jiawei.shao@intel.com): support 1D and 3D textures
-export function physicalMipSize(size, format, dimension, level) {
-  assert(dimension === '2d');
-  assert(Math.max(size.width, size.height) >> level > 0);
-
-  const virtualWidthAtLevel = Math.max(size.width >> level, 1);
-  const virtualHeightAtLevel = Math.max(size.height >> level, 1);
-  const physicalWidthAtLevel = align(virtualWidthAtLevel, kAllTextureFormatInfo[format].blockWidth);
-  const physicalHeightAtLevel = align(
-    virtualHeightAtLevel,
-    kAllTextureFormatInfo[format].blockHeight
-  );
-
-  return {
-    width: physicalWidthAtLevel,
-    height: physicalHeightAtLevel,
-    depthOrArrayLayers: size.depthOrArrayLayers,
-  };
 }

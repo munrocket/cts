@@ -7,8 +7,6 @@
 
 /**
                                                                                                                     * Base fixture for testing the exposed interface is correct (without actually using WebGPU).
-                                                                                                                    *
-                                                                                                                    * @noInheritDoc
                                                                                                                     */
 export class IDLTest extends Fixture {
   // TODO: add a helper to check prototype chains

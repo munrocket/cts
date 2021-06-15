@@ -2,7 +2,7 @@
  * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
  **/ import { assert, unreachable } from '../../../../../common/util/util.js';
 import { kEncodableTextureFormatInfo } from '../../../../capability_info.js';
-import { getMipSizePassthroughLayers } from '../../../../util/texture/layout.js';
+import { virtualMipSize } from '../../../../util/texture/base.js';
 import {
   kTexelRepresentationInfo,
   getSingleDataType,
@@ -16,7 +16,7 @@ export const checkContentsBySampling = (t, params, texture, state, subresourceRa
   const rep = kTexelRepresentationInfo[format];
 
   for (const { level, layers } of subresourceRange.mipLevels()) {
-    const [width, height, depth] = getMipSizePassthroughLayers(
+    const [width, height, depth] = virtualMipSize(
       params.dimension,
       [t.textureWidth, t.textureHeight, t.textureDepth],
       level
