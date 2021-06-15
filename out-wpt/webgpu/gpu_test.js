@@ -4,7 +4,7 @@
 import { attemptGarbageCollection } from '../common/util/collect_garbage.js';
 import { assert } from '../common/util/util.js';
 
-import { kAllTextureFormatInfo, kQueryTypeInfo } from './capability_info.js';
+import { kTextureFormatInfo, kQueryTypeInfo } from './capability_info.js';
 import { makeBufferWithContents } from './util/buffer.js';
 import { DevicePool, TestOOMedShouldAttemptGC } from './util/device_pool.js';
 import { align } from './util/math.js';
@@ -114,7 +114,7 @@ export class GPUTest extends Fixture {
     const features = new Set();
     for (const format of formats) {
       if (format !== undefined) {
-        features.add(kAllTextureFormatInfo[format].feature);
+        features.add(kTextureFormatInfo[format].feature);
       }
     }
 

@@ -29,7 +29,7 @@
       TODO: depth slice set to {'0', slice > '0'} for 3D textures
       TODO: test with more interesting loadOp values`;import { makeTestGroup } from '../../../../common/framework/test_group.js';
 import {
-kEncodableTextureFormatInfo,
+kTextureFormatInfo,
 kEncodableTextureFormats,
 kSizedDepthStencilFormats } from
 '../../../capability_info.js';
@@ -144,7 +144,7 @@ u.
 combine('colorFormat', kEncodableTextureFormats)
 // Filter out any non-renderable formats
 .filter(({ colorFormat }) => {
-  const info = kEncodableTextureFormatInfo[colorFormat];
+  const info = kTextureFormatInfo[colorFormat];
   return info.color && info.renderable;
 }).
 combine('storeOperation', kStoreOps).

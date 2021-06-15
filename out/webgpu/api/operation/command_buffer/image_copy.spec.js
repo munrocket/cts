@@ -37,7 +37,7 @@ TODO: Fix this test for the various skipped formats:
 `;import { makeTestGroup } from '../../../../common/framework/test_group.js';
 import { assert, unreachable } from '../../../../common/util/util.js';
 import {
-kSizedTextureFormatInfo,
+kTextureFormatInfo,
 
 kSizedTextureFormats } from
 '../../../capability_info.js';
@@ -118,7 +118,7 @@ class ImageCopyTest extends GPUTest {
   origin = { x: 0, y: 0, z: 0 })
   {
     const { offset, bytesPerRow, rowsPerImage } = textureDataLayout;
-    const info = kSizedTextureFormatInfo[format];
+    const info = kTextureFormatInfo[format];
 
     assert(texel.x >= origin.x && texel.y >= origin.y && texel.z >= origin.z);
     assert(texel.x % info.blockWidth === 0);
@@ -145,7 +145,7 @@ class ImageCopyTest extends GPUTest {
       // do not iterate anything for an empty region
       return;
     }
-    const info = kSizedTextureFormatInfo[format];
+    const info = kTextureFormatInfo[format];
     assert(size.height % info.blockHeight === 0);
     for (let y = 0; y < size.height; y += info.blockHeight) {
       for (let z = 0; z < size.depthOrArrayLayers; ++z) {
@@ -633,7 +633,7 @@ class ImageCopyTest extends GPUTest {
       * TODO: Modify this after introducing tests with rendering.
       */
 function formatCanBeTested({ format }) {
-  return kSizedTextureFormatInfo[format].copyDst && kSizedTextureFormatInfo[format].copySrc;
+  return kTextureFormatInfo[format].copyDst && kTextureFormatInfo[format].copySrc;
 }
 
 export const g = makeTestGroup(ImageCopyTest);
@@ -697,7 +697,7 @@ fn(async t => {
     initMethod,
     checkMethod } =
   t.params;
-  const info = kSizedTextureFormatInfo[format];
+  const info = kTextureFormatInfo[format];
   await t.selectDeviceOrSkipTestCase(info.feature);
 
   // For CopyB2T and CopyT2B we need to have bytesPerRow 256-aligned,
@@ -777,7 +777,7 @@ fn(async t => {
     initMethod,
     checkMethod } =
   t.params;
-  const info = kSizedTextureFormatInfo[format];
+  const info = kTextureFormatInfo[format];
   await t.selectDeviceOrSkipTestCase(info.feature);
 
   const offset = offsetInBlocks * info.bytesPerBlock;
@@ -840,7 +840,7 @@ fn(async t => {
     initMethod,
     checkMethod } =
   t.params;
-  const info = kSizedTextureFormatInfo[format];
+  const info = kTextureFormatInfo[format];
   await t.selectDeviceOrSkipTestCase(info.feature);
 
   const originBlocks = [1, 1, 1];
@@ -910,7 +910,7 @@ function* generateTestTextureSizes({
 
 
 {
-  const info = kSizedTextureFormatInfo[format];
+  const info = kTextureFormatInfo[format];
 
   const widthAtThisLevel = _mipSizeInBlocks.width * info.blockWidth;
   const heightAtThisLevel = _mipSizeInBlocks.height * info.blockHeight;
@@ -1016,7 +1016,7 @@ fn(async t => {
     initMethod,
     checkMethod } =
   t.params;
-  const info = kSizedTextureFormatInfo[format];
+  const info = kTextureFormatInfo[format];
   await t.selectDeviceOrSkipTestCase(info.feature);
 
   const origin = {

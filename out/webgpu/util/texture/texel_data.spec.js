@@ -4,7 +4,7 @@
 import { assert } from '../../../common/util/util.js';
 import {
 kEncodableTextureFormats,
-kEncodableTextureFormatInfo } from
+kTextureFormatInfo } from
 
 '../../capability_info.js';
 import { GPUTest } from '../../gpu_test.js';
@@ -138,8 +138,8 @@ u.
 combine('format', kEncodableTextureFormats).
 filter(({ format }) => {
   return (
-    kEncodableTextureFormatInfo[format].copyDst &&
-    kEncodableTextureFormatInfo[format].color &&
+    kTextureFormatInfo[format].copyDst &&
+    kTextureFormatInfo[format].color &&
     getSingleDataType(format) === 'unorm');
 
 }).
@@ -170,8 +170,8 @@ u.
 combine('format', kEncodableTextureFormats).
 filter(({ format }) => {
   return (
-    kEncodableTextureFormatInfo[format].copyDst &&
-    kEncodableTextureFormatInfo[format].color &&
+    kTextureFormatInfo[format].copyDst &&
+    kTextureFormatInfo[format].color &&
     getSingleDataType(format) === 'snorm');
 
 }).
@@ -205,8 +205,8 @@ u.
 combine('format', kEncodableTextureFormats).
 filter(({ format }) => {
   return (
-    kEncodableTextureFormatInfo[format].copyDst &&
-    kEncodableTextureFormatInfo[format].color &&
+    kTextureFormatInfo[format].copyDst &&
+    kTextureFormatInfo[format].color &&
     getSingleDataType(format) === 'uint');
 
 }).
@@ -237,8 +237,8 @@ u.
 combine('format', kEncodableTextureFormats).
 filter(({ format }) => {
   return (
-    kEncodableTextureFormatInfo[format].copyDst &&
-    kEncodableTextureFormatInfo[format].color &&
+    kTextureFormatInfo[format].copyDst &&
+    kTextureFormatInfo[format].color &&
     getSingleDataType(format) === 'sint');
 
 }).
@@ -271,8 +271,8 @@ u.
 combine('format', kEncodableTextureFormats).
 filter(({ format }) => {
   return (
-    kEncodableTextureFormatInfo[format].copyDst &&
-    kEncodableTextureFormatInfo[format].color &&
+    kTextureFormatInfo[format].copyDst &&
+    kTextureFormatInfo[format].color &&
     getSingleDataType(format) === 'float');
 
 }).
@@ -307,8 +307,8 @@ u.
 combine('format', kEncodableTextureFormats).
 filter(({ format }) => {
   return (
-    kEncodableTextureFormatInfo[format].copyDst &&
-    kEncodableTextureFormatInfo[format].color &&
+    kTextureFormatInfo[format].copyDst &&
+    kTextureFormatInfo[format].color &&
     getSingleDataType(format) === 'ufloat');
 
 }).

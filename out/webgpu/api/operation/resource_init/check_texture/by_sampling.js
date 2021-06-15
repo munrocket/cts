@@ -1,9 +1,6 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
-**/import { assert, unreachable } from '../../../../../common/util/util.js';import {
-kEncodableTextureFormatInfo } from
-'../../../../capability_info.js';
-import { virtualMipSize } from '../../../../util/texture/base.js';
+**/import { assert, unreachable } from '../../../../../common/util/util.js';import { kTextureFormatInfo } from '../../../../capability_info.js';import { virtualMipSize } from '../../../../util/texture/base.js';
 import {
 kTexelRepresentationInfo,
 getSingleDataType,
@@ -19,7 +16,7 @@ state,
 subresourceRange) =>
 {
   assert(params.dimension !== '1d');
-  assert(params.format in kEncodableTextureFormatInfo);
+  assert(params.format in kTextureFormatInfo);
   const format = params.format;
   const rep = kTexelRepresentationInfo[format];
 

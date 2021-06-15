@@ -14,7 +14,7 @@ TODO: Test zero-sized copies from all sources (just make sure params cover it) (
 import { unreachable } from '../../../common/util/util.js';
 import {
 
-kRegularTextureFormatInfo,
+kTextureFormatInfo,
 kValidTextureFormatsForCopyIB2T } from
 '../../capability_info.js';
 import { GPUTest } from '../../gpu_test.js';
@@ -220,7 +220,7 @@ got [${failedByteActualValues.join(', ')}]`;
 
 
   {
-    const bytesPerPixel = kRegularTextureFormatInfo[format].bytesPerBlock;
+    const bytesPerPixel = kTextureFormatInfo[format].bytesPerBlock;
 
     // Generate input contents by iterating 'Color' enum
     const imagePixels = new Uint8ClampedArray(bytesPerPixel * width * height);
@@ -293,7 +293,7 @@ fn(async t => {
 
 
   // Construct expected value for different dst color format
-  const dstBytesPerPixel = kRegularTextureFormatInfo[dstColorFormat].bytesPerBlock;
+  const dstBytesPerPixel = kTextureFormatInfo[dstColorFormat].bytesPerBlock;
   const expectedPixels = t.getImagePixels({
     format: dstColorFormat,
     width,
@@ -384,7 +384,7 @@ fn(async t => {
     GPUTextureUsage.COPY_DST | GPUTextureUsage.COPY_SRC | GPUTextureUsage.RENDER_ATTACHMENT });
 
 
-  const dstBytesPerPixel = kRegularTextureFormatInfo[dstColorFormat].bytesPerBlock;
+  const dstBytesPerPixel = kTextureFormatInfo[dstColorFormat].bytesPerBlock;
   const expectedData = t.getImagePixels({
     format: dstColorFormat,
     width,

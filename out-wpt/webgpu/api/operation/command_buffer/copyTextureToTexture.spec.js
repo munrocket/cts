@@ -7,9 +7,8 @@ TODO(jiawei.shao@intel.com): support all WebGPU texture formats.
 import { makeTestGroup } from '../../../../common/framework/test_group.js';
 import { assert } from '../../../../common/util/util.js';
 import {
-  kSizedTextureFormatInfo,
+  kTextureFormatInfo,
   kRegularTextureFormats,
-  kCompressedTextureFormatInfo,
   kCompressedTextureFormats,
 } from '../../../capability_info.js';
 import { GPUTest } from '../../../gpu_test.js';
@@ -20,9 +19,9 @@ class F extends GPUTest {
   GetInitialDataPerMipLevel(textureSize, format, mipLevel) {
     // TODO(jiawei.shao@intel.com): support 3D textures
     const textureSizeAtLevel = physicalMipSize(textureSize, format, '2d', mipLevel);
-    const bytesPerBlock = kSizedTextureFormatInfo[format].bytesPerBlock;
-    const blockWidthInTexel = kSizedTextureFormatInfo[format].blockWidth;
-    const blockHeightInTexel = kSizedTextureFormatInfo[format].blockHeight;
+    const bytesPerBlock = kTextureFormatInfo[format].bytesPerBlock;
+    const blockWidthInTexel = kTextureFormatInfo[format].blockWidth;
+    const blockHeightInTexel = kTextureFormatInfo[format].blockHeight;
     const blocksPerSubresource =
       (textureSizeAtLevel.width / blockWidthInTexel) *
       (textureSizeAtLevel.height / blockHeightInTexel);
@@ -68,9 +67,9 @@ class F extends GPUTest {
     // Fill the whole subresource of srcTexture at srcCopyLevel with initialSrcData.
     const initialSrcData = this.GetInitialDataPerMipLevel(srcTextureSize, format, srcCopyLevel);
     const srcTextureSizeAtLevel = physicalMipSize(srcTextureSize, format, '2d', srcCopyLevel);
-    const bytesPerBlock = kSizedTextureFormatInfo[format].bytesPerBlock;
-    const blockWidth = kSizedTextureFormatInfo[format].blockWidth;
-    const blockHeight = kSizedTextureFormatInfo[format].blockHeight;
+    const bytesPerBlock = kTextureFormatInfo[format].bytesPerBlock;
+    const blockWidth = kTextureFormatInfo[format].blockWidth;
+    const blockHeight = kTextureFormatInfo[format].blockHeight;
     const srcBlocksPerRow = srcTextureSizeAtLevel.width / blockWidth;
     const srcBlockRowsPerImage = srcTextureSizeAtLevel.height / blockHeight;
     this.device.queue.writeTexture(
@@ -435,7 +434,7 @@ g.test('color_textures,compressed,non_array')
   )
   .fn(async t => {
     const { textureSize, format, copyBoxOffsets, srcCopyLevel, dstCopyLevel } = t.params;
-    await t.selectDeviceOrSkipTestCase(kCompressedTextureFormatInfo[format].feature);
+    await t.selectDeviceOrSkipTestCase(kTextureFormatInfo[format].feature);
 
     t.DoCopyTextureToTextureTest(
       textureSize.srcTextureSize,
@@ -518,7 +517,7 @@ g.test('color_textures,compressed,array')
   )
   .fn(async t => {
     const { textureSize, format, copyBoxOffsets, srcCopyLevel, dstCopyLevel } = t.params;
-    await t.selectDeviceOrSkipTestCase(kCompressedTextureFormatInfo[format].feature);
+    await t.selectDeviceOrSkipTestCase(kTextureFormatInfo[format].feature);
 
     t.DoCopyTextureToTextureTest(
       textureSize.srcTextureSize,

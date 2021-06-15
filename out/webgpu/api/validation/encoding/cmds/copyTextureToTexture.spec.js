@@ -38,8 +38,8 @@ Test Plan: (TODO(jiawei.shao@intel.com): add tests on 1D/3D textures)
     texture subresources.
 `;import { makeTestGroup } from '../../../../../common/framework/test_group.js';
 import {
-kAllTextureFormatInfo,
-kAllTextureFormats,
+kTextureFormatInfo,
+kTextureFormats,
 kCompressedTextureFormats,
 kDepthStencilFormats,
 kTextureUsages } from
@@ -69,13 +69,10 @@ class F extends ValidationTest {
   {
     const virtualWidthAtLevel = Math.max(textureSize.width >> mipLevel, 1);
     const virtualHeightAtLevel = Math.max(textureSize.height >> mipLevel, 1);
-    const physicalWidthAtLevel = align(
-    virtualWidthAtLevel,
-    kAllTextureFormatInfo[format].blockWidth);
-
+    const physicalWidthAtLevel = align(virtualWidthAtLevel, kTextureFormatInfo[format].blockWidth);
     const physicalHeightAtLevel = align(
     virtualHeightAtLevel,
-    kAllTextureFormatInfo[format].blockHeight);
+    kTextureFormatInfo[format].blockHeight);
 
     return {
       width: physicalWidthAtLevel,
@@ -260,13 +257,13 @@ fn(async t => {
 g.test('texture_format_equality').
 paramsSubcasesOnly((u) =>
 u //
-.combine('srcFormat', kAllTextureFormats).
-combine('dstFormat', kAllTextureFormats)).
+.combine('srcFormat', kTextureFormats).
+combine('dstFormat', kTextureFormats)).
 
 fn(async t => {
   const { srcFormat, dstFormat } = t.params;
-  const srcFormatInfo = kAllTextureFormatInfo[srcFormat];
-  const dstFormatInfo = kAllTextureFormatInfo[dstFormat];
+  const srcFormatInfo = kTextureFormatInfo[srcFormat];
+  const dstFormatInfo = kTextureFormatInfo[dstFormat];
   await t.selectDeviceOrSkipTestCase([srcFormatInfo.feature, dstFormatInfo.feature]);
 
   const kTextureSize = { width: 16, height: 16, depthOrArrayLayers: 1 };
@@ -326,7 +323,7 @@ fn(async t => {
     srcCopyLevel,
     dstCopyLevel } =
   t.params;
-  await t.selectDeviceOrSkipTestCase(kAllTextureFormatInfo[format].feature);
+  await t.selectDeviceOrSkipTestCase(kTextureFormatInfo[format].feature);
 
   const kMipLevelCount = 3;
 
@@ -512,7 +509,7 @@ combine('destinationAspect', ['all', 'depth-only', 'stencil-only'])).
 
 fn(async t => {
   const { format, sourceAspect, destinationAspect } = t.params;
-  await t.selectDeviceOrSkipTestCase(kAllTextureFormatInfo[format].feature);
+  await t.selectDeviceOrSkipTestCase(kTextureFormatInfo[format].feature);
 
   const kTextureSize = { width: 16, height: 8, depthOrArrayLayers: 1 };
 
@@ -577,7 +574,7 @@ combine('dstCopyLevel', [0, 1, 2])).
 
 fn(async t => {
   const { format, copyBoxOffsets, srcCopyLevel, dstCopyLevel } = t.params;
-  await t.selectDeviceOrSkipTestCase(kAllTextureFormatInfo[format].feature);
+  await t.selectDeviceOrSkipTestCase(kTextureFormatInfo[format].feature);
 
   const kTextureSize = { width: 60, height: 48, depthOrArrayLayers: 3 };
   const kMipLevelCount = 4;
@@ -611,8 +608,8 @@ fn(async t => {
   const copyDepth =
   kTextureSize.depthOrArrayLayers + copyBoxOffsets.depthOrArrayLayers - copyOrigin.z;
 
-  const texelBlockWidth = kAllTextureFormatInfo[format].blockWidth;
-  const texelBlockHeight = kAllTextureFormatInfo[format].blockHeight;
+  const texelBlockWidth = kTextureFormatInfo[format].blockWidth;
+  const texelBlockHeight = kTextureFormatInfo[format].blockHeight;
 
   const isSuccessForCompressedFormats =
   copyOrigin.x % texelBlockWidth === 0 &&

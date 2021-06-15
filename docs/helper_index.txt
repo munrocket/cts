@@ -42,7 +42,6 @@ Whenever a new generally-useful helper is added, it should be indexed here.
 ### WebGPU Helpers
 
 - {@link webgpu/capability_info}: Structured information about texture formats, binding types, etc.
-  TODO
 - {@link webgpu/constants}:
     Constant values (needed anytime a WebGPU constant is needed outside of a test function).
 - {@link webgpu/util/buffer}: Helpers for GPUBuffers.
@@ -54,8 +53,7 @@ Whenever a new generally-useful helper is added, it should be indexed here.
 - {@link webgpu/util/texture/layout}: Helpers for working with linear image data
     (like in copyBufferToTexture, copyTextureToBuffer, writeTexture).
 - {@link webgpu/util/texture/subresource}: Helpers for working with texture subresource ranges.
-- {@link webgpu/util/texture/texel_data}:
-    TODO
+- {@link webgpu/util/texture/texel_data}: Helpers encoding/decoding texel formats.
 
 ### General Helpers
 

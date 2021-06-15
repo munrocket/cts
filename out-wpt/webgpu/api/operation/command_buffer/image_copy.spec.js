@@ -37,7 +37,7 @@ TODO: Fix this test for the various skipped formats:
 `;
 import { makeTestGroup } from '../../../../common/framework/test_group.js';
 import { assert, unreachable } from '../../../../common/util/util.js';
-import { kSizedTextureFormatInfo, kSizedTextureFormats } from '../../../capability_info.js';
+import { kTextureFormatInfo, kSizedTextureFormats } from '../../../capability_info.js';
 import { GPUTest } from '../../../gpu_test.js';
 import { align } from '../../../util/math.js';
 import {
@@ -77,7 +77,7 @@ class ImageCopyTest extends GPUTest {
   /** Offset for a particular texel in the linear texture data */
   getTexelOffsetInBytes(textureDataLayout, format, texel, origin = { x: 0, y: 0, z: 0 }) {
     const { offset, bytesPerRow, rowsPerImage } = textureDataLayout;
-    const info = kSizedTextureFormatInfo[format];
+    const info = kTextureFormatInfo[format];
 
     assert(texel.x >= origin.x && texel.y >= origin.y && texel.z >= origin.z);
     assert(texel.x % info.blockWidth === 0);
@@ -100,7 +100,7 @@ class ImageCopyTest extends GPUTest {
       // do not iterate anything for an empty region
       return;
     }
-    const info = kSizedTextureFormatInfo[format];
+    const info = kTextureFormatInfo[format];
     assert(size.height % info.blockHeight === 0);
     for (let y = 0; y < size.height; y += info.blockHeight) {
       for (let z = 0; z < size.depthOrArrayLayers; ++z) {
@@ -563,7 +563,7 @@ class ImageCopyTest extends GPUTest {
  * TODO: Modify this after introducing tests with rendering.
  */
 function formatCanBeTested({ format }) {
-  return kSizedTextureFormatInfo[format].copyDst && kSizedTextureFormatInfo[format].copySrc;
+  return kTextureFormatInfo[format].copyDst && kTextureFormatInfo[format].copySrc;
 }
 
 export const g = makeTestGroup(ImageCopyTest);
@@ -627,7 +627,7 @@ bytes in copy works for every format.
       initMethod,
       checkMethod,
     } = t.params;
-    const info = kSizedTextureFormatInfo[format];
+    const info = kTextureFormatInfo[format];
     await t.selectDeviceOrSkipTestCase(info.feature);
 
     // For CopyB2T and CopyT2B we need to have bytesPerRow 256-aligned,
@@ -707,7 +707,7 @@ works for every format with 2d and 2d-array textures.
       initMethod,
       checkMethod,
     } = t.params;
-    const info = kSizedTextureFormatInfo[format];
+    const info = kTextureFormatInfo[format];
     await t.selectDeviceOrSkipTestCase(info.feature);
 
     const offset = offsetInBlocks * info.bytesPerBlock;
@@ -772,7 +772,7 @@ for all formats. We pass origin and copyExtent as [number, number, number].`
       initMethod,
       checkMethod,
     } = t.params;
-    const info = kSizedTextureFormatInfo[format];
+    const info = kTextureFormatInfo[format];
     await t.selectDeviceOrSkipTestCase(info.feature);
 
     const originBlocks = [1, 1, 1];
@@ -836,7 +836,7 @@ for all formats. We pass origin and copyExtent as [number, number, number].`
  * sizes at mip level different from the physical ones.
  */
 function* generateTestTextureSizes({ format, mipLevel, _mipSizeInBlocks }) {
-  const info = kSizedTextureFormatInfo[format];
+  const info = kTextureFormatInfo[format];
 
   const widthAtThisLevel = _mipSizeInBlocks.width * info.blockWidth;
   const heightAtThisLevel = _mipSizeInBlocks.height * info.blockHeight;
@@ -948,7 +948,7 @@ g.test('mip_levels')
       initMethod,
       checkMethod,
     } = t.params;
-    const info = kSizedTextureFormatInfo[format];
+    const info = kTextureFormatInfo[format];
     await t.selectDeviceOrSkipTestCase(info.feature);
 
     const origin = {

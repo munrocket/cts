@@ -30,7 +30,7 @@
       TODO: test with more interesting loadOp values`;
 import { makeTestGroup } from '../../../../common/framework/test_group.js';
 import {
-  kEncodableTextureFormatInfo,
+  kTextureFormatInfo,
   kEncodableTextureFormats,
   kSizedDepthStencilFormats,
 } from '../../../capability_info.js';
@@ -146,7 +146,7 @@ g.test('render_pass_store_op,color_attachment_only')
       .combine('colorFormat', kEncodableTextureFormats)
       // Filter out any non-renderable formats
       .filter(({ colorFormat }) => {
-        const info = kEncodableTextureFormatInfo[colorFormat];
+        const info = kTextureFormatInfo[colorFormat];
         return info.color && info.renderable;
       })
       .combine('storeOperation', kStoreOps)

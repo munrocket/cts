@@ -4,7 +4,7 @@
   'Test helpers for texel data produce the expected data in the shader';
 import { makeTestGroup } from '../../../common/framework/test_group.js';
 import { assert } from '../../../common/util/util.js';
-import { kEncodableTextureFormats, kEncodableTextureFormatInfo } from '../../capability_info.js';
+import { kEncodableTextureFormats, kTextureFormatInfo } from '../../capability_info.js';
 import { GPUTest } from '../../gpu_test.js';
 
 import {
@@ -124,8 +124,8 @@ g.test('unorm_texel_data_in_shader')
       .combine('format', kEncodableTextureFormats)
       .filter(({ format }) => {
         return (
-          kEncodableTextureFormatInfo[format].copyDst &&
-          kEncodableTextureFormatInfo[format].color &&
+          kTextureFormatInfo[format].copyDst &&
+          kTextureFormatInfo[format].color &&
           getSingleDataType(format) === 'unorm'
         );
       })
@@ -156,8 +156,8 @@ g.test('snorm_texel_data_in_shader')
       .combine('format', kEncodableTextureFormats)
       .filter(({ format }) => {
         return (
-          kEncodableTextureFormatInfo[format].copyDst &&
-          kEncodableTextureFormatInfo[format].color &&
+          kTextureFormatInfo[format].copyDst &&
+          kTextureFormatInfo[format].color &&
           getSingleDataType(format) === 'snorm'
         );
       })
@@ -191,8 +191,8 @@ g.test('uint_texel_data_in_shader')
       .combine('format', kEncodableTextureFormats)
       .filter(({ format }) => {
         return (
-          kEncodableTextureFormatInfo[format].copyDst &&
-          kEncodableTextureFormatInfo[format].color &&
+          kTextureFormatInfo[format].copyDst &&
+          kTextureFormatInfo[format].color &&
           getSingleDataType(format) === 'uint'
         );
       })
@@ -223,8 +223,8 @@ g.test('sint_texel_data_in_shader')
       .combine('format', kEncodableTextureFormats)
       .filter(({ format }) => {
         return (
-          kEncodableTextureFormatInfo[format].copyDst &&
-          kEncodableTextureFormatInfo[format].color &&
+          kTextureFormatInfo[format].copyDst &&
+          kTextureFormatInfo[format].color &&
           getSingleDataType(format) === 'sint'
         );
       })
@@ -257,8 +257,8 @@ g.test('float_texel_data_in_shader')
       .combine('format', kEncodableTextureFormats)
       .filter(({ format }) => {
         return (
-          kEncodableTextureFormatInfo[format].copyDst &&
-          kEncodableTextureFormatInfo[format].color &&
+          kTextureFormatInfo[format].copyDst &&
+          kTextureFormatInfo[format].color &&
           getSingleDataType(format) === 'float'
         );
       })
@@ -293,8 +293,8 @@ g.test('ufloat_texel_data_in_shader')
       .combine('format', kEncodableTextureFormats)
       .filter(({ format }) => {
         return (
-          kEncodableTextureFormatInfo[format].copyDst &&
-          kEncodableTextureFormatInfo[format].color &&
+          kTextureFormatInfo[format].copyDst &&
+          kTextureFormatInfo[format].color &&
           getSingleDataType(format) === 'ufloat'
         );
       })

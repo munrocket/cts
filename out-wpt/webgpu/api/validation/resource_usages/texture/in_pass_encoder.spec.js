@@ -48,7 +48,7 @@ import { pp } from '../../../../../common/util/preprocessor.js';
 import { assert } from '../../../../../common/util/util.js';
 import {
   kDepthStencilFormats,
-  kDepthStencilFormatInfo,
+  kTextureFormatInfo,
   kShaderStages,
 } from '../../../../capability_info.js';
 import { GPUConst } from '../../../../constants.js';
@@ -504,13 +504,13 @@ g.test('subresources_and_binding_types_combination_for_aspect')
       .combine('aspect1', ['all', 'depth-only', 'stencil-only'])
       .unless(
         p =>
-          (p.aspect0 === 'stencil-only' && !kDepthStencilFormatInfo[p.format].stencil) ||
-          (p.aspect1 === 'stencil-only' && !kDepthStencilFormatInfo[p.format].stencil)
+          (p.aspect0 === 'stencil-only' && !kTextureFormatInfo[p.format].stencil) ||
+          (p.aspect1 === 'stencil-only' && !kTextureFormatInfo[p.format].stencil)
       )
       .unless(
         p =>
-          (p.aspect0 === 'depth-only' && !kDepthStencilFormatInfo[p.format].depth) ||
-          (p.aspect1 === 'depth-only' && !kDepthStencilFormatInfo[p.format].depth)
+          (p.aspect0 === 'depth-only' && !kTextureFormatInfo[p.format].depth) ||
+          (p.aspect1 === 'depth-only' && !kTextureFormatInfo[p.format].depth)
       )
       .combineWithParams([
         {
@@ -552,7 +552,7 @@ g.test('subresources_and_binding_types_combination_for_aspect')
       _resourceSuccess,
       _usageSuccess,
     } = t.params;
-    await t.selectDeviceOrSkipTestCase(kDepthStencilFormatInfo[format].feature);
+    await t.selectDeviceOrSkipTestCase(kTextureFormatInfo[format].feature);
 
     const texture = t.createTexture({
       arrayLayerCount: TOTAL_LAYERS,

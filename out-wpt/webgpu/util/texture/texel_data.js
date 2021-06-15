@@ -11,8 +11,10 @@ import {
   packRGB9E5UFloat,
 } from '../conversion.js';
 
+/** A component of a texture format: R, G, B, A, Depth, or Stencil. */
 export let TexelComponent;
-(function (TexelComponent) {
+
+/** Arbitrary data, per component of a texel format. */ (function (TexelComponent) {
   TexelComponent['R'] = 'R';
   TexelComponent['G'] = 'G';
   TexelComponent['B'] = 'B';
