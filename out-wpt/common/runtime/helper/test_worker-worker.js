@@ -6,7 +6,7 @@ import { parseQuery } from '../../internal/query/parseQuery.js';
 
 import { assert } from '../../util/util.js';
 
-// should be DedicatedWorkerGlobalScope
+// Should be DedicatedWorkerGlobalScope, but importing lib "webworker" conflicts with lib "dom".
 
 const loader = new DefaultTestFileLoader();
 

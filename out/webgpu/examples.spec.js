@@ -22,7 +22,6 @@ import { GPUTest } from './gpu_test.js';
 export const g = makeTestGroup(GPUTest);
 
 // Note: spaces in test names are replaced with underscores: webgpu:examples:test_name=
-
 g.test('test_name').fn(t => {});
 
 g.test('not_implemented_yet,without_plan').unimplemented();
