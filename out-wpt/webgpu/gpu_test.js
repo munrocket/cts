@@ -81,10 +81,10 @@ export class GPUTest extends Fixture {
   async selectDeviceOrSkipTestCase(descriptor) {
     if (descriptor === undefined) return;
     if (typeof descriptor === 'string') {
-      descriptor = { nonGuaranteedFeatures: [descriptor] };
+      descriptor = { requiredFeatures: [descriptor] };
     } else if (descriptor instanceof Array) {
       descriptor = {
-        nonGuaranteedFeatures: descriptor.filter(f => f !== undefined),
+        requiredFeatures: descriptor.filter(f => f !== undefined),
       };
     }
 

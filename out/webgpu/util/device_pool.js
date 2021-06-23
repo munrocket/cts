@@ -176,6 +176,10 @@ class DescriptorToHolderMap {
 
 
 
+
+
+
+
 /**
       * Make a stringified map-key from a GPUDeviceDescriptor.
       * Tries to make sure all defaults are resolved, first - but it's okay if some are missed
@@ -184,15 +188,15 @@ class DescriptorToHolderMap {
 function canonicalizeDescriptor(
 desc)
 {
-  const featuresCanonicalized = desc.nonGuaranteedFeatures ?
-  Array.from(new Set(desc.nonGuaranteedFeatures)).sort() :
+  const featuresCanonicalized = desc.requiredFeatures ?
+  Array.from(new Set(desc.requiredFeatures)).sort() :
   [];
 
   const limitsCanonicalized = { ...DefaultLimits };
-  if (desc.nonGuaranteedLimits) {
-    for (const k of Object.keys(desc.nonGuaranteedLimits)) {
-      if (desc.nonGuaranteedLimits[k] !== undefined) {
-        limitsCanonicalized[k] = desc.nonGuaranteedLimits[k];
+  if (desc.requiredLimits) {
+    for (const k of Object.keys(desc.requiredLimits)) {
+      if (desc.requiredLimits[k] !== undefined) {
+        limitsCanonicalized[k] = desc.requiredLimits[k];
       }
     }
   }
@@ -200,14 +204,12 @@ desc)
   // Type ensures every field is carried through.
   const descriptorCanonicalized = {
     requiredFeatures: featuresCanonicalized,
-    requiredLimits: limitsCanonicalized,
-    nonGuaranteedFeatures: featuresCanonicalized,
-    nonGuaranteedLimits: limitsCanonicalized };
+    requiredLimits: limitsCanonicalized };
 
   return [descriptorCanonicalized, JSON.stringify(descriptorCanonicalized)];
 }
 
-function isNonGuaranteedFeatureSupported(
+function supportsFeature(
 adapter,
 descriptor)
 {
@@ -215,8 +217,8 @@ descriptor)
     return true;
   }
 
-  for (const feature of descriptor.nonGuaranteedFeatures) {
-    if (!adapter.features.has(feature.toString())) {
+  for (const feature of descriptor.requiredFeatures) {
+    if (!adapter.features.has(feature)) {
       return false;
     }
   }
@@ -246,7 +248,7 @@ class DeviceHolder {
     const gpu = getGPU();
     const adapter = await gpu.requestAdapter();
     assert(adapter !== null, 'requestAdapter returned null');
-    if (!isNonGuaranteedFeatureSupported(adapter, descriptor)) {
+    if (!supportsFeature(adapter, descriptor)) {
       throw new FeaturesNotSupported('One or more features are not supported');
     }
     const device = await adapter.requestDevice(descriptor);
