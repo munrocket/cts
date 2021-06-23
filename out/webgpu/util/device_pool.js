@@ -199,6 +199,8 @@ desc)
 
   // Type ensures every field is carried through.
   const descriptorCanonicalized = {
+    requiredFeatures: featuresCanonicalized,
+    requiredLimits: limitsCanonicalized,
     nonGuaranteedFeatures: featuresCanonicalized,
     nonGuaranteedLimits: limitsCanonicalized };
 
