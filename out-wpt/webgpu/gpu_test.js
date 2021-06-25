@@ -171,7 +171,7 @@ export class GPUTest extends Fixture {
   /**
    * Expect a GPUBuffer's contents to equal the values in the provided TypedArray.
    */
-  expectContents(src, expected, srcOffset = 0, { generateWarningOnly = false } = {}) {
+  expectGPUBufferValuesEqual(src, expected, srcOffset = 0, { generateWarningOnly = false } = {}) {
     const { dst, begin, end } = this.createAlignedCopyForMapRead(
       src,
       expected.byteLength,
@@ -545,7 +545,7 @@ got [${failedByteActualValues.join(', ')}]`;
     this.queue.submit([commandEncoder.finish()]);
     const arrayBuffer = new ArrayBuffer(byteLength);
     fillTextureDataWithTexelValue(expectedTexelData, format, dimension, arrayBuffer, size, layout);
-    this.expectContents(buffer, new Uint8Array(arrayBuffer));
+    this.expectGPUBufferValuesEqual(buffer, new Uint8Array(arrayBuffer));
   }
 
   /** Return a GPUBuffer that data are going to be written into. */
@@ -587,7 +587,7 @@ got [${failedByteActualValues.join(', ')}]`;
     { exp, slice = 0, layout, generateWarningOnly = false }
   ) {
     const buffer = this.readSinglePixelFrom2DTexture(src, format, { x, y }, { slice, layout });
-    this.expectContents(buffer, exp, 0, { generateWarningOnly });
+    this.expectGPUBufferValuesEqual(buffer, exp, 0, { generateWarningOnly });
   }
 
   /**

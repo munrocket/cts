@@ -43,15 +43,15 @@ class F extends GPUTest {
   }
 
   async CheckGPUBufferContent(buffer, bufferUsage, expectedData) {
-    // We can only check the buffer contents with t.expectContents() when the buffer usage contains
-    // COPY_SRC.
+    // We can only check the buffer contents with t.expectGPUBufferValuesEqual() when the buffer
+    // usage contains COPY_SRC.
     if (bufferUsage & GPUBufferUsage.MAP_READ) {
       await buffer.mapAsync(GPUMapMode.READ);
       this.expectBuffer(new Uint8Array(buffer.getMappedRange()), expectedData);
       buffer.unmap();
     } else {
       assert((bufferUsage & GPUBufferUsage.COPY_SRC) !== 0);
-      this.expectContents(buffer, expectedData);
+      this.expectGPUBufferValuesEqual(buffer, expectedData);
     }
   }
 }
@@ -82,7 +82,7 @@ the buffer, the remaining part of that buffer will be initialized to 0.`
     }
     t.queue.writeBuffer(buffer, appliedOffset, writeData, 0);
 
-    t.expectContents(buffer, expectedData);
+    t.expectGPUBufferValuesEqual(buffer, expectedData);
   });
 
 g.test('map_whole_buffer')
