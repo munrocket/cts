@@ -145,4 +145,13 @@ export function objectEquals(x, y) {
 export function range(n, fn) {
   return [...new Array(n)].map((_, i) => fn(i));
 }
+
+/**
+   * Generates a range of values `fn(0)..fn(n-1)`.
+   */
+export function* iterRange(n, fn) {
+  for (let i = 0; i < n; ++i) {
+    yield fn(i);
+  }
+}
 //# sourceMappingURL=util.js.map

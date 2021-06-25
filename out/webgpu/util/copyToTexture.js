@@ -1,6 +1,7 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
-**/import { GPUTest } from '../gpu_test.js';import { align } from './math.js';
+**/import { GPUTest } from '../gpu_test.js';import { checkElementsEqual } from './check_contents.js';
+import { align } from './math.js';
 import { kBytesPerRowAlignment } from './texture/layout.js';
 
 export class CopyToTextureUtils extends GPUTest {
@@ -34,6 +35,7 @@ export class CopyToTextureUtils extends GPUTest {
     });
   }
 
+  // TODO(crbug.com/dawn/868): Should be possible to consolidate this along with texture checking
   checkBufferWithRowPitch(
   actual,
   exp,
@@ -44,7 +46,7 @@ export class CopyToTextureUtils extends GPUTest {
   {
     const bytesPerRow = width * bytesPerPixel;
     for (let y = 0; y < height; ++y) {
-      const checkResult = this.checkBuffer(
+      const checkResult = checkElementsEqual(
       actual.subarray(y * rowPitch, bytesPerRow),
       exp.subarray(y * bytesPerRow, bytesPerRow));
 

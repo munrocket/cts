@@ -18,6 +18,7 @@ TODO: Test that mapping-for-write again shows the values previously written.
 TODO: Some testing (probably minimal) of accessing with different TypedArray/DataView types.
 `;import { makeTestGroup } from '../../../../common/framework/test_group.js';
 import { assert } from '../../../../common/util/util.js';
+import { checkElementsEqual } from '../../../util/check_contents.js';
 
 import { MappingTest } from './mapping_test.js';
 
@@ -133,7 +134,7 @@ fn(async t => {
   const mapRegion = getRegionForMap(size, [rangeOffset, rangeSize], t.params);
   await buffer.mapAsync(GPUMapMode.READ, ...mapRegion);
   const actual = new Uint8Array(buffer.getMappedRange(...range));
-  t.expectBuffer(actual, new Uint8Array(expected.buffer));
+  t.expectOK(checkElementsEqual(actual, new Uint8Array(expected.buffer)));
 });
 
 g.test('mappedAtCreation').

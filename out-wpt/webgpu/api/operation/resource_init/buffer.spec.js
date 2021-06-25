@@ -4,6 +4,7 @@
 import { assert, unreachable } from '../../../../common/util/util.js';
 import { GPUConst } from '../../../constants.js';
 import { GPUTest } from '../../../gpu_test.js';
+import { checkElementsEqual } from '../../../util/check_contents.js';
 import { getTextureCopyLayout } from '../../../util/texture/layout.js';
 
 export const description = `
@@ -46,7 +47,7 @@ class F extends GPUTest {
     // usage contains COPY_SRC.
     if (bufferUsage & GPUBufferUsage.MAP_READ) {
       await buffer.mapAsync(GPUMapMode.READ);
-      this.expectBuffer(new Uint8Array(buffer.getMappedRange()), expectedData);
+      this.expectOK(checkElementsEqual(new Uint8Array(buffer.getMappedRange()), expectedData));
       buffer.unmap();
     } else {
       assert((bufferUsage & GPUBufferUsage.COPY_SRC) !== 0);
