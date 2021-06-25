@@ -72,6 +72,7 @@
 						<section class="tsd-index-section ">
 							<h3>Classes</h3>
 							<ul class="tsd-index-list">
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/common_util_util.errorwithextra.html" class="tsd-kind-icon">Error<wbr>With<wbr>Extra</a></li>
 								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/common_util_util.promisetimeouterror.html" class="tsd-kind-icon">Promise<wbr>Timeout<wbr>Error</a></li>
 							</ul>
 						</section>
@@ -79,6 +80,7 @@
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="common_util_util.html#assert" class="tsd-kind-icon">assert</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="common_util_util.html#assertok" class="tsd-kind-icon">assertOK</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="common_util_util.html#assertreject" class="tsd-kind-icon">assert<wbr>Reject</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="common_util_util.html#now" class="tsd-kind-icon">now</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="common_util_util.html#objectequals" class="tsd-kind-icon">object<wbr>Equals</a></li>
@@ -105,7 +107,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/f81a7c5/src/common/util/util.ts#L6">src/common/util/util.ts:6</a></li>
+									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/c095a13/src/common/util/util.ts#L32">src/common/util/util.ts:32</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -126,6 +128,40 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="assertok" class="tsd-anchor"></a>
+					<h3>assertOK</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">assertOK&lt;T&gt;<span class="tsd-signature-symbol">(</span>value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">T</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/c095a13/src/common/util/util.ts#L39">src/common/util/util.ts:39</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>If the argument is an Error, throw it. Otherwise, pass it back.</p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T</h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>value: <span class="tsd-signature-type">Error</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">T</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">T</span></h4>
+						</li>
+					</ul>
+				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 					<a name="assertreject" class="tsd-anchor"></a>
 					<h3>assert<wbr>Reject</h3>
@@ -136,7 +172,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/f81a7c5/src/common/util/util.ts#L15">src/common/util/util.ts:15</a></li>
+									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/c095a13/src/common/util/util.ts#L49">src/common/util/util.ts:49</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -167,7 +203,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/f81a7c5/src/common/util/util.ts#L40">src/common/util/util.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/c095a13/src/common/util/util.ts#L74">src/common/util/util.ts:74</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -189,7 +225,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/f81a7c5/src/common/util/util.ts#L90">src/common/util/util.ts:90</a></li>
+									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/c095a13/src/common/util/util.ts#L124">src/common/util/util.ts:124</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -220,7 +256,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/f81a7c5/src/common/util/util.ts#L72">src/common/util/util.ts:72</a></li>
+									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/c095a13/src/common/util/util.ts#L106">src/common/util/util.ts:106</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -261,7 +297,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/f81a7c5/src/common/util/util.ts#L111">src/common/util/util.ts:111</a></li>
+									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/c095a13/src/common/util/util.ts#L145">src/common/util/util.ts:145</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -316,7 +352,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/f81a7c5/src/common/util/util.ts#L60">src/common/util/util.ts:60</a></li>
+									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/c095a13/src/common/util/util.ts#L94">src/common/util/util.ts:94</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -347,7 +383,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/f81a7c5/src/common/util/util.ts#L47">src/common/util/util.ts:47</a></li>
+									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/c095a13/src/common/util/util.ts#L81">src/common/util/util.ts:81</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -375,7 +411,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/f81a7c5/src/common/util/util.ts#L79">src/common/util/util.ts:79</a></li>
+									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/c095a13/src/common/util/util.ts#L113">src/common/util/util.ts:113</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -413,7 +449,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/f81a7c5/src/common/util/util.ts#L27">src/common/util/util.ts:27</a></li>
+									<li>Defined in <a href="https://github.com/gpuweb/cts/blob/c095a13/src/common/util/util.ts#L61">src/common/util/util.ts:61</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -447,10 +483,16 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/common_util_util.errorwithextra.html" class="tsd-kind-icon">Error<wbr>With<wbr>Extra</a>
+					</li>
+					<li class=" tsd-kind-class tsd-parent-kind-module">
 						<a href="../classes/common_util_util.promisetimeouterror.html" class="tsd-kind-icon">Promise<wbr>Timeout<wbr>Error</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="common_util_util.html#assert" class="tsd-kind-icon">assert</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="common_util_util.html#assertok" class="tsd-kind-icon">assertOK</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="common_util_util.html#assertreject" class="tsd-kind-icon">assert<wbr>Reject</a>

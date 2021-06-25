@@ -1,6 +1,9 @@
 /**
 * AUTO-GENERATED - DO NOT EDIT. Source: https://github.com/gpuweb/cts
-**/import { extractImportantStackTrace } from '../stack.js';export class LogMessageWithStack extends Error {
+**/import { extractImportantStackTrace } from '../stack.js';
+export class LogMessageWithStack extends Error {
+
+
   stackHiddenMessage = undefined;
   timesSeen = 1;
 
@@ -9,6 +12,9 @@
 
     this.name = name;
     this.stack = ex.stack;
+    if ('extra' in ex) {
+      this.extra = ex.extra;
+    }
   }
 
   /** Set a flag so the stack is not printed in toJSON(). */
