@@ -1051,6 +1051,13 @@ export const listing = [
     "file": [
       "shader",
       "execution",
+      "robust_access"
+    ]
+  },
+  {
+    "file": [
+      "shader",
+      "execution",
       "robust_access_vertex"
     ]
   },
