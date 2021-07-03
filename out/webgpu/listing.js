@@ -695,7 +695,37 @@ export const listing = [
       "encoding",
       "cmds",
       "render",
-      "other"
+      "indirect_draw"
+    ]
+  },
+  {
+    "file": [
+      "api",
+      "validation",
+      "encoding",
+      "cmds",
+      "render",
+      "setIndexBuffer"
+    ]
+  },
+  {
+    "file": [
+      "api",
+      "validation",
+      "encoding",
+      "cmds",
+      "render",
+      "setPipeline"
+    ]
+  },
+  {
+    "file": [
+      "api",
+      "validation",
+      "encoding",
+      "cmds",
+      "render",
+      "setVertexBuffer"
     ]
   },
   {
