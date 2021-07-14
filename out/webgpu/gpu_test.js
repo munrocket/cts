@@ -14,7 +14,11 @@ kTextureFormatInfo,
 kQueryTypeInfo } from
 './capability_info.js';
 import { makeBufferWithContents } from './util/buffer.js';
-import { checkElementsEqual, checkElementsBetween } from './util/check_contents.js';
+import {
+checkElementsEqual,
+checkElementsBetween,
+checkElementsFloat16Between } from
+'./util/check_contents.js';
 import {
 DevicePool,
 
@@ -425,7 +429,12 @@ export class GPUTest extends Fixture {
     exp,
     slice = 0,
     layout,
-    generateWarningOnly = false })
+    generateWarningOnly = false,
+    checkElementsBetweenFn = checkElementsBetween })
+
+
+
+
 
 
 
@@ -439,10 +448,44 @@ export class GPUTest extends Fixture {
     const typedLength = exp[0].length;
 
     const buffer = this.readSinglePixelFrom2DTexture(src, format, { x, y }, { slice, layout });
-    this.expectGPUBufferValuesPassCheck(buffer, a => checkElementsBetween(a, exp), {
+    this.expectGPUBufferValuesPassCheck(buffer, a => checkElementsBetweenFn(a, exp), {
       type: constructor,
       typedLength,
       mode: generateWarningOnly ? 'warn' : 'fail' });
+
+  }
+
+  /**
+     * Equivalent to {@link expectSinglePixelBetweenTwoValuesIn2DTexture} but uses a special check func
+     * to interpret incoming values as float16
+     */
+  expectSinglePixelBetweenTwoValuesFloat16In2DTexture(
+  src,
+  format,
+  { x, y },
+  {
+    exp,
+    slice = 0,
+    layout,
+    generateWarningOnly = false })
+
+
+
+
+
+
+  {
+    this.expectSinglePixelBetweenTwoValuesIn2DTexture(
+    src,
+    format,
+    { x, y },
+    {
+      exp,
+      slice,
+      layout,
+      generateWarningOnly,
+      checkElementsBetweenFn: checkElementsFloat16Between });
+
 
   }
 
