@@ -21,7 +21,24 @@ Tests index buffer must be valid.
   `).
 
 paramsSubcasesOnly(kRenderEncodeTypeParams.combine('state', kBufferStates)).
-unimplemented();
+fn(t => {
+  const { encoderType, state } = t.params;
+  const indexBuffer = t.createBufferWithState(state, {
+    size: 16,
+    usage: GPUBufferUsage.INDEX });
+
+
+  const { encoder, finish } = t.createEncoder(encoderType);
+  encoder.setIndexBuffer(indexBuffer, 'uint32');
+
+  t.expectValidationError(() => {
+    if (state === 'destroyed') {
+      t.queue.submit([finish()]);
+    } else {
+      finish();
+    }
+  }, state !== 'valid');
+});
 
 g.test('index_buffer_usage').
 desc(
@@ -36,7 +53,20 @@ GPUConst.BufferUsage.COPY_DST,
 GPUConst.BufferUsage.COPY_DST | GPUConst.BufferUsage.INDEX])).
 
 
-unimplemented();
+fn(t => {
+  const { encoderType, usage } = t.params;
+  const indexBuffer = t.device.createBuffer({
+    size: 16,
+    usage });
+
+
+  const { encoder, finish } = t.createEncoder(encoderType);
+  encoder.setIndexBuffer(indexBuffer, 'uint32');
+
+  t.expectValidationError(() => {
+    finish();
+  }, (usage | GPUConst.BufferUsage.INDEX) !== usage);
+});
 
 g.test('offset_alignment').
 desc(
@@ -51,7 +81,22 @@ expand('offset', p => {
   return p.indexFormat === 'uint16' ? [0, 1, 2] : [0, 2, 4];
 })).
 
-unimplemented();
+fn(t => {
+  const { encoderType, indexFormat, offset } = t.params;
+  const indexBuffer = t.device.createBuffer({
+    size: 16,
+    usage: GPUBufferUsage.INDEX });
+
+
+  const { encoder, finish } = t.createEncoder(encoderType);
+  encoder.setIndexBuffer(indexBuffer, indexFormat, offset);
+
+  const alignment =
+  indexFormat === 'uint16' ? Uint16Array.BYTES_PER_ELEMENT : Uint32Array.BYTES_PER_ELEMENT;
+  t.expectValidationError(() => {
+    finish();
+  }, offset % alignment !== 0);
+});
 
 g.test('offset_and_size_oob').
 desc(
@@ -60,5 +105,18 @@ Tests offset and size cannot be larger than index buffer size.
   `).
 
 paramsSubcasesOnly(buildBufferOffsetAndSizeOOBTestParams(4, 256)).
-unimplemented();
+fn(t => {
+  const { encoderType, offset, size, _valid } = t.params;
+  const indexBuffer = t.device.createBuffer({
+    size: 256,
+    usage: GPUBufferUsage.INDEX });
+
+
+  const { encoder, finish } = t.createEncoder(encoderType);
+  encoder.setIndexBuffer(indexBuffer, 'uint32', offset, size);
+
+  t.expectValidationError(() => {
+    finish();
+  }, !_valid);
+});
 //# sourceMappingURL=setIndexBuffer.spec.js.map

@@ -214,6 +214,11 @@ export class ValidationTest extends GPUTest {
     }
   }
 
+  /** Create a GPURenderPipeline in the specified state. */
+  createRenderPipelineWithState(state) {
+    return state === 'valid' ? this.createNoOpRenderPipeline() : this.createErrorRenderPipeline();
+  }
+
   /** Return a GPURenderPipeline with default options and no-op vertex and fragment shaders. */
   createNoOpRenderPipeline() {
     return this.device.createRenderPipeline({
@@ -238,6 +243,23 @@ export class ValidationTest extends GPUTest {
 
       primitive: { topology: 'triangle-list' },
     });
+  }
+
+  /** Return an invalid GPURenderPipeline. */
+  createErrorRenderPipeline() {
+    this.device.pushErrorScope('validation');
+    const pipeline = this.device.createRenderPipeline({
+      vertex: {
+        module: this.device.createShaderModule({
+          code: '',
+        }),
+
+        entryPoint: '',
+      },
+    });
+
+    this.device.popErrorScope();
+    return pipeline;
   }
 
   /** Return a GPUComputePipeline with a no-op shader. */
