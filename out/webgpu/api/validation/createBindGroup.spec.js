@@ -16,6 +16,7 @@ sampledAndStorageBindingEntries,
 texBindingTypeInfo } from
 '../../capability_info.js';
 import { GPUConst } from '../../constants.js';
+import { getTextureDimensionFromView } from '../../util/texture/base.js';
 
 import { ValidationTest } from './validation_test.js';
 
@@ -266,15 +267,22 @@ fn(async t => {
 
 
 
+  let height = 16;
+  let depthOrArrayLayers = 6;
+  if (dimension === '1d') {
+    height = 1;
+    depthOrArrayLayers = 1;
+  }
+
   const texture = t.device.createTexture({
-    size: { width: 16, height: 16, depthOrArrayLayers: 6 },
+    size: { width: 16, height, depthOrArrayLayers },
     format: 'rgba8unorm',
-    usage: GPUTextureUsage.SAMPLED });
+    usage: GPUTextureUsage.SAMPLED,
+    dimension: getTextureDimensionFromView(dimension) });
 
 
   const shouldError = viewDimension !== dimension;
-  const arrayLayerCount = dimension === '2d' ? 1 : undefined;
-  const textureView = texture.createView({ dimension, arrayLayerCount });
+  const textureView = texture.createView({ dimension });
 
   t.expectValidationError(() => {
     t.device.createBindGroup({

@@ -54,3 +54,23 @@ export function virtualMipSize(dimension, size, mipLevel) {
       unreachable();
   }
 }
+
+/**
+ * Get texture dimension from view dimension in order to create an compatible texture for a given
+ * view dimension.
+ */
+export function getTextureDimensionFromView(viewDimension) {
+  switch (viewDimension) {
+    case '1d':
+      return '1d';
+    case '2d':
+    case '2d-array':
+    case 'cube':
+    case 'cube-array':
+      return '2d';
+    case '3d':
+      return '3d';
+    default:
+      unreachable();
+  }
+}
