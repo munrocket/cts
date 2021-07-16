@@ -112,15 +112,14 @@ fn(t => {
   const resource = t.getBindingResource(resourceType);
 
   let resourceBindingIsCompatible;
-  switch (resourceType) {
+  switch (info.resource) {
     // Either type of sampler may be bound to a filtering sampler binding.
     case 'filtSamp':
-      resourceBindingIsCompatible =
-      info.resource === 'filtSamp' || info.resource === 'nonFiltSamp';
+      resourceBindingIsCompatible = resourceType === 'filtSamp' || resourceType === 'nonFiltSamp';
       break;
     // But only non-filtering samplers can be used with non-filtering sampler bindings.
     case 'nonFiltSamp':
-      resourceBindingIsCompatible = info.resource === 'nonFiltSamp';
+      resourceBindingIsCompatible = resourceType === 'nonFiltSamp';
       break;
     default:
       resourceBindingIsCompatible = info.resource === resourceType;
