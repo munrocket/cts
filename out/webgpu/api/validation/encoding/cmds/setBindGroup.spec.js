@@ -312,16 +312,23 @@ fn(t => {
 
 
   const { encoder, finish } = t.createEncoder('render pass');
-  encoder.setBindGroup(
-  0,
-  bindGroup,
-  new Uint32Array(offsets),
-  dynamicOffsetsDataStart,
-  dynamicOffsetsDataLength);
 
+  const doSetBindGroup = () => {
+    encoder.setBindGroup(
+    0,
+    bindGroup,
+    new Uint32Array(offsets),
+    dynamicOffsetsDataStart,
+    dynamicOffsetsDataLength);
 
-  t.expectValidationError(() => {
-    finish();
-  }, !_success);
+  };
+
+  if (_success) {
+    doSetBindGroup();
+  } else {
+    t.shouldThrow('RangeError', doSetBindGroup);
+  }
+
+  finish();
 });
 //# sourceMappingURL=setBindGroup.spec.js.map
