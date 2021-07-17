@@ -621,9 +621,9 @@ fn(async t => {
     undefined :
     {
       view: view1,
-      depthStoreOp: 'clear',
+      depthStoreOp: 'discard',
       depthLoadValue: 'load',
-      stencilStoreOp: 'clear',
+      stencilStoreOp: 'discard',
       stencilLoadValue: 'load' } });
 
 
