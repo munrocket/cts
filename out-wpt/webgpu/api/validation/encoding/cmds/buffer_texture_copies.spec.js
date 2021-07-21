@@ -20,19 +20,15 @@ import { ValidationTest } from '../../validation_test.js';
 
 class ImageCopyTest extends ValidationTest {
   testCopyBufferToTexture(source, destination, copySize, isSuccess) {
-    const encoder = this.device.createCommandEncoder();
+    const { encoder, validateFinishAndSubmit } = this.createEncoder('non-pass');
     encoder.copyBufferToTexture(source, destination, copySize);
-    this.expectValidationError(() => {
-      this.device.queue.submit([encoder.finish()]);
-    }, !isSuccess);
+    validateFinishAndSubmit(isSuccess, true);
   }
 
   testCopyTextureToBuffer(source, destination, copySize, isSuccess) {
-    const encoder = this.device.createCommandEncoder();
+    const { encoder, validateFinishAndSubmit } = this.createEncoder('non-pass');
     encoder.copyTextureToBuffer(source, destination, copySize);
-    this.expectValidationError(() => {
-      this.device.queue.submit([encoder.finish()]);
-    }, !isSuccess);
+    validateFinishAndSubmit(isSuccess, true);
   }
 }
 

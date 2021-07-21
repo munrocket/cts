@@ -54,12 +54,12 @@ setPipeline should generate an error iff using an 'invalid' pipeline.
   )
   .params(u => u.beginSubcases().combine('state', ['valid', 'invalid']))
   .fn(t => {
-    const pipeline = t.createComputePipeline(t.params.state);
-    const { encoder, finish } = t.createEncoder('compute pass');
+    const { state } = t.params;
+    const pipeline = t.createComputePipeline(state);
+
+    const { encoder, validateFinishAndSubmitGivenState } = t.createEncoder('compute pass');
     encoder.setPipeline(pipeline);
-    t.expectValidationError(() => {
-      finish();
-    }, t.params.state === 'invalid');
+    validateFinishAndSubmitGivenState(state);
   });
 
 const kMaxDispatch = DefaultLimits.maxComputePerDimensionDispatchSize;
@@ -91,7 +91,7 @@ g.test('dispatch_sizes')
     const workSizes = [smallDimValue, smallDimValue, smallDimValue];
     workSizes[largeDimIndex] = largeDimValue;
 
-    const { encoder, finish } = t.createEncoder('compute pass');
+    const { encoder, validateFinishAndSubmit } = t.createEncoder('compute pass');
     encoder.setPipeline(pipeline);
     if (dispatchType === 'direct') {
       const [x, y, z] = workSizes;
@@ -104,13 +104,7 @@ g.test('dispatch_sizes')
       dispatchType === 'direct' &&
       (workSizes[0] > kMaxDispatch || workSizes[1] > kMaxDispatch || workSizes[2] > kMaxDispatch);
 
-    if (shouldError) {
-      t.expectValidationError(() => {
-        finish();
-      });
-    } else {
-      t.queue.submit([finish()]);
-    }
+    validateFinishAndSubmit(!shouldError, true);
   });
 
 const kBufferData = new Uint32Array(6).fill(1);
@@ -147,10 +141,14 @@ TODO: test specifically which call the validation error occurs in.
     const { state, offset } = t.params;
     const pipeline = t.createNoOpComputePipeline();
     const buffer = t.createIndirectBuffer(state, kBufferData);
-    const { encoder, finish } = t.createEncoder('compute pass');
+
+    const { encoder, validateFinishAndSubmit } = t.createEncoder('compute pass');
     encoder.setPipeline(pipeline);
-    t.expectValidationError(() => {
-      encoder.dispatchIndirect(buffer, offset);
-      t.queue.submit([finish()]);
-    }, state !== 'valid' || offset % 4 !== 0 || offset + 3 * Uint32Array.BYTES_PER_ELEMENT > kBufferData.byteLength);
+    encoder.dispatchIndirect(buffer, offset);
+
+    const finishShouldError =
+      state === 'invalid' ||
+      offset % 4 !== 0 ||
+      offset + 3 * Uint32Array.BYTES_PER_ELEMENT > kBufferData.byteLength;
+    validateFinishAndSubmit(!finishShouldError, state !== 'destroyed');
   });

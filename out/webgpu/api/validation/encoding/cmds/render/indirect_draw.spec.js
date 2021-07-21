@@ -36,7 +36,7 @@ fn(t => {
     usage: GPUBufferUsage.INDIRECT });
 
 
-  const { encoder, finish } = t.createEncoder(encoderType);
+  const { encoder, validateFinishAndSubmitGivenState } = t.createEncoder(encoderType);
   encoder.setPipeline(pipeline);
   if (indexed) {
     const indexBuffer = t.makeIndexBuffer();
@@ -46,13 +46,7 @@ fn(t => {
     encoder.drawIndirect(indirectBuffer, 0);
   }
 
-  t.expectValidationError(() => {
-    if (state === 'destroyed') {
-      t.queue.submit([finish()]);
-    } else {
-      finish();
-    }
-  }, state !== 'valid');
+  validateFinishAndSubmitGivenState(state);
 });
 
 g.test('indirect_buffer_usage').
@@ -75,7 +69,7 @@ fn(t => {
     usage });
 
 
-  const { encoder, finish } = t.createEncoder(encoderType);
+  const { encoder, validateFinish } = t.createEncoder(encoderType);
   encoder.setPipeline(t.createNoOpRenderPipeline());
   if (indexed) {
     const indexBuffer = t.makeIndexBuffer();
@@ -84,10 +78,7 @@ fn(t => {
   } else {
     encoder.drawIndirect(indirectBuffer, 0);
   }
-
-  t.expectValidationError(() => {
-    finish();
-  }, (usage | GPUConst.BufferUsage.INDIRECT) !== usage);
+  validateFinish((usage & GPUBufferUsage.INDIRECT) !== 0);
 });
 
 g.test('indirect_offset_alignment').
@@ -105,7 +96,7 @@ fn(t => {
     usage: GPUBufferUsage.INDIRECT });
 
 
-  const { encoder, finish } = t.createEncoder(encoderType);
+  const { encoder, validateFinish } = t.createEncoder(encoderType);
   encoder.setPipeline(pipeline);
   if (indexed) {
     const indexBuffer = t.makeIndexBuffer();
@@ -115,9 +106,7 @@ fn(t => {
     encoder.drawIndirect(indirectBuffer, indirectOffset);
   }
 
-  t.expectValidationError(() => {
-    finish();
-  }, indirectOffset % 4 !== 0);
+  validateFinish(indirectOffset % 4 === 0);
 });
 
 g.test('indirect_offset_oob').
@@ -167,7 +156,7 @@ fn(t => {
     usage: GPUBufferUsage.INDIRECT });
 
 
-  const { encoder, finish } = t.createEncoder(encoderType);
+  const { encoder, validateFinish } = t.createEncoder(encoderType);
   encoder.setPipeline(pipeline);
   if (indexed) {
     const indexBuffer = t.makeIndexBuffer();
@@ -177,8 +166,6 @@ fn(t => {
     encoder.drawIndirect(indirectBuffer, indirectOffset);
   }
 
-  t.expectValidationError(() => {
-    finish();
-  }, !_valid);
+  validateFinish(_valid);
 });
 //# sourceMappingURL=indirect_draw.spec.js.map

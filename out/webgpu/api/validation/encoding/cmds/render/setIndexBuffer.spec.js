@@ -28,16 +28,9 @@ fn(t => {
     usage: GPUBufferUsage.INDEX });
 
 
-  const { encoder, finish } = t.createEncoder(encoderType);
+  const { encoder, validateFinishAndSubmitGivenState } = t.createEncoder(encoderType);
   encoder.setIndexBuffer(indexBuffer, 'uint32');
-
-  t.expectValidationError(() => {
-    if (state === 'destroyed') {
-      t.queue.submit([finish()]);
-    } else {
-      finish();
-    }
-  }, state !== 'valid');
+  validateFinishAndSubmitGivenState(state);
 });
 
 g.test('index_buffer_usage').
@@ -60,12 +53,9 @@ fn(t => {
     usage });
 
 
-  const { encoder, finish } = t.createEncoder(encoderType);
+  const { encoder, validateFinish } = t.createEncoder(encoderType);
   encoder.setIndexBuffer(indexBuffer, 'uint32');
-
-  t.expectValidationError(() => {
-    finish();
-  }, (usage | GPUConst.BufferUsage.INDEX) !== usage);
+  validateFinish((usage & GPUBufferUsage.INDEX) !== 0);
 });
 
 g.test('offset_alignment').
@@ -88,14 +78,12 @@ fn(t => {
     usage: GPUBufferUsage.INDEX });
 
 
-  const { encoder, finish } = t.createEncoder(encoderType);
+  const { encoder, validateFinish } = t.createEncoder(encoderType);
   encoder.setIndexBuffer(indexBuffer, indexFormat, offset);
 
   const alignment =
   indexFormat === 'uint16' ? Uint16Array.BYTES_PER_ELEMENT : Uint32Array.BYTES_PER_ELEMENT;
-  t.expectValidationError(() => {
-    finish();
-  }, offset % alignment !== 0);
+  validateFinish(offset % alignment === 0);
 });
 
 g.test('offset_and_size_oob').
@@ -112,11 +100,8 @@ fn(t => {
     usage: GPUBufferUsage.INDEX });
 
 
-  const { encoder, finish } = t.createEncoder(encoderType);
+  const { encoder, validateFinish } = t.createEncoder(encoderType);
   encoder.setIndexBuffer(indexBuffer, 'uint32', offset, size);
-
-  t.expectValidationError(() => {
-    finish();
-  }, !_valid);
+  validateFinish(_valid);
 });
 //# sourceMappingURL=setIndexBuffer.spec.js.map

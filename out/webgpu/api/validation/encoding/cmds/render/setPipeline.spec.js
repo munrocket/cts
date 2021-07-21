@@ -3,7 +3,8 @@
 **/export const description = `
 Validation tests for setPipeline on render pass and render bundle.
 `;import { makeTestGroup } from '../../../../../../common/framework/test_group.js';
-import { ValidationTest, kRenderEncodeTypes } from '../../../validation_test.js';
+import { kRenderEncodeTypes } from '../../../util/command_buffer_maker.js';
+import { ValidationTest } from '../../../validation_test.js';
 
 export const g = makeTestGroup(ValidationTest);
 
@@ -20,11 +21,8 @@ fn(t => {
   const { encoderType, state } = t.params;
   const pipeline = t.createRenderPipelineWithState(state);
 
-  const { encoder, finish } = t.createEncoder(encoderType);
+  const { encoder, validateFinish } = t.createEncoder(encoderType);
   encoder.setPipeline(pipeline);
-
-  t.expectValidationError(() => {
-    finish();
-  }, state === 'invalid');
+  validateFinish(state !== 'invalid');
 });
 //# sourceMappingURL=setPipeline.spec.js.map
